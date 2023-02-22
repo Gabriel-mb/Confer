@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Employee;
 
@@ -26,6 +27,8 @@ public class SearchController {
     private Parent root;
     @FXML
     private TextField employeeId;
+    @FXML
+    private AnchorPane anchorPane;
 
 
     public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
@@ -60,6 +63,7 @@ public class SearchController {
         CardController cardController = loader.getController();
         cardController.setEmployee(String.valueOf(employee.getId()),employee.getName());
 
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -72,5 +76,14 @@ public class SearchController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+    @FXML
+    private void initialize() {
+        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
+        for (Node node : anchorPane.getChildrenUnmodifiable()) {
+            if (node instanceof TextField) {
+                ((TextField) node).setFocusTraversable(false);
+            }
+        }
     }
 }
