@@ -20,7 +20,7 @@
             <Font size="13.0" />
          </font>
       </Button>
-      <TextField fx:id="equipmentInput" cache="true" layoutX="14.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" promptText="Nome" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
+      <TextField fx:id="equipmentNameInput" cache="true" layoutX="14.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" promptText="Nome" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -43,5 +43,10 @@
         </columns>
       </TableView>
       <DatePicker fx:id="date" layoutX="373.0" layoutY="96.0" prefHeight="55.0" prefWidth="174.0" />
+      <Button layoutX="559.0" layoutY="153.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Deletar" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

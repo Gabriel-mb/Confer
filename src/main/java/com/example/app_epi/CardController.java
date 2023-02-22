@@ -113,6 +113,7 @@ public class CardController {
             stage.show();
         }
     }
+
     public void setEmployee(String id, String name) throws SQLException {
         employeeId.setText(id);
         nameLabel.setText(name);

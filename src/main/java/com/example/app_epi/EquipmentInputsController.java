@@ -1,5 +1,8 @@
 package com.example.app_epi;
 
+import dao.ConnectionDAO;
+import dao.EmployeeDAO;
+import dao.EquipmentsDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +14,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import models.Equipment;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Objects;
+
+import static java.lang.Integer.parseInt;
 
 public class EquipmentInputsController {
     private Stage stage;
@@ -27,6 +35,10 @@ public class EquipmentInputsController {
     private DatePicker date;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private TextField equipmentNameInput;
+    @FXML
+    private TextField equipmentIdInput;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
