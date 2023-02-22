@@ -4,10 +4,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.Alert;
 import models.Employee;
+
 public class EmployeeDAO {
     private final Connection connection;
-    public EmployeeDAO(Connection connection) { this.connection = connection; }
+
+    public EmployeeDAO(Connection connection) {
+        this.connection = connection;
+    }
 
     public void create(Employee employee) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
         String sql = "INSERT INTO EMPLOYEE (IDEMPLOYEE, NAME) VALUES (?, ?)";
@@ -31,7 +36,7 @@ public class EmployeeDAO {
 
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
-            Employee employee = new Employee(rst.getInt(1),rst.getString(2));
+            Employee employee = new Employee(rst.getInt(1), rst.getString(2));
             System.out.println(employee);
         }
 
@@ -39,7 +44,7 @@ public class EmployeeDAO {
         rst.close();
     }
 
-    public Employee readId(Integer id) throws SQLException{
+    public Employee readId(Integer id) throws SQLException {
         verifyId(id);
         String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
 
@@ -64,7 +69,7 @@ public class EmployeeDAO {
         return null;
     }
 
-    public void updateId(Integer id, Integer newid) throws SQLException{
+    public void updateId(Integer id, Integer newid) throws SQLException {
         verifyId(id);
         verifyId(newid);
         String sql = "UPDATE EMPLOYEE SET IDEMPLOYEE = ? WHERE IDEMPLOYEE = ?";
@@ -98,32 +103,49 @@ public class EmployeeDAO {
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
 
-        Integer rows = pstm.executeUpdate();
+        int rows = pstm.executeUpdate();
 
         if (rows == 0) {
-            System.out.println("Não existe nenhum funcionário com esse ID: " + id);
-        } else System.out.println("Funcionário com ID : " + id + " foi excluído com sucesso!");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Não existe um funcinario com esta matricula");
+        }
 
         pstm.close();
     }
 
-    public List<Employee> listEmployees() throws SQLException{
+    public List<Employee> listEmployees() throws SQLException {
         String sql = "SELECT * FROM EMPLOYEE";
         Statement stmt = connection.createStatement();
         ResultSet rst = stmt.executeQuery(sql);
         List<Employee> employees = new ArrayList<>();
 
-        while  (rst.next()) {
+        while (rst.next()) {
             Integer id = rst.getInt(1);
             String name = rst.getString(2);
-            employees.add(new Employee(id,name));
+            employees.add(new Employee(id, name));
         }
         return employees;
     }
 
     public void verifyId(Integer id) throws SQLException {
-        if (id.toString().length() != 8){
+        if (id.toString().length() != 8) {
             throw new SQLException("O número ID do funcionário deve ter exatamente 8 caracteres!");
+        }
+    }
+
+    public Boolean checkIfIdExists(Integer id) throws SQLException {
+        String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, id);
+        pstm.execute();
+        ResultSet rst = pstm.getResultSet();
+        if (rst.next()) {
+            pstm.close();
+            return true;
+        } else {
+            pstm.close();
+            return false;
         }
     }
 }

@@ -78,7 +78,7 @@ public class SearchController {
     }
     @FXML
     private void initialize() {
-        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
+        // percorre todos os nós da cena e define o foco como não transversal para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
                 ((TextField) node).setFocusTraversable(false);
