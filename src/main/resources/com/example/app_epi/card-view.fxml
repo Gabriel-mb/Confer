@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="591.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
+   <children>
+      <Label fx:id="nameLabel" layoutX="31.0" layoutY="23.0" prefHeight="27.0" prefWidth="115.0" style="-fx-background-color: #ffffff;" />
+      <Label fx:id="employeeId" layoutX="159.0" layoutY="23.0" prefHeight="27.0" prefWidth="115.0" style="-fx-background-color: #ffffff;" />
+      <TableView layoutX="31.0" layoutY="71.0" prefHeight="354.0" prefWidth="530.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="290.0" text="NomeEq" />
+            <TableColumn fx:id="idColumn" prefWidth="116.0" text="Matricula" />
+            <TableColumn fx:id="dateColumn" prefWidth="122.0" text="Data" />
+        </columns>
+      </TableView>
+      <TextField fx:id="newEmployeeId" layoutX="356.0" layoutY="24.0" prefHeight="25.0" prefWidth="97.0" promptText="Matrícula" />
+      <Button layoutX="464.0" layoutY="24.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="25.0" prefWidth="97.0" text="Pesquisar" />
+      <Button layoutX="474.0" layoutY="438.0" mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="43.0" prefWidth="88.0" text="Menu" />
+      <Button layoutX="31.0" layoutY="438.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="43.0" prefWidth="88.0" text="Delete" />
+   </children>
+</AnchorPane>
