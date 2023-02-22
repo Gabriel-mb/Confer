@@ -1,6 +1,9 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import models.Employee;
 public class EmployeeDAO {
     private final Connection connection;
@@ -36,7 +39,7 @@ public class EmployeeDAO {
         rst.close();
     }
 
-    public void readId(Integer id) throws SQLException{
+    public Employee readId(Integer id) throws SQLException{
         verifyId(id);
         String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
 
@@ -47,16 +50,18 @@ public class EmployeeDAO {
 
         ResultSet rst = pstm.getResultSet();
         int counter = 0;
-        while (rst.next()) {
+        if (rst.next()) {
             Employee employee = new Employee(rst.getInt(1), rst.getString(2));
             System.out.println(employee);
             counter++;
+            pstm.close();
+            rst.close();
+            return employee;
         }
 
         if (counter == 0) System.out.println("Nenhum funcionário encontrado!");
 
-        pstm.close();
-        rst.close();
+        return null;
     }
 
     public void updateId(Integer id, Integer newid) throws SQLException{
@@ -100,6 +105,20 @@ public class EmployeeDAO {
         } else System.out.println("Funcionário com ID : " + id + " foi excluído com sucesso!");
 
         pstm.close();
+    }
+
+    public List<Employee> listEmployees() throws SQLException{
+        String sql = "SELECT * FROM EMPLOYEE";
+        Statement stmt = connection.createStatement();
+        ResultSet rst = stmt.executeQuery(sql);
+        List<Employee> employees = new ArrayList<>();
+
+        while  (rst.next()) {
+            Integer id = rst.getInt(1);
+            String name = rst.getString(2);
+            employees.add(new Employee(id,name));
+        }
+        return employees;
     }
 
     public void verifyId(Integer id) throws SQLException {
