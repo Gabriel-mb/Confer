@@ -7,7 +7,7 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="670.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.EquipmentInputsController">
    <children>
-      <TextField fx:id="employeeId" cache="true" layoutX="190.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="29.0" prefWidth="177.0" promptText="Matrícula" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
+      <TextField fx:id="equipmentIdInput" cache="true" layoutX="190.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="29.0" prefWidth="177.0" promptText="Matrícula" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -20,7 +20,7 @@
             <Font size="13.0" />
          </font>
       </Button>
-      <TextField fx:id="employeeId1" cache="true" layoutX="14.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" promptText="Nome" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
+      <TextField fx:id="equipmentInput" cache="true" layoutX="14.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" promptText="Nome" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -42,6 +42,6 @@
             <TableColumn minWidth="0.0" prefWidth="122.0" text="Data" />
         </columns>
       </TableView>
-      <DatePicker layoutX="373.0" layoutY="96.0" prefHeight="55.0" prefWidth="174.0" />
+      <DatePicker fx:id="date" layoutX="373.0" layoutY="96.0" prefHeight="55.0" prefWidth="174.0" />
    </children>
 </AnchorPane>

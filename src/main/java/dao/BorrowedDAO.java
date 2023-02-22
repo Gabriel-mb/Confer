@@ -1,7 +1,11 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import models.Borrowed;
+import models.Employee;
 
 public class BorrowedDAO {
     private final Connection connection;
@@ -18,6 +22,30 @@ public class BorrowedDAO {
         pstm.execute();
 
         pstm.close();
+    }
+
+    public List<Borrowed> listBorrowed(Integer id) throws SQLException {
+        String sql = "SELECT equipments.name, borrowed.idEquipment, borrowed.date " +
+                "FROM equipments " +
+                "INNER JOIN borrowed " +
+                "ON equipments.idEquipment = borrowed.idEquipment WHERE borrowed.idEmployee = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, id);
+        pstm.execute();
+        ResultSet rst = pstm.getResultSet();
+        List<Borrowed> borrowings = new ArrayList<>();
+
+        while  (rst.next()) {
+            String name = rst.getString(1);
+            Integer idEquip = rst.getInt(2);
+            Date date = rst.getDate(3);
+
+            borrowings.add(new Borrowed(name,idEquip,date));
+        }
+        pstm.close();
+        rst.close();
+
+        return borrowings;
     }
 
     public void readName(String name) throws SQLException { //FAZER INNER JOIN PARA USAR NOME DO FUNCIONÁRIO!

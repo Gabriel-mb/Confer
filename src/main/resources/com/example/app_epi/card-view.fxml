@@ -9,9 +9,9 @@
       <Label fx:id="employeeId" layoutX="159.0" layoutY="23.0" prefHeight="27.0" prefWidth="115.0" style="-fx-background-color: #ffffff;" />
       <TableView layoutX="31.0" layoutY="71.0" prefHeight="354.0" prefWidth="530.0">
         <columns>
-          <TableColumn prefWidth="290.0" text="NomeEq" />
-            <TableColumn prefWidth="116.0" text="Matricula" />
-            <TableColumn prefWidth="122.0" text="Data" />
+          <TableColumn fx:id="nameColumn" prefWidth="290.0" text="NomeEq" />
+            <TableColumn fx:id="idColumn" prefWidth="116.0" text="Matricula" />
+            <TableColumn fx:id="dateColumn" prefWidth="122.0" text="Data" />
         </columns>
       </TableView>
       <TextField fx:id="newEmployeeId" layoutX="356.0" layoutY="24.0" prefHeight="25.0" prefWidth="97.0" promptText="Matrícula" />

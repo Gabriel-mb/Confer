@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -21,6 +22,8 @@ public class EquipmentInputsController {
     private Label nameLabel;
     @FXML
     private Label idLabel;
+    @FXML
+    private DatePicker date;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
