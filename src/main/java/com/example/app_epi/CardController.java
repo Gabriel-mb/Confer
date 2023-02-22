@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Employee;
 
@@ -40,6 +41,8 @@ public class CardController {
     private TableColumn idColumn;
     @FXML
     private TableColumn dateColumn;
+    @FXML
+    private AnchorPane anchorPane;
 
 
 
@@ -105,6 +108,14 @@ public class CardController {
     public void setEmployee(String id, String name) throws SQLException {
         employeeId.setText(id);
         nameLabel.setText(name);
-
+    }
+    @FXML
+    private void initialize() {
+        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
+        for (Node node : anchorPane.getChildrenUnmodifiable()) {
+            if (node instanceof TextField) {
+                ((TextField) node).setFocusTraversable(false);
+            }
+        }
     }
 }

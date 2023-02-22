@@ -5,11 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="670.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="670.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
    <children>
-      <TextField fx:id="employeeId" cache="true" layoutX="123.0" layoutY="188.0" nodeOrientation="LEFT_TO_RIGHT"
-                 prefHeight="0.0" prefWidth="424.0" promptText="Matrícula"
-                 style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
+      <TextField fx:id="employeeId" cache="true" layoutX="123.0" layoutY="188.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="0.0" prefWidth="424.0" promptText="Matrícula" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

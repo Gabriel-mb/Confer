@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,6 +25,8 @@ public class EquipmentInputsController {
     private Label idLabel;
     @FXML
     private DatePicker date;
+    @FXML
+    private AnchorPane anchorPane;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -37,5 +40,14 @@ public class EquipmentInputsController {
     public void setEmployee(String id, String name) {
         idLabel.setText(id);
         nameLabel.setText(name);
+    }
+    @FXML
+    private void initialize() {
+        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
+        for (Node node : anchorPane.getChildrenUnmodifiable()) {
+            if (node instanceof TextField) {
+                ((TextField) node).setFocusTraversable(false);
+            }
+        }
     }
 }
