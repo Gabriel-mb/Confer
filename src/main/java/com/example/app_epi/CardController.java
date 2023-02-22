@@ -2,6 +2,8 @@ package com.example.app_epi;
 
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import models.Borrowed;
 import models.Employee;
 
 import java.io.IOException;
@@ -40,12 +43,15 @@ public class CardController {
     private TableColumn idColumn;
     @FXML
     private TableColumn dateColumn;
+    @FXML
+    private TableView<Borrowed> borrowedTable;
 
-
-
-    public void fillTable() {
+    public void initialize() {
+        ObservableList<Borrowed> borrowedList = FXCollections.observableList();
+        borrowedList.addAll(borroweds);
 
     }
+
     public void onSearchButtonClick(ActionEvent event) throws SQLException ,IOException {
         if (newEmployeeId.getText().length() != 8){
             Alert alert = new Alert(Alert.AlertType.ERROR);
