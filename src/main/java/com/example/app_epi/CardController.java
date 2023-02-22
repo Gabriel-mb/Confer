@@ -9,10 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Employee;
 
@@ -37,9 +34,18 @@ public class CardController {
     private Label nameLabel;
     @FXML
     private TextField newEmployeeId;
+    @FXML
+    private TableColumn nameColumn;
+    @FXML
+    private TableColumn idColumn;
+    @FXML
+    private TableColumn dateColumn;
 
 
 
+    public void fillTable() {
+
+    }
     public void onSearchButtonClick(ActionEvent event) throws SQLException ,IOException {
         if (newEmployeeId.getText().length() != 8){
             Alert alert = new Alert(Alert.AlertType.ERROR);
