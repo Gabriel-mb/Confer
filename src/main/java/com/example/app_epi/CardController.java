@@ -1,7 +1,10 @@
 package com.example.app_epi;
 
+import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,17 +13,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import models.Borrowed;
 import models.Employee;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -36,19 +39,50 @@ public class CardController {
     @FXML
     private TextField newEmployeeId;
     @FXML
-    private TableColumn nameColumn;
-    @FXML
-    private TableColumn idColumn;
-    @FXML
-    private TableColumn dateColumn;
-    @FXML
     private AnchorPane anchorPane;
+    @FXML private TableView<Borrowed> table;
+    @FXML private TableColumn<Borrowed, String> nameColumn;
+    @FXML private TableColumn<Borrowed, Integer> idColumn;
+    @FXML private TableColumn<Borrowed, Date> dateColumn;
 
 
+    ObservableList<Borrowed> borrowingsList;
 
-    public void fillTable() {
-
+    {
+        try {
+            borrowingsList = FXCollections.observableList(parseBorrowingsList());
+            System.out.println(borrowingsList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
+    @FXML
+    private void initialize() throws SQLException{
+        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
+        for (Node node : anchorPane.getChildrenUnmodifiable()) {
+            if (node instanceof TextField) {
+                ((TextField) node).setFocusTraversable(false);
+            }
+        }
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String >("equipmentName"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date >("date"));
+
+        table.setItems(borrowingsList);
+    }
+
+    private List<Borrowed> parseBorrowingsList() throws SQLException{
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+
+        return borrowedDAO.listBorrowed(parseInt("employeeId.getText()"));
+    }
+
+
+
     public void onSearchButtonClick(ActionEvent event) throws SQLException ,IOException {
         if (newEmployeeId.getText().length() != 8){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -108,14 +142,6 @@ public class CardController {
     public void setEmployee(String id, String name) throws SQLException {
         employeeId.setText(id);
         nameLabel.setText(name);
-    }
-    @FXML
-    private void initialize() {
-        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
-        for (Node node : anchorPane.getChildrenUnmodifiable()) {
-            if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
-            }
-        }
+
     }
 }

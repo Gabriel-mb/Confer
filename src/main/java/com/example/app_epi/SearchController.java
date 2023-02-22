@@ -63,6 +63,7 @@ public class SearchController {
         CardController cardController = loader.getController();
         cardController.setEmployee(String.valueOf(employee.getId()),employee.getName());
 
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
