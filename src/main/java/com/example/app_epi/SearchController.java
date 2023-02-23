@@ -61,7 +61,7 @@ public class SearchController {
         Parent root = (Parent) loader.load();
 
         CardController cardController = loader.getController();
-        cardController.setEmployee(String.valueOf(employee.getId()),employee.getName());
+        cardController.setCardEmployee(employeeId.getText());
 
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

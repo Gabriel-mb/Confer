@@ -29,6 +29,7 @@ import static java.lang.Integer.parseInt;
 
 public class CardController {
 
+    ObservableList<Borrowed> borrowingsList;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -40,51 +41,27 @@ public class CardController {
     private TextField newEmployeeId;
     @FXML
     private AnchorPane anchorPane;
-    @FXML private TableView<Borrowed> table;
-    @FXML private TableColumn<Borrowed, String> nameColumn;
-    @FXML private TableColumn<Borrowed, Integer> idColumn;
-    @FXML private TableColumn<Borrowed, Date> dateColumn;
-
-
-    ObservableList<Borrowed> borrowingsList;
-
-    {
-        try {
-            borrowingsList = FXCollections.observableList(parseBorrowingsList());
-            System.out.println(borrowingsList);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    @FXML
+    private TableView<Borrowed> table;
+    @FXML
+    private TableColumn<Borrowed, String> nameColumn;
+    @FXML
+    private TableColumn<Borrowed, Integer> idColumn;
+    @FXML
+    private TableColumn<Borrowed, Date> dateColumn;
 
 
     @FXML
-    private void initialize() throws SQLException{
+    private void initialize() throws SQLException {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
                 ((TextField) node).setFocusTraversable(false);
             }
         }
-
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String >("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date >("date"));
-
-        table.setItems(borrowingsList);
     }
-
-    private List<Borrowed> parseBorrowingsList() throws SQLException{
-        Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-
-        return borrowedDAO.listBorrowed(parseInt("employeeId.getText()"));
-    }
-
-
-
-    public void onSearchButtonClick(ActionEvent event) throws SQLException ,IOException {
-        if (newEmployeeId.getText().length() != 8){
+    public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
+        if (newEmployeeId.getText().length() != 8) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -110,13 +87,14 @@ public class CardController {
         Parent root = (Parent) loader.load();
 
         CardController cardController = loader.getController();
-        cardController.setEmployee(String.valueOf(employee.getId()),employee.getName());
+        cardController.setCardEmployee(newEmployeeId.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
+
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -124,6 +102,7 @@ public class CardController {
         stage.setScene(scene);
         stage.show();
     }
+
     public void onDeleteButtonClick(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmação");
@@ -131,7 +110,7 @@ public class CardController {
         alert.setContentText("Esta ação não pode ser desfeita.");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (((Optional<?>) result).get() == ButtonType.OK){
+        if (((Optional<?>) result).get() == ButtonType.OK) {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -139,9 +118,20 @@ public class CardController {
             stage.show();
         }
     }
-    public void setEmployee(String id, String name) throws SQLException {
-        employeeId.setText(id);
-        nameLabel.setText(name);
 
+    public void setCardEmployee(String id) throws SQLException {
+        employeeId.setText(id);
+
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date>("date"));
+        table.setItems(borrowingsList);
+
+        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+        Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
+        nameLabel.setText(employee.getName());
     }
 }
