@@ -103,7 +103,7 @@ public class CardController {
         stage.show();
     }
 
-    public void onDeleteButtonClick(ActionEvent event) throws IOException {
+    public void onDeleteButtonClick(ActionEvent event) throws IOException, SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmação");
         alert.setHeaderText("Tem certeza que deseja continuar?");
@@ -111,6 +111,14 @@ public class CardController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (((Optional<?>) result).get() == ButtonType.OK) {
+            Connection connection = new ConnectionDAO().connect();
+            EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+            employeeDAO.delete(parseInt(employeeId.getText()));
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Ficha Deletada");
+            alert.setHeaderText(null);
+            alert.setContentText("A ficha foi deletada com sucesso!");
+            alert.showAndWait();
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);

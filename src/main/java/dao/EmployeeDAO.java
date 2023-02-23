@@ -126,4 +126,19 @@ public class EmployeeDAO {
             throw new SQLException("O número ID do funcionário deve ter exatamente 8 caracteres!");
         }
     }
+    public Boolean checkIfIdExists(Integer id) throws SQLException {
+        String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, id);
+        pstm.execute();
+        ResultSet rst = pstm.getResultSet();
+        if (rst.next()) {
+            pstm.close();
+            return true;
+        } else {
+            pstm.close();
+            return false;
+        }
+    }
 }
+
