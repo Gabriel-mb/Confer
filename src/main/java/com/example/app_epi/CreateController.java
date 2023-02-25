@@ -60,6 +60,11 @@ public class CreateController {
         } else {
             Employee employee = new Employee(parseInt(employeeId.getText()), nameInput.getText());
             employeeDAO.create(employee);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Funcionário criado com sucesso!");
+            alert.showAndWait();
         }
 
         EquipmentInputsController equipmentInputsController = loader.getController();

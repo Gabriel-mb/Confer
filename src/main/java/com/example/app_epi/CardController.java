@@ -60,6 +60,7 @@ public class CardController {
             }
         }
     }
+
     public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
         if (newEmployeeId.getText().length() != 8) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -104,21 +105,26 @@ public class CardController {
     }
 
     public void onDeleteButtonClick(ActionEvent event) throws IOException, SQLException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Confirmação");
         alert.setHeaderText("Tem certeza que deseja continuar?");
         alert.setContentText("Esta ação não pode ser desfeita.");
-
+        ButtonType yesButton = new ButtonType("Sim");
+        ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(cancelButton, yesButton);
         Optional<ButtonType> result = alert.showAndWait();
-        if (((Optional<?>) result).get() == ButtonType.OK) {
+
+        if (result.get() == yesButton) {
             Connection connection = new ConnectionDAO().connect();
             EmployeeDAO employeeDAO = new EmployeeDAO(connection);
             employeeDAO.delete(parseInt(employeeId.getText()));
+
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Ficha Deletada");
             alert.setHeaderText(null);
             alert.setContentText("A ficha foi deletada com sucesso!");
             alert.showAndWait();
+
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -128,11 +134,13 @@ public class CardController {
     }
 
     public void setCardEmployee(String id) throws SQLException {
+        //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         employeeId.setText(id);
 
         Connection connection = new ConnectionDAO().connect();
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
         idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date>("date"));
