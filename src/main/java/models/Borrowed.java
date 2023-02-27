@@ -16,10 +16,10 @@ public class Borrowed {
         this.date = date;
     }
 
-    public Borrowed(Integer idEmployee, Integer idEquipment, Integer quantity) {
+    public Borrowed(Integer idEmployee, Integer idEquipment, Date date) {
         this.idEmployee = idEmployee;
         this.idEquipment = idEquipment;
-        this.quantity = quantity;
+        this.date = date;
     }
 
     public Integer getIdEmployee() {
@@ -54,8 +54,8 @@ public class Borrowed {
         this.equipmentName = equipmentName;
     }
 
-    public Date getDate() {
-        return date;
+    public java.sql.Date getDate() {
+        return (java.sql.Date) date;
     }
 
     public void setDate(Date date) {

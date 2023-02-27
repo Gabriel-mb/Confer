@@ -32,7 +32,6 @@ import static java.lang.Integer.parseInt;
 
 public class CardController {
 
-    ObservableList<Borrowed> borrowingsList;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -52,6 +51,9 @@ public class CardController {
     private TableColumn<Borrowed, Integer> idColumn;
     @FXML
     private TableColumn<Borrowed, Date> dateColumn;
+
+    ObservableList<Borrowed> borrowingsList;
+
     private Double x;
     private Double y;
 
@@ -140,6 +142,19 @@ public class CardController {
         }
     }
 
+    public void onRemoveButtonClick(ActionEvent event) throws SQLException {
+        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
+        int selectedIndex = selectionModel.getSelectedIndex();
+        ObservableList<Borrowed> data = table.getItems();
+
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        borrowedDAO.delete(data.get(selectedIndex).getIdEquipment());
+
+        data.remove(selectedIndex);
+        table.refresh();
+    }
+
     public void setCardEmployee(String id) throws SQLException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         employeeId.setText(id);
@@ -156,6 +171,8 @@ public class CardController {
         EmployeeDAO employeeDAO = new EmployeeDAO(connection);
         Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
         nameLabel.setText(employee.getName());
+
+
     }
     public void onCloseButtonClick(ActionEvent event) {
         System.exit(0);

@@ -35,9 +35,8 @@ public class EquipmentsDAO {
         pstm.close();
         rst.close();
     }
-
-    public void readId(Integer id) throws SQLException{
-        verifyId(id);
+    //new
+    public Equipment readId(Integer id) throws SQLException{
         String sql = "SELECT * FROM EQUIPMENTS WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -46,16 +45,19 @@ public class EquipmentsDAO {
         pstm.execute();
 
         ResultSet rst = pstm.getResultSet();
-        int counter = 0;
-        while (rst.next()) {
+
+        if (rst.next()) {
             Equipment equipment = new Equipment(rst.getInt(1), rst.getString(2));
-            counter++;
+            pstm.close();
+            rst.close();
+
+            return equipment;
         }
 
-        pstm.close();
-        rst.close();
-    }
+        return null;
 
+    }
+    //
     public void updateId(Integer id, Integer newid) throws SQLException{
         verifyId(id);
         verifyId(newid);

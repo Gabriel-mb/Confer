@@ -7,7 +7,7 @@
 
 <AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="430.0" prefWidth="670.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.EquipmentInputsController">
    <children>
-      <TextField fx:id="equipmentIdInput" cache="true" layoutX="190.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="29.0" prefWidth="177.0" promptText="Matrícula" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
+      <TextField fx:id="equipmentIdInput" cache="true" layoutX="14.0" layoutY="97.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="29.0" prefWidth="177.0" promptText="Matrícula" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -15,19 +15,11 @@
             <Font name="Segoe UI" size="30.0" />
          </font>
       </TextField>
-      <Button layoutX="559.0" layoutY="106.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Incluir" textAlignment="CENTER">
+      <Button layoutX="559.0" layoutY="197.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Incluir" textAlignment="CENTER">
          <font>
             <Font size="13.0" />
          </font>
       </Button>
-      <TextField fx:id="equipmentInput" cache="true" layoutX="14.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" promptText="Nome" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <font>
-            <Font name="Segoe UI" size="30.0" />
-         </font>
-      </TextField>
       <Label fx:id="nameLabel" layoutX="14.0" layoutY="22.0" prefHeight="36.0" prefWidth="138.0" style="-fx-background-color: #ffffff;" />
       <Label fx:id="idLabel" layoutX="158.0" layoutY="22.0" prefHeight="36.0" prefWidth="138.0" style="-fx-background-color: #ffffff;" />
       <Button layoutX="574.0" layoutY="380.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Salvar" textAlignment="CENTER">
@@ -35,13 +27,30 @@
             <Font size="13.0" />
          </font>
       </Button>
-      <TableView layoutX="14.0" layoutY="171.0" prefHeight="244.0" prefWidth="521.0">
+      <TableView fx:id="table" layoutX="14.0" layoutY="171.0" prefHeight="244.0" prefWidth="521.0">
         <columns>
-          <TableColumn prefWidth="272.0" text="Nome" />
-          <TableColumn minWidth="0.0" prefWidth="126.0" text="Matricula" />
-            <TableColumn minWidth="0.0" prefWidth="122.0" text="Data" />
+          <TableColumn fx:id="nameColumn" prefWidth="272.0" text="Nome" />
+          <TableColumn fx:id="idColumn" minWidth="0.0" prefWidth="126.0" text="Matricula" />
+            <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="122.0" text="Data" />
         </columns>
       </TableView>
       <DatePicker fx:id="date" layoutX="373.0" layoutY="96.0" prefHeight="55.0" prefWidth="174.0" />
+      <!--new: deleted text field-->
+      <Label fx:id="equipmentName" accessibleRole="TEXT_FIELD" cache="true" layoutX="198.0" layoutY="96.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="168.0" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2; -fx-background-color: #ffffff;" text="Nome">
+         <font>
+            <Font name="Segoe UI" size="30.0" />
+         </font>
+      </Label>
+      <Button layoutX="559.0" layoutY="107.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Buscar" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="559.0" layoutY="243.0" mnemonicParsing="false" onAction="#onRemoveButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Remover" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <!---->
    </children>
 </AnchorPane>
