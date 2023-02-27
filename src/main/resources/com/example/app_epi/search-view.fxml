@@ -1,93 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="670.0" style="-fx-background-color: #67c1eb;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
    <children>
-      <Label alignment="CENTER" layoutX="377.0" layoutY="300.0" prefHeight="55.0" prefWidth="293.0" style="-fx-border-radius: 11;" text="DIGITE UMA MATRÍCULA" textAlignment="CENTER" textFill="#0e1c6b">
-         <font>
-            <Font name="System Bold" size="23.0" />
-         </font>
-      </Label>
-      <MFXTextField fx:id="employeeId" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="311.0" layoutY="355.0" prefHeight="55.0" prefWidth="424.0" promptText="Matricula" style="-fx-border-color: #0e1c6b; -fx-border-radius: 11; -fx-background-radius: 11; -fx-border-width: 2;" textLimit="8">
-         <font>
-            <Font size="32.0" />
-         </font>
-         <effect>
-            <DropShadow height="26.86" offsetX="4.0" offsetY="3.0" radius="13.6625" width="29.79">
-               <color>
-                  <Color red="0.30000001192092896" green="0.2939999997615814" blue="0.2939999997615814" opacity="0.550000011920929" />
-               </color>
-            </DropShadow>
-         </effect>
-      </MFXTextField>
-      <MFXButton alignment="CENTER" contentDisplay="CENTER" layoutX="669.0" layoutY="355.0" onAction="#onSearchButtonClick" prefHeight="59.0" prefWidth="46.0" rippleAnimateShadow="true" rippleColor="WHITE" style="-fx-background-radius: 11; -fx-background-color: transparent;" textFill="#ffffff00">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-         <graphic>
-            <ImageView fitHeight="42.0" fitWidth="42.0" onKeyPressed="#pressEnter">
-               <Image url="@../assets/49116.png" />
-            </ImageView>
-         </graphic>
-      </MFXButton>
-      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="16.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
-         <font>
-            <Font name="Arial" size="11.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </MFXButton>
-      <Rectangle arcHeight="32.0" arcWidth="27.0" height="80.0" layoutX="68.0" layoutY="-12.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="139.0">
-         <fill>
-            <LinearGradient endX="1.0" endY="1.0">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="0.054901961237192154" green="0.10980392247438431" blue="0.41960784792900085" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="0.19607843458652496" green="0.30588236451148987" blue="0.8549019694328308" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
-         <effect>
-            <DropShadow height="22.41" offsetX="3.0" offsetY="4.0" radius="10.965" width="23.45">
-               <color>
-                  <Color red="0.3019607961177826" green="0.29411765933036804" blue="0.29411765933036804" opacity="0.550000011920929" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Rectangle>
-      <Button fx:id="create" alignment="CENTER" layoutX="81.0" layoutY="7.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="44.0" prefWidth="117.0" style="-fx-background-color: transparent; -fx-background-radius: 11; -fx-opacity: 1;" text="Criar" textAlignment="CENTER" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="25.0" />
-         </font>
+      <TextField fx:id="employeeId" cache="true" layoutX="123.0" layoutY="188.0" nodeOrientation="LEFT_TO_RIGHT"
+                 prefHeight="0.0" prefWidth="424.0" promptText="Matrícula"
+                 style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #3360d4; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
+         <font>
+            <Font name="Segoe UI" size="30.0" />
+         </font>
+      </TextField>
+      <Button layoutX="401.0" layoutY="285.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="55.0" prefWidth="146.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Buscar" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
       </Button>
+      <Button fx:id="create" layoutX="123.0" layoutY="285.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="55.0" prefWidth="146.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Criar" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Label layoutX="123.0" layoutY="106.0" prefHeight="55.0" prefWidth="424.0" text="Insira a matrícula do funcionário" textAlignment="CENTER">
+         <font>
+            <Font size="27.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

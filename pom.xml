@@ -38,11 +38,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.github.palexdev</groupId>
-            <artifactId>materialfx</artifactId>
-            <version>11.13.9</version>
-        </dependency>
     </dependencies>
 
     <build>

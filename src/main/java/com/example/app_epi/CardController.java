@@ -1,6 +1,5 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import javafx.collections.FXCollections;
@@ -13,8 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import models.Borrowed;
 import models.Employee;
@@ -23,13 +20,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static java.lang.Integer.parseInt;
 
 public class CardController {
 
-    ObservableList<Borrowed> borrowingsList;
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -40,29 +38,22 @@ public class CardController {
     @FXML
     private TextField newEmployeeId;
     @FXML
-    private AnchorPane anchorPane;
+    private TableColumn nameColumn;
     @FXML
-    private TableView<Borrowed> table;
+    private TableColumn idColumn;
     @FXML
-    private TableColumn<Borrowed, String> nameColumn;
+    private TableColumn dateColumn;
     @FXML
-    private TableColumn<Borrowed, Integer> idColumn;
-    @FXML
-    private TableColumn<Borrowed, Date> dateColumn;
+    private TableView<Borrowed> borrowedTable;
 
+    public void initialize() {
+        ObservableList<Borrowed> borrowedList = FXCollections.observableList();
+        borrowedList.addAll(borroweds);
 
-    @FXML
-    private void initialize() throws SQLException {
-        // percorre todos os nós da cena e define o foco como não transversável para os TextFields
-        for (Node node : anchorPane.getChildrenUnmodifiable()) {
-            if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
-            }
-        }
     }
 
-    public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
-        if (newEmployeeId.getText().length() != 8) {
+    public void onSearchButtonClick(ActionEvent event) throws SQLException ,IOException {
+        if (newEmployeeId.getText().length() != 8){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -88,14 +79,13 @@ public class CardController {
         Parent root = (Parent) loader.load();
 
         CardController cardController = loader.getController();
-        cardController.setCardEmployee(newEmployeeId.getText());
+        cardController.setEmployee(String.valueOf(employee.getId()),employee.getName());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -103,28 +93,14 @@ public class CardController {
         stage.setScene(scene);
         stage.show();
     }
-
-    public void onDeleteButtonClick(ActionEvent event) throws IOException, SQLException {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+    public void onDeleteButtonClick(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmação");
         alert.setHeaderText("Tem certeza que deseja continuar?");
         alert.setContentText("Esta ação não pode ser desfeita.");
-        ButtonType yesButton = new ButtonType("Sim");
-        ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(cancelButton, yesButton);
+
         Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.get() == yesButton) {
-            Connection connection = new ConnectionDAO().connect();
-            EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-            employeeDAO.delete(parseInt(employeeId.getText()));
-
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Ficha Deletada");
-            alert.setHeaderText(null);
-            alert.setContentText("A ficha foi deletada com sucesso!");
-            alert.showAndWait();
-
+        if (((Optional<?>) result).get() == ButtonType.OK){
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -132,22 +108,9 @@ public class CardController {
             stage.show();
         }
     }
-
-    public void setCardEmployee(String id) throws SQLException {
-        //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
+    public void setEmployee(String id, String name) throws SQLException {
         employeeId.setText(id);
+        nameLabel.setText(name);
 
-        Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
-
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date>("date"));
-        table.setItems(borrowingsList);
-
-        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-        Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
-        nameLabel.setText(employee.getName());
     }
 }

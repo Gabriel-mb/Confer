@@ -30,6 +30,7 @@ public class EquipmentsDAO {
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
             Equipment equipment = new Equipment(rst.getInt(1),rst.getString(2));
+            System.out.println(equipment);
         }
 
         pstm.close();
@@ -49,8 +50,11 @@ public class EquipmentsDAO {
         int counter = 0;
         while (rst.next()) {
             Equipment equipment = new Equipment(rst.getInt(1), rst.getString(2));
+            System.out.println(equipment);
             counter++;
         }
+
+        if (counter == 0) System.out.println("Nenhuma ferramenta encontrada!");
 
         pstm.close();
         rst.close();
@@ -91,6 +95,10 @@ public class EquipmentsDAO {
         pstm.setInt(1, id);
 
         Integer rows = pstm.executeUpdate();
+
+        if (rows == 0) {
+            System.out.println("Não existe nenhuma ferramenta com esse ID: " + id);
+        } else System.out.println("Ferramenta com ID : " + id + " foi excluída com sucesso!");
 
         pstm.close();
     }

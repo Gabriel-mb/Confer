@@ -32,6 +32,7 @@ public class EmployeeDAO {
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
             Employee employee = new Employee(rst.getInt(1),rst.getString(2));
+            System.out.println(employee);
         }
 
         pstm.close();
@@ -51,11 +52,15 @@ public class EmployeeDAO {
         int counter = 0;
         if (rst.next()) {
             Employee employee = new Employee(rst.getInt(1), rst.getString(2));
+            System.out.println(employee);
             counter++;
             pstm.close();
             rst.close();
             return employee;
         }
+
+        if (counter == 0) System.out.println("Nenhum funcionário encontrado!");
+
         return null;
     }
 
@@ -95,6 +100,10 @@ public class EmployeeDAO {
 
         Integer rows = pstm.executeUpdate();
 
+        if (rows == 0) {
+            System.out.println("Não existe nenhum funcionário com esse ID: " + id);
+        } else System.out.println("Funcionário com ID : " + id + " foi excluído com sucesso!");
+
         pstm.close();
     }
 
@@ -117,19 +126,4 @@ public class EmployeeDAO {
             throw new SQLException("O número ID do funcionário deve ter exatamente 8 caracteres!");
         }
     }
-    public Boolean checkIfIdExists(Integer id) throws SQLException {
-        String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setInt(1, id);
-        pstm.execute();
-        ResultSet rst = pstm.getResultSet();
-        if (rst.next()) {
-            pstm.close();
-            return true;
-        } else {
-            pstm.close();
-            return false;
-        }
-    }
 }
-

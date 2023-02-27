@@ -59,6 +59,7 @@ public class BorrowedDAO {
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
             Borrowed borrowed = new Borrowed(rst.getInt(1),rst.getInt(2), rst.getInt(3));
+            System.out.println(borrowed);
         }
 
         pstm.close();
@@ -78,8 +79,11 @@ public class BorrowedDAO {
         int counter = 0;
         while (rst.next()) {
             Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getInt(3));
+            System.out.println(borrowed);
             counter++;
         }
+
+        if (counter == 0) System.out.println("Nenhum empréstimo encontrado!");
 
         pstm.close();
         rst.close();
@@ -106,6 +110,10 @@ public class BorrowedDAO {
         pstm.setInt(1, id);
 
         Integer rows = pstm.executeUpdate();
+
+        if (rows == 0) {
+            System.out.println("Não existe nenhuma ferramenta com esse ID: " + id);
+        } else System.out.println("Ferramenta com ID : " + id + " foi excluída com sucesso!");
 
         pstm.close();
     }
