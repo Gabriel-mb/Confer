@@ -14,8 +14,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.Borrowed;
 import models.Employee;
 
@@ -48,7 +51,12 @@ public class CardController {
     private TableColumn<Borrowed, Integer> idColumn;
     @FXML
     private TableColumn<Borrowed, Date> dateColumn;
+
     ObservableList<Borrowed> borrowingsList;
+
+    private Double x;
+    private Double y;
+
 
     @FXML
     private void initialize() throws SQLException {
@@ -60,7 +68,7 @@ public class CardController {
         }
     }
 
-    public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
+    public void onSearchButtonClick(MouseEvent event) throws SQLException, IOException {
         if (newEmployeeId.getText().length() != 8) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -92,14 +100,16 @@ public class CardController {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
 
-    public void onMenuButtonClick(ActionEvent event) throws IOException {
+    public void onMenuButtonClick(MouseEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
 
@@ -163,5 +173,19 @@ public class CardController {
         nameLabel.setText(employee.getName());
 
 
+    }
+    public void onCloseButtonClick(ActionEvent event) {
+        System.exit(0);
+    }
+    public void anchorPane_dragged(MouseEvent event) {
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.setY(event.getScreenY() - y);
+        stage.setX(event.getScreenX() - x);
+
+    }
+
+    public void anchorPane_pressed(MouseEvent event) {
+        x = event.getSceneX();
+        y = event.getSceneY();
     }
 }

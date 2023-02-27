@@ -11,9 +11,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.Borrowed;
 import models.Equipment;
@@ -51,6 +59,8 @@ public class EquipmentInputsController {
     private TableColumn<Borrowed, Integer> idColumn;
     @FXML
     private TableColumn<Borrowed, java.util.Date> dateColumn;
+    private Double x;
+    private Double y;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -61,11 +71,11 @@ public class EquipmentInputsController {
             for (Borrowed item : borrowingsList) {
                 borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
             }
-
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            scene.setFill(Color.TRANSPARENT);
             stage.show();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -125,6 +135,7 @@ public class EquipmentInputsController {
         ObservableList<Borrowed> data = table.getItems();
         data.remove(selectedIndex);
         table.refresh();
+
     }
 
     public void setEmployee(String id, String name) {
@@ -139,5 +150,16 @@ public class EquipmentInputsController {
                 ((TextField) node).setFocusTraversable(false);
             }
         }
+    }
+    public void anchorPane_dragged(MouseEvent event) {
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.setY(event.getScreenY() - y);
+        stage.setX(event.getScreenX() - x);
+
+    }
+
+    public void anchorPane_pressed(MouseEvent event) {
+        x = event.getSceneX();
+        y = event.getSceneY();
     }
 }
