@@ -30,15 +30,13 @@ public class EquipmentsDAO {
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
             Equipment equipment = new Equipment(rst.getInt(1),rst.getString(2));
-            System.out.println(equipment);
         }
 
         pstm.close();
         rst.close();
     }
-
-    public void readId(Integer id) throws SQLException{
-        verifyId(id);
+    //new
+    public Equipment readId(Integer id) throws SQLException{
         String sql = "SELECT * FROM EQUIPMENTS WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -47,19 +45,19 @@ public class EquipmentsDAO {
         pstm.execute();
 
         ResultSet rst = pstm.getResultSet();
-        int counter = 0;
-        while (rst.next()) {
+
+        if (rst.next()) {
             Equipment equipment = new Equipment(rst.getInt(1), rst.getString(2));
-            System.out.println(equipment);
-            counter++;
+            pstm.close();
+            rst.close();
+
+            return equipment;
         }
 
-        if (counter == 0) System.out.println("Nenhuma ferramenta encontrada!");
+        return null;
 
-        pstm.close();
-        rst.close();
     }
-
+    //
     public void updateId(Integer id, Integer newid) throws SQLException{
         verifyId(id);
         verifyId(newid);
@@ -95,10 +93,6 @@ public class EquipmentsDAO {
         pstm.setInt(1, id);
 
         Integer rows = pstm.executeUpdate();
-
-        if (rows == 0) {
-            System.out.println("Não existe nenhuma ferramenta com esse ID: " + id);
-        } else System.out.println("Ferramenta com ID : " + id + " foi excluída com sucesso!");
 
         pstm.close();
     }

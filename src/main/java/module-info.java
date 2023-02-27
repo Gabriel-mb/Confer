@@ -5,5 +5,6 @@ module com.example.app_epi {
 
 
     opens com.example.app_epi to javafx.fxml;
+    opens models to javafx.base;
     exports com.example.app_epi;
 }
