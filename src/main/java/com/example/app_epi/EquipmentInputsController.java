@@ -85,7 +85,7 @@ public class EquipmentInputsController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Nenhum equipamento encontrado encontrado!");
+            alert.setContentText("Nenhum equipamento encontrado!");
             alert.showAndWait();
             return;
         } else equipmentName.setText(equipment.getName());
@@ -112,7 +112,19 @@ public class EquipmentInputsController {
             idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
             dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, java.util.Date>("date"));
             table.setItems(borrowingsList);
+
+            equipmentName.setText("Nome");
+            equipmentIdInput.setText("");
+            date.setValue(null);
         }
+    }
+
+    public void onRemoveButtonClick(ActionEvent event) throws IOException {
+        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
+        int selectedIndex = selectionModel.getSelectedIndex();
+        ObservableList<Borrowed> data = table.getItems();
+        data.remove(selectedIndex);
+        table.refresh();
     }
 
     public void setEmployee(String id, String name) {

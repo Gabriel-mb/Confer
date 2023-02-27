@@ -18,5 +18,6 @@
       <Button layoutX="464.0" layoutY="24.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="25.0" prefWidth="97.0" text="Pesquisar" />
       <Button layoutX="474.0" layoutY="438.0" mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="43.0" prefWidth="88.0" text="Menu" />
       <Button layoutX="31.0" layoutY="438.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="43.0" prefWidth="88.0" text="Delete" />
+      <Button layoutX="236.0" layoutY="438.0" mnemonicParsing="false" onAction="#onRemoveButtonClick" prefHeight="43.0" prefWidth="88.0" text="Remover" />
    </children>
 </AnchorPane>

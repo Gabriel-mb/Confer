@@ -15,7 +15,7 @@
             <Font name="Segoe UI" size="30.0" />
          </font>
       </TextField>
-      <Button layoutX="559.0" layoutY="134.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Incluir" textAlignment="CENTER">
+      <Button layoutX="559.0" layoutY="197.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Incluir" textAlignment="CENTER">
          <font>
             <Font size="13.0" />
          </font>
@@ -41,7 +41,12 @@
             <Font name="Segoe UI" size="30.0" />
          </font>
       </Label>
-      <Button layoutX="559.0" layoutY="96.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Buscar" textAlignment="CENTER">
+      <Button layoutX="559.0" layoutY="107.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Buscar" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="559.0" layoutY="243.0" mnemonicParsing="false" onAction="#onRemoveButtonClick" prefHeight="36.0" prefWidth="82.0" style="-fx-background-color: #fff; -fx-border-color: #3360d4; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Remover" textAlignment="CENTER">
          <font>
             <Font size="13.0" />
          </font>

@@ -66,7 +66,6 @@ public class BorrowedDAO {
     }
 
     public void readId(Integer id) throws SQLException{
-        verifyId(id);
         String sql = "SELECT * FROM BORROWED WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -86,7 +85,6 @@ public class BorrowedDAO {
     }
 
     public void updateQuantity(Integer id, Integer quantity) throws SQLException {
-        verifyId(id);
         String sql = "UPDATE BORROWED SET QUANTITY = ? WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -99,7 +97,7 @@ public class BorrowedDAO {
     }
 
     public void delete(Integer id) throws SQLException {
-        verifyId(id);
+
         String sql = "DELETE FROM BORROWED WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -110,10 +108,6 @@ public class BorrowedDAO {
         pstm.close();
     }
 
-    public void verifyId(Integer id) throws SQLException {
-        if (id.toString().length() != 8){
-            throw new SQLException("O número ID do empréstimo deve ter exatamente 8 caracteres!");
-        }
-    }
+
 
 }
