@@ -12,12 +12,12 @@ public class BorrowedDAO {
     public BorrowedDAO(Connection connection) { this.connection = connection; }
 
     public void create(Borrowed borrowed) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
-        String sql = "INSERT INTO BORROWED (IDEMPLOYEE, IDEQUIPMENT, QUANTITY) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO BORROWED (IDEMPLOYEE, IDEQUIPMENT, DATE) VALUES (?, ?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, borrowed.getIdEmployee());
         pstm.setInt(2, borrowed.getIdEquipment());
-        pstm.setInt(3, borrowed.getQuantity());
+        pstm.setDate(3, borrowed.getDate());
 
         pstm.execute();
 
@@ -58,7 +58,7 @@ public class BorrowedDAO {
 
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
-            Borrowed borrowed = new Borrowed(rst.getInt(1),rst.getInt(2), rst.getInt(3));
+            Borrowed borrowed = new Borrowed(rst.getInt(1),rst.getInt(2), rst.getDate(3));
         }
 
         pstm.close();
@@ -77,7 +77,7 @@ public class BorrowedDAO {
         ResultSet rst = pstm.getResultSet();
         int counter = 0;
         while (rst.next()) {
-            Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getInt(3));
+            Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getDate(3));
             counter++;
         }
 

@@ -149,5 +149,7 @@ public class CardController {
         EmployeeDAO employeeDAO = new EmployeeDAO(connection);
         Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
         nameLabel.setText(employee.getName());
+
+
     }
 }
