@@ -168,6 +168,7 @@ public class SearchController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
+
     public void onInventoryButtonClick (ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("inventoryController-view.fxml"));
         Parent root = (Parent) loader.load();

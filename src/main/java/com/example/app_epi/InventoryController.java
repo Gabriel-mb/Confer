@@ -25,7 +25,6 @@ import javafx.stage.Stage;
 import models.Borrowed;
 import models.Employee;
 import models.Equipment;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +33,6 @@ import java.util.Date;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
-
 
 public class InventoryController {
     private Stage stage;
@@ -61,6 +59,7 @@ public class InventoryController {
     private MFXTextField idEquipment;
     @FXML
     private MFXTextField name;
+
 
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
