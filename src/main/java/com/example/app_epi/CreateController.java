@@ -10,7 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.Employee;
 
@@ -31,6 +33,8 @@ public class CreateController {
     private TextField employeeId;
     @FXML
     private AnchorPane anchorPane;
+    private Double x;
+    private Double y;
 
     public void onSaveButtonClick(ActionEvent event) throws IOException, SQLException {
 
@@ -73,13 +77,15 @@ public class CreateController {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
-    public void onBackButtonClick(ActionEvent event) throws IOException {
+    public void onBackButtonClick(MouseEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
     @FXML
@@ -90,5 +96,19 @@ public class CreateController {
                 ((TextField) node).setFocusTraversable(false);
             }
         }
+    }
+    public void anchorPane_dragged(MouseEvent event) {
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.setY(event.getScreenY() - y);
+        stage.setX(event.getScreenX() - x);
+
+    }
+
+    public void anchorPane_pressed(MouseEvent event) {
+        x = event.getSceneX();
+        y = event.getSceneY();
+    }
+    public void onCloseButtonClick(ActionEvent event) {
+        System.exit(0);
     }
 }

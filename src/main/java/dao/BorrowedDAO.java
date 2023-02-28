@@ -65,7 +65,7 @@ public class BorrowedDAO {
         rst.close();
     }
 
-    public void readId(Integer id) throws SQLException{
+    public Borrowed readId(Integer id) throws SQLException{
         String sql = "SELECT * FROM BORROWED WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -74,14 +74,17 @@ public class BorrowedDAO {
         pstm.execute();
 
         ResultSet rst = pstm.getResultSet();
-        int counter = 0;
-        while (rst.next()) {
+
+        if (rst.next()) {
             Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getDate(3));
-            counter++;
+            pstm.close();
+            rst.close();
+            return borrowed;
         }
 
         pstm.close();
         rst.close();
+        return null;
     }
 
     public void updateQuantity(Integer id, Integer quantity) throws SQLException {
