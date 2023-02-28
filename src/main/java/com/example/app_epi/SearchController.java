@@ -3,7 +3,6 @@ package com.example.app_epi;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,17 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import models.Employee;
 
 import java.io.IOException;
@@ -76,7 +70,7 @@ public class SearchController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
         Parent root = (Parent) loader.load();
         CardController cardController = loader.getController();
-        cardController.setCardEmployee(employeeId.getText());
+        cardController.setTableEmployee(employeeId.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -142,7 +136,7 @@ public class SearchController {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
                         Parent root = (Parent) loader.load();
                         CardController cardController = loader.getController();
-                        cardController.setCardEmployee(employeeId.getText());
+                        cardController.setTableEmployee(employeeId.getText());
 
                         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         scene = new Scene(root);
@@ -173,5 +167,17 @@ public class SearchController {
     public void anchorPane_pressed(MouseEvent event) {
         x = event.getSceneX();
         y = event.getSceneY();
+    }
+    public void onInventoryButtonClick (ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("inventoryController-view.fxml"));
+        Parent root = (Parent) loader.load();
+        InventoryController inventoryController = loader.getController();
+        inventoryController.setTableEquipments();
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
     }
 }

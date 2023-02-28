@@ -3,6 +3,7 @@ package com.example.app_epi;
 import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,7 +45,7 @@ public class EquipmentInputsController {
     @FXML
     private Label idLabel;
     @FXML
-    private DatePicker date;
+    private MFXDatePicker date;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -65,6 +66,7 @@ public class EquipmentInputsController {
     private Boolean confirmation = false;
 
 
+
     public void onSaveButtonClick(ActionEvent event) throws IOException {
         int index = 0;
         try {
@@ -83,7 +85,6 @@ public class EquipmentInputsController {
                     }
                 }
             }
-
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -134,7 +135,7 @@ public class EquipmentInputsController {
                 alert.setContentText("Ferramenta já cadastrada!");
                 alert.showAndWait();
 
-                equipmentName.setText("Nome");
+                equipmentName.setText("Ferramenta");
                 equipmentIdInput.setText("");
                 date.setValue(null);
 
@@ -214,5 +215,17 @@ public class EquipmentInputsController {
     public void anchorPane_pressed(MouseEvent event) {
         x = event.getSceneX();
         y = event.getSceneY();
+    }
+    public void onCloseButtonClick(ActionEvent event) {
+        System.exit(0);
+    }
+
+    public void onMenuButtonClick(MouseEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
     }
 }

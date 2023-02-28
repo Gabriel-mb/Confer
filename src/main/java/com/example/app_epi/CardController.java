@@ -8,7 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,12 +17,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import models.Borrowed;
 import models.Employee;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -52,7 +49,7 @@ public class CardController {
     @FXML
     private TableColumn<Borrowed, Date> dateColumn;
 
-    ObservableList<Borrowed> borrowingsList;
+    private ObservableList<Borrowed> borrowingsList;
 
     private Double x;
     private Double y;
@@ -95,7 +92,7 @@ public class CardController {
         Parent root = (Parent) loader.load();
 
         CardController cardController = loader.getController();
-        cardController.setCardEmployee(newEmployeeId.getText());
+        cardController.setTableEmployee(newEmployeeId.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -155,7 +152,7 @@ public class CardController {
         table.refresh();
     }
 
-    public void setCardEmployee(String id) throws SQLException {
+    public void setTableEmployee(String id) throws SQLException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         employeeId.setText(id);
 
@@ -163,16 +160,14 @@ public class CardController {
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Date>("date"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         table.setItems(borrowingsList);
 
         EmployeeDAO employeeDAO = new EmployeeDAO(connection);
         Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
         nameLabel.setText(employee.getName());
-
-
     }
     public void onCloseButtonClick(ActionEvent event) {
         System.exit(0);
@@ -195,9 +190,11 @@ public class CardController {
         equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
         equipmentInputsController.setTable(borrowingsList, true);
 
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
 }
