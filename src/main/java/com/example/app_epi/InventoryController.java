@@ -4,6 +4,7 @@ import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import dao.EquipmentsDAO;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -27,6 +29,7 @@ import models.Equipment;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 
@@ -54,6 +57,10 @@ public class InventoryController {
     private TableColumn<Equipment, String> nameEmployeeColumn;
     @FXML
     private TableColumn<Equipment, Date> dateColumn;
+    @FXML
+    private MFXTextField idEquipment;
+    @FXML
+    private MFXTextField name;
 
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
@@ -68,6 +75,7 @@ public class InventoryController {
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         equipmentsStatus = FXCollections.observableList(equipmentsDAO.listEquipmentsStatus());
+        equipmentsStatus.sort(Comparator.comparingInt(Equipment::getIdEquipment));
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
         nameEquipColumn.setCellValueFactory(new PropertyValueFactory<>("nameEquip"));
@@ -75,6 +83,30 @@ public class InventoryController {
         nameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("nameEmployee"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         table.setItems(equipmentsStatus);
+    }
+
+    public void onIncludeButtonClick(ActionEvent event) {
+        if (Objects.equals(name.getText(), "")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ocorreu um erro");
+            alert.setContentText("Insira um nome para a ferramenta!");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Connection connection = new ConnectionDAO().connect();
+            EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+            equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText());
+
+            setTableEquipments();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ocorreu um erro");
+            alert.setContentText("Patrimônio já cadastrado!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
