@@ -72,17 +72,17 @@
             <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="124.0" text="Data" />
          </columns>
       </TableView>
-      <MFXTextField borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="69.0" layoutY="98.0" prefHeight="28.0" prefWidth="158.0" promptText="Patrimônio" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+      <MFXTextField fx:id="idEquipment" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="69.0" layoutY="98.0" prefHeight="28.0" prefWidth="158.0" promptText="Patrimônio" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <MFXTextField borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="98.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+      <MFXTextField fx:id="name" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="98.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <Button layoutX="582.0" layoutY="98.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Incluir" textFill="WHITE">
+      <Button layoutX="582.0" layoutY="98.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Incluir" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

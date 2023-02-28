@@ -68,6 +68,7 @@ public class EquipmentInputsController {
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
+        int id = 0;
         int index = 0;
         try {
             Connection connection = new ConnectionDAO().connect();
@@ -75,6 +76,7 @@ public class EquipmentInputsController {
             borrowingsList.sort(Comparator.comparingInt(Borrowed::getIdEquipment));
             if (!confirmation) {
                 for (Borrowed item : borrowingsList) {
+                    id = item.getIdEquipment();
                     borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
                     index++;
                 }
@@ -85,6 +87,13 @@ public class EquipmentInputsController {
                     }
                 }
             }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Ferramentas inseridas com sucesso!");
+            alert.showAndWait();
+
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
@@ -95,7 +104,7 @@ public class EquipmentInputsController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Ferramenta com matrícula: " + (index) +" já alocada!");
+            alert.setContentText("Ferramenta com matrícula: " + id +" já alocada!");
             alert.showAndWait();
 
             borrowingsList.remove(index);
@@ -161,7 +170,7 @@ public class EquipmentInputsController {
             dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, java.util.Date>("date"));
             table.setItems(borrowingsList);
 
-            equipmentName.setText("Nome");
+            equipmentName.setText("");
             equipmentIdInput.setText("");
             date.setValue(null);
         }

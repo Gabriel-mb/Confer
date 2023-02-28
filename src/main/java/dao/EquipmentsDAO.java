@@ -11,12 +11,12 @@ public class EquipmentsDAO {
     private final Connection connection;
     public EquipmentsDAO(Connection connection) { this.connection = connection; }
 
-    public void create(Equipment equipment) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
+    public void create(Integer id, String name) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
         String sql = "INSERT INTO EQUIPMENTS (IDEQUIPMENT, NAME) VALUES (?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setInt(1, equipment.getIdEquipment());
-        pstm.setString(2, equipment.getName());
+        pstm.setInt(1, id);
+        pstm.setString(2, name);
 
         pstm.execute();
 
