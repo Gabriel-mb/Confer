@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -61,15 +62,27 @@ public class EquipmentInputsController {
     private TableColumn<Borrowed, java.util.Date> dateColumn;
     private Double x;
     private Double y;
+    private Boolean confirmation = false;
+
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
+        int index = 0;
         try {
             Connection connection = new ConnectionDAO().connect();
             BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-            //em um while(list.hasnext) usa borrowedDAO.create(item)
-            for (Borrowed item : borrowingsList) {
-                borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
+            borrowingsList.sort(Comparator.comparingInt(Borrowed::getIdEquipment));
+            if (!confirmation) {
+                for (Borrowed item : borrowingsList) {
+                    borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
+                    index++;
+                }
+            } else {
+                for (Borrowed item : borrowingsList) {
+                    if (borrowedDAO.readId(item.getIdEquipment()) == null && confirmation) {
+                        borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
+                    }
+                }
             }
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -81,12 +94,22 @@ public class EquipmentInputsController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText(String.valueOf(e));
+            alert.setContentText("Ferramenta com matrícula: " + (index) +" já alocada!");
             alert.showAndWait();
+
+            borrowingsList.remove(index);
         }
     }
 
     public void onSearchButtonClick(ActionEvent event) throws IOException, SQLException {
+        if (equipmentIdInput.getText() == "")  {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ocorreu um erro");
+            alert.setContentText("Por favor insira uma matrícula adequada!");
+            alert.showAndWait();
+            return;
+        }
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         Equipment equipment = equipmentsDAO.readId(parseInt(equipmentIdInput.getText()));
@@ -102,21 +125,35 @@ public class EquipmentInputsController {
     }
 
     public void onIncludeButtonClick(ActionEvent event) throws IOException{
+        for (Borrowed borrowed : table.getItems()) {
+            Integer id = idColumn.getCellData(borrowed);
+            if (parseInt(equipmentIdInput.getText()) == id) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Ocorreu um erro");
+                alert.setContentText("Ferramenta já cadastrada!");
+                alert.showAndWait();
+
+                equipmentName.setText("Nome");
+                equipmentIdInput.setText("");
+                date.setValue(null);
+
+                return;
+            }
+        }
         if(equipmentName.getText() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma matrícula válida");
             alert.showAndWait();
-            return;
         } else if (date.getValue() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma data válida");
             alert.showAndWait();
-            return;
-        } else {
+        }  else {
             borrowingsList.add(new Borrowed(equipmentName.getText(), parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue())));
             nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
             idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
@@ -129,18 +166,34 @@ public class EquipmentInputsController {
         }
     }
 
-    public void onRemoveButtonClick(ActionEvent event) throws IOException {
+    public void onRemoveButtonClick(ActionEvent event) throws SQLException {
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
-        ObservableList<Borrowed> data = table.getItems();
-        data.remove(selectedIndex);
-        table.refresh();
 
+        removeData(borrowingsList.get(selectedIndex).getIdEquipment());
+
+        borrowingsList.remove(selectedIndex);
+        table.setItems(borrowingsList);
+    }
+
+    public void removeData(Integer id) throws SQLException {
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        if(borrowedDAO.readId(id) != null) borrowedDAO.delete(id);
     }
 
     public void setEmployee(String id, String name) {
         idLabel.setText(id);
         nameLabel.setText(name);
+    }
+    public void setTable(ObservableList<Borrowed> list, Boolean confirm) {
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, java.util.Date>("date"));
+        table.setItems(list);
+        confirmation = confirm;
+
+        borrowingsList.addAll(list);
     }
     @FXML
     private void initialize() {

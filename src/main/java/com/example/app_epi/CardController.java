@@ -193,6 +193,8 @@ public class CardController {
         Parent root = (Parent) loader.load();
         EquipmentInputsController equipmentInputsController = loader.getController();
         equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
+        equipmentInputsController.setTable(borrowingsList, true);
+
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
