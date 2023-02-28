@@ -174,4 +174,12 @@ public class SearchController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
+    public void onInventoryButtonClick (ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("inventoryController-view.fxml")));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
 }

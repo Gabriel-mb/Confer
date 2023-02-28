@@ -2,9 +2,7 @@
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -13,10 +11,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.SearchController">
    <children>
       <Label alignment="CENTER" layoutX="377.0" layoutY="300.0" prefHeight="55.0" prefWidth="293.0" style="-fx-border-radius: 11;" text="DIGITE UMA MATRÍCULA" textAlignment="CENTER" textFill="#0e1c6b">
          <font>
@@ -53,7 +52,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <Rectangle arcHeight="32.0" arcWidth="27.0" height="80.0" layoutX="68.0" layoutY="-12.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="139.0">
+      <Rectangle arcHeight="32.0" arcWidth="27.0" height="86.0" layoutX="68.0" layoutY="-12.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="164.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -78,16 +77,42 @@
             </DropShadow>
          </effect>
       </Rectangle>
-      <Button fx:id="create" alignment="CENTER" layoutX="81.0" layoutY="7.0" mnemonicParsing="false" onAction="#onCreateButtonClick" prefHeight="44.0" prefWidth="117.0" style="-fx-background-color: transparent; -fx-background-radius: 11; -fx-opacity: 1;" text="Criar" textAlignment="CENTER" textFill="WHITE">
+      <MFXButton contentDisplay="TOP" layoutX="80.0" layoutY="1.0" onAction="#onCreateButtonClick" prefHeight="33.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Criar" textAlignment="CENTER" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="38.0" fitWidth="34.0">
+               <image>
+                  <Image url="@../assets/1077114.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </graphic>
          <font>
-            <Font name="System Bold" size="25.0" />
+            <Font name="System Bold" size="12.0" />
          </font>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
-      </Button>
+      </MFXButton>
+      <MFXButton contentDisplay="TOP" layoutX="156.0" layoutY="2.0" onAction="#onInventoryButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Estoque" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <graphic>
+            <ImageView fitHeight="37.0" fitWidth="34.0">
+               <image>
+                  <Image url="@../assets/3524762.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+         </graphic>
+      </MFXButton>
+      <Line endX="-100.0" endY="-48.0" layoutX="250.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
    </children>
 </AnchorPane>

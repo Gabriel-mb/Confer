@@ -199,6 +199,7 @@ public class CardController {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
 }
