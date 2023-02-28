@@ -65,6 +65,7 @@ public class EquipmentInputsController {
     private Boolean confirmation = false;
 
 
+
     public void onSaveButtonClick(ActionEvent event) throws IOException {
         int index = 0;
         try {
@@ -83,7 +84,6 @@ public class EquipmentInputsController {
                     }
                 }
             }
-
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);

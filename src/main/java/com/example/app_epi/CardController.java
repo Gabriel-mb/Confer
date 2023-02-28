@@ -195,6 +195,7 @@ public class CardController {
         equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
         equipmentInputsController.setTable(borrowingsList, true);
 
+
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
