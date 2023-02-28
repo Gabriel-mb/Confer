@@ -1,6 +1,10 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import models.Equipment;
 
 public class EquipmentsDAO {
@@ -17,6 +21,32 @@ public class EquipmentsDAO {
         pstm.execute();
 
         pstm.close();
+    }
+
+    public List<Equipment> listEquipmentsStatus() throws SQLException {
+        String sql = "SELECT e.idEquipment, e.name, " +
+                "CASE WHEN b.idEquipment IS NOT NULL THEN 'em uso' ELSE 'Armazenado' END AS Status, " +
+                "emp.name, b.date " +
+                "FROM equipments e " +
+                "LEFT JOIN borrowed b ON e.idEquipment = b.idEquipment " +
+                "LEFT JOIN employee emp ON emp.idEmployee = b.idEmployee";
+        Statement stmt = connection.createStatement();
+        ResultSet rst = stmt.executeQuery(sql);
+        List<Equipment> equipmentStatus = new ArrayList<>();
+
+        while(rst.next()) {
+            Integer idEquipment = rst.getInt(1);
+            String nameEquip = rst.getString(2);
+            String status = rst.getString(3);
+            String nameEmployee = rst.getString(4);
+            Date date = rst.getDate(5);
+
+            equipmentStatus.add(new Equipment(idEquipment, nameEquip, status, nameEmployee, date));
+        }
+        stmt.close();
+        rst.close();
+
+        return equipmentStatus;
     }
 
     public void readName(String name) throws SQLException {
