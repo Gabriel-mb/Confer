@@ -188,4 +188,15 @@ public class CardController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
+    public void onModifyButtonClick (ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputs-view.fxml"));
+        Parent root = (Parent) loader.load();
+        EquipmentInputsController equipmentInputsController = loader.getController();
+        equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
