@@ -15,7 +15,7 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("login-view.fxml")));
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.initStyle(StageStyle.UNDECORATED);
