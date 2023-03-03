@@ -1,8 +1,7 @@
 package com.example.app_epi;
 
-import dao.ConnectionDAO;
-import dao.EquipmentsDAO;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+
+import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,12 +20,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.Equipment;
-
+import models.History;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -39,8 +39,33 @@ public class HistoryController {
     private AnchorPane anchorPane;
     private Double x;
     private Double y;
+    @FXML
+    private TableView<History> table;
+    @FXML
+    private TableColumn<History, Integer> idColumn;
+    @FXML
+    private TableColumn<History, String> supplierNameColumn;
+    @FXML
+    private TableColumn<History, String> nameEquipColumn;
+    @FXML
+    private TableColumn<History, Integer> idEmployeeColumn;
+    @FXML
+    private TableColumn<History, String> nameEmployeeColumn;
+    @FXML
+    private TableColumn<History, Date> dateBorrowedColumn;
+    @FXML
+    private TableColumn<History, String> statusColumn;
+    @FXML
+    private TableColumn<History, Date> dateDevolutionColumn;
+    @FXML
+    private TableColumn<History, BigDecimal> fineColumn;
 
+    private ObservableList<History> historyList;
 
+    // ideia: após o usuário relatar a devolução, adicionar os dados no histórico.
+    // Fará uma transferência da table equipments para histórico, apagando de um e passando pra outro dependendo do status da ferramenta(Roubado, Danificado, Não localizado, Devolvido)
+    // No caso de devolvido ele fará apenas uma cópia e irá manter o equipment.
+    // Problema na supplierId: caso um supplier seja excluído do DB ele pode retornar um erro.
     public void onMenuButtonClick(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -73,5 +98,23 @@ public class HistoryController {
 
     public void onCloseButtonClick(ActionEvent event) {
         System.exit(0);
+    }
+    
+    public void setTableHistory() throws SQLException {
+        Connection connection = new ConnectionDAO().connect();
+        HistoryDAO historyDAO = new HistoryDAO(connection);
+        historyList = FXCollections.observableList(historyDAO.listHistory());
+
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
+        supplierNameColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+        nameEquipColumn.setCellValueFactory(new PropertyValueFactory<>("nameEquip"));
+        idEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("idEmployee"));
+        nameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("nameEmployee"));
+        dateBorrowedColumn.setCellValueFactory(new PropertyValueFactory<>("borrowedDay"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("statusName"));
+        dateDevolutionColumn.setCellValueFactory(new PropertyValueFactory<>("devolutionDay"));
+        fineColumn.setCellValueFactory(new PropertyValueFactory<>("fine"));
+
+        table.setItems(historyList);
     }
 }

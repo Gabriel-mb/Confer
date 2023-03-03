@@ -1,4 +1,7 @@
 package com.example.app_epi;
+import dao.ConnectionDAO;
+import dao.HistoryDAO;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,8 +10,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.History;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 public class Application extends javafx.application.Application {
@@ -24,5 +31,7 @@ public class Application extends javafx.application.Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {launch();}
+    public static void main(String[] args) {
+        launch();
+    }
 }
