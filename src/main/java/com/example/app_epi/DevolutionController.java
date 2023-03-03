@@ -67,6 +67,8 @@ public class DevolutionController {
             alert.showAndWait();
             return;
         }
+
+
     }
 
 
@@ -117,23 +119,12 @@ public class DevolutionController {
         String selectedItem = statusComboBox.getValue();
         int selectedValue = -1;
 
-            switch (selectedItem) {
-                case "DEVOLVIDO":
-                    selectedValue = 1;
-                    break;
-                case "NÃO LOCALIZADO":
-                    selectedValue = 2;
-                    break;
-                case "DANIFICADO":
-                    selectedValue = 3;
-                    break;
-                case "ROUBADO":
-                    selectedValue = 4;
-                    break;
-                default:
-                    // Tratar erros caso a opção selecionada não seja válida
-                    break;
-            }
-            statusId = selectedValue;
+        switch (selectedItem) {
+            case "DEVOLVIDO" -> selectedValue = 1;
+            case "NÃO LOCALIZADO" -> selectedValue = 2;
+            case "DANIFICADO" -> selectedValue = 3;
+            case "ROUBADO" -> selectedValue = 4;
+        }
+        statusId = selectedValue;
     }
 }
