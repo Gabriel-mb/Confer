@@ -1,5 +1,6 @@
 package com.example.app_epi;
 
+
 import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -17,13 +19,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.Equipment;
 import models.History;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -96,7 +99,7 @@ public class HistoryController {
     public void onCloseButtonClick(ActionEvent event) {
         System.exit(0);
     }
-
+    
     public void setTableHistory() throws SQLException {
         Connection connection = new ConnectionDAO().connect();
         HistoryDAO historyDAO = new HistoryDAO(connection);

@@ -57,7 +57,9 @@ public class LoginController {
     }
 
     public void onLoginButtonClick(ActionEvent event) throws IOException {
+
         //verificar usuário e senha
+
         root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
