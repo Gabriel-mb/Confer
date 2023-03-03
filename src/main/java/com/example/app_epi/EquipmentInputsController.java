@@ -237,4 +237,33 @@ public class EquipmentInputsController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
+
+    public void onDevolutionClick(ActionEvent event) throws IOException {
+        //remover o dado do borrowed e gerar dado no histórico
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("devolution-view.fxml"));
+        Parent root = (Parent) loader.load();
+        DevolutionController devolutionController = loader.getController();
+
+        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
+        int selectedIndex = selectionModel.getSelectedIndex();
+
+        if (selectedIndex == -1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ocorreu um erro");
+            alert.setContentText("Por favor selecione um item que quer devolver.");
+            alert.showAndWait();
+            return;
+        }
+
+        Borrowed itemSelected = borrowingsList.get(selectedIndex);
+
+        devolutionController.setData(nameLabel.getText(), idLabel.getText(), String.valueOf(itemSelected.getIdEquipment()), itemSelected.getEquipmentName(), String.valueOf(itemSelected.getDate()));
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
 }
