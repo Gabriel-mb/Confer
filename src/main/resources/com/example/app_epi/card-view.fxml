@@ -17,15 +17,15 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
    <children>
-      <Label fx:id="nameLabel" layoutX="153.0" layoutY="94.0" prefHeight="28.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5;">
+      <Label fx:id="nameLabel" layoutX="153.0" layoutY="94.0" prefHeight="0.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
          <font>
-            <Font size="17.0" />
+            <Font size="15.0" />
          </font></Label>
-      <Label fx:id="employeeId" layoutX="422.0" layoutY="94.0" prefHeight="28.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5;">
+      <Label fx:id="employeeId" layoutX="422.0" layoutY="94.0" prefHeight="28.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
          <font>
-            <Font size="17.0" />
+            <Font size="15.0" />
          </font></Label>
       <Button layoutX="893.0" layoutY="676.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Excluir Ficha" textFill="WHITE">
          <font>
