@@ -3,6 +3,7 @@ package com.example.app_epi;
 import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
+import dao.HistoryDAO;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -199,17 +200,19 @@ public class EquipmentInputsController {
     public void onRemoveButtonClick(ActionEvent event) throws SQLException {
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
+        /*Borrowed item = borrowingsList.get(selectedIndex);
 
-        removeData(borrowingsList.get(selectedIndex).getIdEquipment());
+        removeData(item.getIdEquipment(), item.getSupplierName());*/
 
         borrowingsList.remove(selectedIndex);
         table.setItems(borrowingsList);
     }
 
-    public void removeData(Integer id) throws SQLException {
+    public void removeData(Integer idEquip, String supplierName) throws SQLException {
         Connection connection = new ConnectionDAO().connect();
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        if(borrowedDAO.readId(id) != null) borrowedDAO.delete(id);
+        HistoryDAO historyDAO = new HistoryDAO(connection);
+        if(borrowedDAO.readId(idEquip) != null) borrowedDAO.delete(idEquip, historyDAO.getSupplierId(supplierName));
     }
 
     public void setEmployee(String id, String name) {
