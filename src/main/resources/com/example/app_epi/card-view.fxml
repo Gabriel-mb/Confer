@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
    <children>
       <Label fx:id="nameLabel" layoutX="153.0" layoutY="94.0" prefHeight="0.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
          <font>
@@ -36,7 +36,7 @@
          </effect></Button>
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="16.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
          <font>
-            <Font name="Arial" size="11.0" />
+            <Font name="Arial Bold" size="10.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -69,7 +69,7 @@
       </Rectangle>
       <MFXButton contentDisplay="TOP" layoutX="114.0" layoutY="3.0" onMouseClicked="#onMenuButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Menu" textAlignment="CENTER" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="35.0" fitWidth="34.0" onMouseClicked="#onMenuButtonClick">
+            <ImageView fitHeight="32.0" fitWidth="32.0" onMouseClicked="#onMenuButtonClick">
                <Image url="@../assets/1946488.png" />
                <cursor>
                   <Cursor fx:constant="HAND" />

@@ -21,12 +21,12 @@
 
 <AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.EquipmentInputsController">
    <children>
-      <Label fx:id="nameLabel" layoutX="163.0" layoutY="93.0" prefHeight="28.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5;">
+      <Label fx:id="nameLabel" layoutX="163.0" layoutY="93.0" prefHeight="28.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 0 0 0 4;">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="idLabel" layoutX="431.0" layoutY="93.0" prefHeight="28.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5;">
+      <Label fx:id="idLabel" layoutX="431.0" layoutY="93.0" prefHeight="28.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 0 0 0 4;">
          <font>
             <Font size="17.0" />
          </font>
@@ -39,13 +39,13 @@
             <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="123.0" text="Data" />
          </columns>
       </TableView>
-      <MFXDatePicker fx:id="date" layoutX="652.0" layoutY="134.0" prefHeight="38.0" prefWidth="143.0" style="-fx-border-color: #0e1c6b;" />
+      <MFXDatePicker fx:id="date" layoutX="739.0" layoutY="134.0" prefHeight="38.0" prefWidth="143.0" promptText="Data" style="-fx-border-color: #0e1c6b;" />
       <MFXTextField fx:id="equipmentIdInput" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="163.0" layoutY="135.0" prefHeight="28.0" prefWidth="158.0" promptText="Patrimônio" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <Button layoutX="803.0" layoutY="135.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Buscar" textFill="WHITE">
+      <Button layoutX="333.0" layoutY="135.0" mnemonicParsing="false" onAction="#onSearchButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Buscar" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -80,7 +80,7 @@
       </Rectangle>
       <MFXButton contentDisplay="TOP" layoutX="113.0" layoutY="2.0" onMouseClicked="#onMenuButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Menu" textAlignment="CENTER" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="35.0" fitWidth="34.0" onMouseClicked="#onMenuButtonClick">
+            <ImageView fitHeight="32.0" fitWidth="32.0" onMouseClicked="#onMenuButtonClick">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -122,13 +122,17 @@
       </Button>
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
          <font>
-            <Font name="Arial" size="11.0" />
+            <Font name="Arial Bold" size="10.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <ComboBox fx:id="equipmentName" layoutX="332.0" layoutY="134.0" prefHeight="38.0" prefWidth="310.0" />
+      <ComboBox fx:id="equipmentName" layoutX="424.0" layoutY="134.0" prefHeight="38.0" prefWidth="304.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: white; -fx-border-color: #0e1c6b; -fx-padding: 0 0 0 4;">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ComboBox>
       <!---->
    </children>
 </AnchorPane>

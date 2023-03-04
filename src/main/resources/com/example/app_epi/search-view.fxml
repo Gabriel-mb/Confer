@@ -39,14 +39,14 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="42.0" fitWidth="42.0" onKeyPressed="#pressEnter">
-               <Image url="@../assets/49116.png" />
+            <ImageView fitHeight="42.0" fitWidth="42.0" onKeyTyped="#pressEnter" onMouseClicked="#onSearchButtonClick">
+               <Image url="@../assets/search-2906.png" />
             </ImageView>
          </graphic>
       </MFXButton>
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
          <font>
-            <Font name="Arial" size="11.0" />
+            <Font name="Arial Bold" size="10.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -77,11 +77,11 @@
             </DropShadow>
          </effect>
       </Rectangle>
-      <MFXButton contentDisplay="TOP" layoutX="80.0" layoutY="1.0" onAction="#onCreateButtonClick" prefHeight="33.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Criar" textAlignment="CENTER" textFill="WHITE">
+      <MFXButton alignment="CENTER" contentDisplay="TOP" layoutX="80.0" layoutY="10.0" onAction="#onCreateButtonClick" prefHeight="33.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Criar" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="38.0" fitWidth="34.0">
+            <ImageView fitHeight="30.0" fitWidth="30.0">
                <image>
-                  <Image url="@../assets/1077114.png" />
+                  <Image url="@../assets/person-266.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -123,9 +123,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="32.0">
+            <ImageView fitHeight="32.0" fitWidth="32.0" preserveRatio="true">
                <image>
-                  <Image url="@../assets/wrench-tool-10222.png" />
+                  <Image url="@../assets/content-9816.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />

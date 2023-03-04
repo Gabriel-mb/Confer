@@ -13,9 +13,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import java.time.format.FormatStyle;
 
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import javafx.scene.control.TextFormatter;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -24,6 +30,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.LocalDateStringConverter;
 import models.Borrowed;
 import models.Equipment;
 
@@ -31,13 +39,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.format.FormatStyle;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static java.lang.Integer.parseInt;
 
 public class EquipmentInputsController {
+    ObservableList<Borrowed> borrowingsList = FXCollections.observableArrayList();
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -53,7 +64,6 @@ public class EquipmentInputsController {
     private TextField equipmentIdInput;
     @FXML
     private ComboBox<String> equipmentName;
-    ObservableList<Borrowed> borrowingsList = FXCollections.observableArrayList();
     @FXML
     private TableView<Borrowed> table;
     @FXML
@@ -69,7 +79,6 @@ public class EquipmentInputsController {
     private Boolean confirmation = false;
     private String equipName;
     private String supplierName;
-
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -109,7 +118,7 @@ public class EquipmentInputsController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Ferramenta com matrícula: " + id +" já alocada!");
+            alert.setContentText("Ferramenta com matrícula: " + id + " já alocada!");
             alert.showAndWait();
 
             borrowingsList.remove(index);
@@ -117,7 +126,7 @@ public class EquipmentInputsController {
     }
 
     public void onSearchButtonClick(ActionEvent event) throws IOException, SQLException {
-        if (equipmentIdInput.getText() == "")  {
+        if (equipmentIdInput.getText() == "") {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -142,9 +151,10 @@ public class EquipmentInputsController {
                 equipmentName.getItems().addAll(i.getSupplierName() + " - " + i.getName());
             }
         }
+        equipmentName.getSelectionModel().selectFirst();
     }
 
-    public void onIncludeButtonClick(ActionEvent event) throws IOException{
+    public void onIncludeButtonClick(ActionEvent event) throws IOException {
         splitSelection();
         for (Borrowed borrowed : table.getItems()) {
             Integer id = idColumn.getCellData(borrowed);
@@ -163,19 +173,19 @@ public class EquipmentInputsController {
                 return;
             }
         }
-        if(equipmentName.getValue() == null){
+        if (equipmentName.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma matrícula válida");
             alert.showAndWait();
-        } else if (date.getValue() == null){
+        } else if (date.getValue() == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma data válida");
             alert.showAndWait();
-        }  else {
+        } else {
             borrowingsList.add(new Borrowed(equipName, parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), supplierName));
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
             idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
@@ -212,13 +222,14 @@ public class EquipmentInputsController {
         Connection connection = new ConnectionDAO().connect();
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         HistoryDAO historyDAO = new HistoryDAO(connection);
-        if(borrowedDAO.readId(idEquip) != null) borrowedDAO.delete(idEquip, historyDAO.getSupplierId(supplierName));
+        if (borrowedDAO.readId(idEquip) != null) borrowedDAO.delete(idEquip, historyDAO.getSupplierId(supplierName));
     }
 
     public void setEmployee(String id, String name) {
         idLabel.setText(id);
         nameLabel.setText(name);
     }
+
     public void setTable(ObservableList<Borrowed> list, Boolean confirm) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
         idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
@@ -230,6 +241,7 @@ public class EquipmentInputsController {
 
         borrowingsList.addAll(list);
     }
+
     @FXML
     private void initialize() {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
@@ -238,7 +250,12 @@ public class EquipmentInputsController {
                 ((TextField) node).setFocusTraversable(false);
             }
         }
+        //formata a data do datepicker
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Supplier<StringConverter<LocalDate>> converterSupplier = () -> new LocalDateStringConverter(dateFormatter, null);
+        date.setConverterSupplier(converterSupplier);
     }
+
     public void anchorPane_dragged(MouseEvent event) {
         Stage stage = (Stage) anchorPane.getScene().getWindow();
         stage.setY(event.getScreenY() - y);
@@ -250,6 +267,7 @@ public class EquipmentInputsController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
+
     public void onCloseButtonClick(ActionEvent event) {
         System.exit(0);
     }
