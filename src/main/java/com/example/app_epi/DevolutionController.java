@@ -1,12 +1,7 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
-import dao.ConnectionDAO;
-import dao.EquipmentsDAO;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,22 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import models.Borrowed;
-import models.Equipment;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.Comparator;
 import java.util.Objects;
-
-import static java.lang.Integer.parseInt;
 
 public class DevolutionController {
     private Stage stage;
@@ -49,6 +35,8 @@ public class DevolutionController {
     private Label equipmentNameLabel;
     @FXML
     private Label dateBorrowedLabel;
+    @FXML
+    private Label supplierLabel;
     @FXML
     private ComboBox<String> statusComboBox;
     @FXML
@@ -107,12 +95,13 @@ public class DevolutionController {
         stage.show();
     }
 
-    public void setData(String employee, String idEmployee, String idEquip, String equipment, String dateBorrowed) {
+    public void setData(String employee, String idEmployee, String idEquip, String equipment, String dateBorrowed, String supplierName) {
         nameLabel.setText(employee);
         idLabel.setText(idEmployee);
         idEquipmentLabel.setText(idEquip);
         equipmentNameLabel.setText(equipment);
         dateBorrowedLabel.setText(dateBorrowed);
+        supplierLabel.setText(supplierName);
     }
 
     public void setStatusComboBox (ActionEvent event) {

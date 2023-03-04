@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +31,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -51,7 +51,7 @@ public class EquipmentInputsController {
     @FXML
     private TextField equipmentIdInput;
     @FXML
-    private Label equipmentName;
+    private ComboBox<String> equipmentName;
     ObservableList<Borrowed> borrowingsList = FXCollections.observableArrayList();
     @FXML
     private TableView<Borrowed> table;
@@ -61,9 +61,13 @@ public class EquipmentInputsController {
     private TableColumn<Borrowed, Integer> idColumn;
     @FXML
     private TableColumn<Borrowed, java.util.Date> dateColumn;
+    @FXML
+    private TableColumn<Borrowed, String> supplierColumn;
     private Double x;
     private Double y;
     private Boolean confirmation = false;
+    private String equipName;
+    private String supplierName;
 
 
 
@@ -122,36 +126,43 @@ public class EquipmentInputsController {
         }
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-        Equipment equipment = equipmentsDAO.readId(parseInt(equipmentIdInput.getText()));
-
-        if (equipment == null) {
+        List<Equipment> equipmentList = equipmentsDAO.readId(parseInt(equipmentIdInput.getText()));
+        System.out.println(equipmentList);
+        if (equipmentList.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Nenhum equipamento encontrado!");
             alert.showAndWait();
             return;
-        } else equipmentName.setText(equipment.getName());
+        } else {
+            for (Equipment i : equipmentList) {
+                if (equipmentName.getItems().contains(i.getSupplierName() + " - " + i.getName())) return;
+                equipmentName.getItems().addAll(i.getSupplierName() + " - " + i.getName());
+            }
+        }
     }
 
     public void onIncludeButtonClick(ActionEvent event) throws IOException{
+        splitSelection();
         for (Borrowed borrowed : table.getItems()) {
             Integer id = idColumn.getCellData(borrowed);
-            if (parseInt(equipmentIdInput.getText()) == id) {
+            String supplier = supplierColumn.getCellData(borrowed);
+            if (parseInt(equipmentIdInput.getText()) == id && Objects.equals(supplierName, supplier)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Erro");
                 alert.setHeaderText("Ocorreu um erro");
                 alert.setContentText("Ferramenta já cadastrada!");
                 alert.showAndWait();
 
-                equipmentName.setText("Ferramenta");
+                equipmentName.getItems().clear();
                 equipmentIdInput.setText("");
                 date.setValue(null);
 
                 return;
             }
         }
-        if(equipmentName.getText() == null){
+        if(equipmentName.getValue() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -164,16 +175,25 @@ public class EquipmentInputsController {
             alert.setContentText("Por favor insira uma data válida");
             alert.showAndWait();
         }  else {
-            borrowingsList.add(new Borrowed(equipmentName.getText(), parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue())));
-            nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
-            idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
-            dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, java.util.Date>("date"));
+            borrowingsList.add(new Borrowed(equipName, parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), supplierName));
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
+            idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
+            dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+            supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
             table.setItems(borrowingsList);
 
-            equipmentName.setText("");
+            equipmentName.getItems().clear();
             equipmentIdInput.setText("");
             date.setValue(null);
         }
+    }
+
+    private void splitSelection() {
+        String selection = equipmentName.getValue();
+        String[] sections = selection.split(" - ");
+
+        supplierName = sections[0];
+        equipName = sections[1];
     }
 
     public void onRemoveButtonClick(ActionEvent event) throws SQLException {
@@ -200,6 +220,8 @@ public class EquipmentInputsController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, String>("equipmentName"));
         idColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, Integer>("idEquipment"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<Borrowed, java.util.Date>("date"));
+        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+
         table.setItems(list);
         confirmation = confirm;
 
@@ -257,8 +279,7 @@ public class EquipmentInputsController {
         }
 
         Borrowed itemSelected = borrowingsList.get(selectedIndex);
-
-        devolutionController.setData(nameLabel.getText(), idLabel.getText(), String.valueOf(itemSelected.getIdEquipment()), itemSelected.getEquipmentName(), String.valueOf(itemSelected.getDate()));
+        devolutionController.setData(nameLabel.getText(), idLabel.getText(), String.valueOf(itemSelected.getIdEquipment()), itemSelected.getEquipmentName(), String.valueOf(itemSelected.getDate()), itemSelected.getSupplierName());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

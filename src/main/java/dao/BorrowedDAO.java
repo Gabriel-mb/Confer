@@ -25,10 +25,12 @@ public class BorrowedDAO {
     }
 
     public List<Borrowed> listBorrowed(Integer id) throws SQLException {
-        String sql = "SELECT equipments.name, borrowed.idEquipment, borrowed.date " +
+        String sql = "SELECT equipments.name, borrowed.idEquipment, borrowed.date, sup.name " +
                 "FROM equipments " +
                 "INNER JOIN borrowed " +
-                "ON equipments.idEquipment = borrowed.idEquipment WHERE borrowed.idEmployee = ?";
+                "ON equipments.idEquipment = borrowed.idEquipment " +
+                "JOIN supplier sup ON equipments.supplierId = sup.supplierId WHERE borrowed.idEmployee = ?";
+
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
         pstm.execute();
@@ -39,8 +41,9 @@ public class BorrowedDAO {
             String name = rst.getString(1);
             Integer idEquip = rst.getInt(2);
             Date date = rst.getDate(3);
+            String supplierName = rst.getString(4);
 
-            borrowings.add(new Borrowed(name,idEquip,date));
+            borrowings.add(new Borrowed(name,idEquip,date, supplierName));
         }
         pstm.close();
         rst.close();

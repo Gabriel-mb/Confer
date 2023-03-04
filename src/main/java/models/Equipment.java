@@ -8,10 +8,12 @@ public class Equipment {
     private String status;
     private String nameEmployee;
     private Date date;
+    private String supplierName;
 
-    public Equipment(Integer idEquipment, String nameEquip) {
+    public Equipment(Integer idEquipment, String nameEquip, String supplierName) {
         this.idEquipment = idEquipment;
         this.nameEquip = nameEquip;
+        this.supplierName = supplierName;
     }
 
     public Equipment(Integer idEquipment, String nameEquip, String status, String nameEmployee, Date date) {
@@ -56,6 +58,14 @@ public class Equipment {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     @Override
