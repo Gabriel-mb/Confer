@@ -6,6 +6,7 @@ public class Borrowed {
 
     private Integer idEmployee;
     private Integer idEquipment;
+    private String supplierName;
     private Integer quantity;
     private String equipmentName;
     private Date date;
@@ -20,6 +21,13 @@ public class Borrowed {
         this.idEmployee = idEmployee;
         this.idEquipment = idEquipment;
         this.date = date;
+    }
+
+    public Borrowed(String equipmentName, Integer idEquipment, Date date, String supplierName) {
+        this.equipmentName = equipmentName;
+        this.idEquipment = idEquipment;
+        this.date = date;
+        this.supplierName = supplierName;
     }
 
     public Integer getIdEmployee() {
@@ -62,13 +70,23 @@ public class Borrowed {
         this.date = date;
     }
 
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
     @Override
     public String toString() {
         return "Borrowed{" +
-                "idEquipment=" + idEquipment +
+                "idEmployee=" + idEmployee +
+                ", idEquipment=" + idEquipment +
+                ", supplierName='" + supplierName + '\'' +
+                ", quantity=" + quantity +
                 ", equipmentName='" + equipmentName + '\'' +
                 ", date=" + date +
                 '}';
     }
-
 }

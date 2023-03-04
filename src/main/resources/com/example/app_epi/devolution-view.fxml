@@ -145,7 +145,8 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <Label fx:id="supplierName" layoutX="660.0" layoutY="294.0" prefHeight="36.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
+      <Label fx:id="supplierLabel" layoutX="660.0" layoutY="294.0" prefHeight="36.0" prefWidth="128.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
+
          <font>
             <Font size="17.0" />
          </font>

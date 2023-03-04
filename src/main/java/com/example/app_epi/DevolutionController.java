@@ -36,6 +36,8 @@ public class DevolutionController {
     @FXML
     private Label dateBorrowedLabel;
     @FXML
+    private Label supplierLabel;
+    @FXML
     private ComboBox<String> statusComboBox;
     @FXML
     private AnchorPane anchorPane;
@@ -93,12 +95,13 @@ public class DevolutionController {
         stage.show();
     }
 
-    public void setData(String employee, String idEmployee, String idEquip, String equipment, String dateBorrowed) {
+    public void setData(String employee, String idEmployee, String idEquip, String equipment, String dateBorrowed, String supplierName) {
         nameLabel.setText(employee);
         idLabel.setText(idEmployee);
         idEquipmentLabel.setText(idEquip);
         equipmentNameLabel.setText(equipment);
         dateBorrowedLabel.setText(dateBorrowed);
+        supplierLabel.setText(supplierName);
     }
 
     public void setStatusComboBox (ActionEvent event) {

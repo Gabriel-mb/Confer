@@ -48,6 +48,8 @@ public class CardController {
     private TableColumn<Borrowed, Integer> idColumn;
     @FXML
     private TableColumn<Borrowed, Date> dateColumn;
+    @FXML
+    private TableColumn<Borrowed, String> supplierColumn;
 
     private ObservableList<Borrowed> borrowingsList;
 
@@ -163,6 +165,7 @@ public class CardController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
         table.setItems(borrowingsList);
 
         EmployeeDAO employeeDAO = new EmployeeDAO(connection);

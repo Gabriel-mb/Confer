@@ -49,7 +49,7 @@ public class EquipmentsDAO {
         return equipmentStatus;
     }
 
-    public void readName(String name) throws SQLException {
+/*    public void readName(String name) throws SQLException {
         String sql = "SELECT * FROM EQUIPMENTS WHERE NAME LIKE ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -64,10 +64,13 @@ public class EquipmentsDAO {
 
         pstm.close();
         rst.close();
-    }
+    }*/
     //new
-    public Equipment readId(Integer id) throws SQLException{
-        String sql = "SELECT * FROM EQUIPMENTS WHERE IDEQUIPMENT = ?";
+    public List<Equipment> readId(Integer id) throws SQLException{
+        String sql = "SELECT e.idEquipment, e.name, sup.name AS supplierName " +
+                "FROM EQUIPMENTS e " +
+                "JOIN supplier sup on e.supplierId = sup.supplierId " +
+                "WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
@@ -75,16 +78,16 @@ public class EquipmentsDAO {
         pstm.execute();
 
         ResultSet rst = pstm.getResultSet();
+        List<Equipment> equipmentList = new ArrayList<>();
+        while (rst.next()) {
 
-        if (rst.next()) {
-            Equipment equipment = new Equipment(rst.getInt(1), rst.getString(2));
-            pstm.close();
-            rst.close();
-
-            return equipment;
+            Equipment equipment = new Equipment(rst.getInt(1), rst.getString(2), rst.getString(3));
+            equipmentList.add(equipment);
         }
+        pstm.close();
+        rst.close();
 
-        return null;
+        return equipmentList;
 
     }
     //
