@@ -1,5 +1,8 @@
 package com.example.app_epi;
 
+import dao.BorrowedDAO;
+import dao.ConnectionDAO;
+import dao.HistoryDAO;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
@@ -13,9 +16,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.History;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Objects;
+
+import static java.lang.Integer.parseInt;
 
 public class DevolutionController {
     private Stage stage;
@@ -46,7 +56,8 @@ public class DevolutionController {
     private int statusId = -1;
 
 
-    public void onSaveButtonClick(ActionEvent event) throws IOException {
+    public void onSaveButtonClick(ActionEvent event) throws IOException, SQLException {
+        Connection connection = new ConnectionDAO().connect();
         if (statusId == -1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -55,7 +66,28 @@ public class DevolutionController {
             alert.showAndWait();
             return;
         }
-
+        //"DEVOLVIDO" -> 1;
+        //"NÃO LOCALIZADO" -> 2;
+        //"DANIFICADO" -> 3;
+        //"ROUBADO" -> 4;
+        switch (statusId) {
+            case 1:
+                //apenas salvar no histórico e tirar de borrowed, porém não excluir de equipments.
+                HistoryDAO historyDAO = new HistoryDAO(connection);
+                Integer supId = historyDAO.getSupplierId(supplierLabel.getText());
+                History history = new History(parseInt(idEquipmentLabel.getText()), supId, equipmentNameLabel.getText(), parseInt(idLabel.getText()), nameLabel.getText(), Date.valueOf(dateBorrowedLabel.getText()), statusId, Date.valueOf(dateDevolution.getValue()), BigDecimal.valueOf(Float.valueOf(fine.getText())));
+                historyDAO.create(history);
+                BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+                borrowedDAO.delete(parseInt(idEquipmentLabel.getText()), supId);
+                break;
+                //casos 2, 3 e 4 excluir de equipments e salvar no history.
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
 
     }
 

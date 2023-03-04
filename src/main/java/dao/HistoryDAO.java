@@ -59,4 +59,18 @@ public class HistoryDAO {
 
         return historyList;
     }
+
+    public Integer getSupplierId(String supplierName) throws SQLException {
+        String sql = "SELECT SUPPLIERID FROM SUPPLIER WHERE NAME = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+
+        pstm.setString(1, supplierName);
+        pstm.execute();
+
+        ResultSet rst = pstm.getResultSet();
+
+        rst.next();
+
+        return rst.getInt(1);
+    }
 }

@@ -28,7 +28,7 @@ public class BorrowedDAO {
         String sql = "SELECT equipments.name, borrowed.idEquipment, borrowed.date, sup.name " +
                 "FROM equipments " +
                 "INNER JOIN borrowed " +
-                "ON equipments.idEquipment = borrowed.idEquipment " +
+                "ON equipments.idEquipment = borrowed.idEquipment AND equipments.supplierId = borrowed.supplierId " +
                 "JOIN supplier sup ON equipments.supplierId = sup.supplierId WHERE borrowed.idEmployee = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -102,12 +102,13 @@ public class BorrowedDAO {
         pstm.close();
     }
 
-    public void delete(Integer id) throws SQLException {
+    public void delete(Integer idEquip, Integer supplierId) throws SQLException {
 
-        String sql = "DELETE FROM BORROWED WHERE IDEQUIPMENT = ?";
+        String sql = "DELETE FROM BORROWED WHERE IDEQUIPMENT = ? AND supplierId = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setInt(1, id);
+        pstm.setInt(1, idEquip);
+        pstm.setInt(2, supplierId);
 
         Integer rows = pstm.executeUpdate();
 

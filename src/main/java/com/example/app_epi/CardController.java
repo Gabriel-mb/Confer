@@ -141,7 +141,7 @@ public class CardController {
         }
     }
 
-    public void onRemoveButtonClick(ActionEvent event) throws SQLException {
+    /*public void onRemoveButtonClick(ActionEvent event) throws SQLException {
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
         ObservableList<Borrowed> data = table.getItems();
@@ -152,7 +152,7 @@ public class CardController {
 
         data.remove(selectedIndex);
         table.refresh();
-    }
+    }*/
 
     public void setTableEmployee(String id) throws SQLException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
