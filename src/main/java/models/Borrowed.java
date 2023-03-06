@@ -10,6 +10,7 @@ public class Borrowed {
     private Integer quantity;
     private String equipmentName;
     private Date date;
+    private Integer supplierId;
 
     public Borrowed(String equipmentName, Integer idEquipment, Date date) {
         this.equipmentName = equipmentName;
@@ -17,10 +18,11 @@ public class Borrowed {
         this.date = date;
     }
 
-    public Borrowed(Integer idEmployee, Integer idEquipment, Date date) {
+    public Borrowed(Integer idEmployee, Integer idEquipment, Date date, Integer supplierId) {
         this.idEmployee = idEmployee;
         this.idEquipment = idEquipment;
         this.date = date;
+        this.supplierId = supplierId;
     }
 
     public Borrowed(String equipmentName, Integer idEquipment, Date date, String supplierName) {
@@ -28,6 +30,14 @@ public class Borrowed {
         this.idEquipment = idEquipment;
         this.date = date;
         this.supplierName = supplierName;
+    }
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
     }
 
     public Integer getIdEmployee() {

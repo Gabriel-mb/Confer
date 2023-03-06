@@ -76,6 +76,7 @@ public class EquipmentInputsController {
     private Boolean confirmation = false;
     private String equipName;
     private String supplierName;
+    private int supplierId;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {
@@ -88,13 +89,15 @@ public class EquipmentInputsController {
             if (!confirmation) {
                 for (Borrowed item : borrowingsList) {
                     id = item.getIdEquipment();
-                    borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
+                    supplierId = borrowedDAO.getSupplierId(supplierName);
+                    borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate(), supplierId));
                     index++;
                 }
             } else {
                 for (Borrowed item : borrowingsList) {
                     if (borrowedDAO.readId(item.getIdEquipment()) == null && confirmation) {
-                        borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate()));
+                        supplierId = borrowedDAO.getSupplierId(supplierName);
+                        borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate(), supplierId));
                     }
                 }
             }
@@ -112,11 +115,12 @@ public class EquipmentInputsController {
             scene.setFill(Color.TRANSPARENT);
             stage.show();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            /*Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Ferramenta com matrícula: " + id + " já alocada!");
-            alert.showAndWait();
+            alert.showAndWait();*/
+            e.printStackTrace();
 
             borrowingsList.remove(index);
         }

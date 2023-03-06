@@ -12,12 +12,14 @@ public class BorrowedDAO {
     public BorrowedDAO(Connection connection) { this.connection = connection; }
 
     public void create(Borrowed borrowed) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
-        String sql = "INSERT INTO BORROWED (IDEMPLOYEE, IDEQUIPMENT, DATE) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO BORROWED (IDEMPLOYEE, IDEQUIPMENT, DATE, SUPPLIERID) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, borrowed.getIdEmployee());
         pstm.setInt(2, borrowed.getIdEquipment());
         pstm.setDate(3, borrowed.getDate());
+        pstm.setInt(4, borrowed.getSupplierId());
+
 
         pstm.execute();
 
@@ -61,7 +63,7 @@ public class BorrowedDAO {
 
         ResultSet rst = pstm.getResultSet();
         while (rst.next()) {
-            Borrowed borrowed = new Borrowed(rst.getInt(1),rst.getInt(2), rst.getDate(3));
+            Borrowed borrowed = new Borrowed(rst.getInt(1),rst.getInt(2), rst.getDate(3), rst.getInt(4));
         }
 
         pstm.close();
@@ -79,7 +81,7 @@ public class BorrowedDAO {
         ResultSet rst = pstm.getResultSet();
 
         if (rst.next()) {
-            Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getDate(3));
+            Borrowed borrowed = new Borrowed(rst.getInt(1), rst.getInt(2), rst.getDate(3), rst.getInt(4));
             pstm.close();
             rst.close();
             return borrowed;
@@ -114,7 +116,17 @@ public class BorrowedDAO {
 
         pstm.close();
     }
+    public int getSupplierId(String name) throws SQLException{
+        String sql = "SELECT supplierId FROM supplier WHERE name = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, name);
+        pstm.execute();
 
+        ResultSet rst = pstm.getResultSet();
 
-
+        if(rst.next()){
+            return rst.getInt(1);
+        }
+        return 0;
+    }
 }
