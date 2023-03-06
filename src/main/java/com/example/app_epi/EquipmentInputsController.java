@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import java.time.format.FormatStyle;
 
 import javafx.scene.control.*;
@@ -146,8 +147,8 @@ public class EquipmentInputsController {
             alert.showAndWait();
             return;
         } else {
+            equipmentName.getItems().clear();
             for (Equipment i : equipmentList) {
-                if (equipmentName.getItems().contains(i.getSupplierName() + " - " + i.getName())) return;
                 equipmentName.getItems().addAll(i.getSupplierName() + " - " + i.getName());
             }
         }
