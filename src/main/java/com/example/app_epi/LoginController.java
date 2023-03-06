@@ -1,27 +1,19 @@
 package com.example.app_epi;
 
-import dao.ConnectionDAO;
-import dao.EmployeeDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import models.Employee;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Objects;
-
-import static java.lang.Integer.parseInt;
 
 public class LoginController {
     private Stage stage;
@@ -37,7 +29,7 @@ public class LoginController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
     }
@@ -52,7 +44,7 @@ public class LoginController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
 

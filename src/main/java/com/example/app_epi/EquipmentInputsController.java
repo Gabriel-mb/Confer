@@ -14,15 +14,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.time.format.FormatStyle;
-
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javafx.scene.control.TextFormatter;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -40,7 +37,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.time.format.FormatStyle;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -126,8 +122,8 @@ public class EquipmentInputsController {
         }
     }
 
-    public void onSearchButtonClick(ActionEvent event) throws IOException, SQLException {
-        if (equipmentIdInput.getText() == "") {
+    public void onSearchButtonClick() throws SQLException {
+        if (Objects.equals(equipmentIdInput.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -155,7 +151,7 @@ public class EquipmentInputsController {
         equipmentName.getSelectionModel().selectFirst();
     }
 
-    public void onIncludeButtonClick(ActionEvent event) throws IOException {
+    public void onIncludeButtonClick() {
         splitSelection();
         for (Borrowed borrowed : table.getItems()) {
             Integer id = idColumn.getCellData(borrowed);
@@ -208,12 +204,12 @@ public class EquipmentInputsController {
         equipName = sections[1];
     }
 
-    public void onRemoveButtonClick(ActionEvent event) throws SQLException {
+    public void onRemoveButtonClick() throws SQLException {
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
-        /*Borrowed item = borrowingsList.get(selectedIndex);
+        Borrowed item = borrowingsList.get(selectedIndex);
 
-        removeData(item.getIdEquipment(), item.getSupplierName());*/
+        removeData(item.getIdEquipment(), item.getSupplierName());
 
         borrowingsList.remove(selectedIndex);
         table.setItems(borrowingsList);
@@ -248,7 +244,7 @@ public class EquipmentInputsController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
         //formata a data do datepicker
@@ -269,7 +265,7 @@ public class EquipmentInputsController {
         y = event.getSceneY();
     }
 
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
 
@@ -285,7 +281,7 @@ public class EquipmentInputsController {
     public void onDevolutionClick(ActionEvent event) throws IOException {
         //remover o dado do borrowed e gerar dado no histórico
         FXMLLoader loader = new FXMLLoader(getClass().getResource("devolution-view.fxml"));
-        Parent root = (Parent) loader.load();
+        Parent root = loader.load();
         DevolutionController devolutionController = loader.getController();
 
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();

@@ -5,7 +5,6 @@ import dao.ConnectionDAO;
 import dao.HistoryDAO;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -61,7 +60,7 @@ public class DevolutionController {
     private int statusId = -1;
 
 
-    public void onSaveButtonClick(ActionEvent event) throws IOException, SQLException {
+    public void onSaveButtonClick() throws SQLException {
         Connection connection = new ConnectionDAO().connect();
         if (statusId == -1) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -80,7 +79,7 @@ public class DevolutionController {
                 //apenas salvar no histórico e tirar de borrowed, porém não excluir de equipments.
                 HistoryDAO historyDAO = new HistoryDAO(connection);
                 Integer supId = historyDAO.getSupplierId(supplierLabel.getText());
-                History history = new History(parseInt(idEquipmentLabel.getText()), supId, equipmentNameLabel.getText(), parseInt(idLabel.getText()), nameLabel.getText(), Date.valueOf(dateBorrowedLabel.getText()), statusId, Date.valueOf(dateDevolution.getValue()), BigDecimal.valueOf(Float.valueOf(fine.getText())));
+                History history = new History(parseInt(idEquipmentLabel.getText()), supId, equipmentNameLabel.getText(), parseInt(idLabel.getText()), nameLabel.getText(), Date.valueOf(dateBorrowedLabel.getText()), statusId, Date.valueOf(dateDevolution.getValue()), BigDecimal.valueOf(Float.parseFloat(fine.getText())));
                 historyDAO.create(history);
                 BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
                 borrowedDAO.delete(parseInt(idEquipmentLabel.getText()), supId);
@@ -88,9 +87,7 @@ public class DevolutionController {
                 //casos 2, 3 e 4 excluir de equipments e salvar no history.
             case 2:
                 break;
-            case 3:
-                break;
-            case 4:
+            case 3, 4:
                 break;
         }
 
@@ -102,7 +99,7 @@ public class DevolutionController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
         //formata a data do datepicker
@@ -123,7 +120,7 @@ public class DevolutionController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
 
@@ -145,7 +142,7 @@ public class DevolutionController {
         supplierLabel.setText(supplierName);
     }
 
-    public void setStatusComboBox (ActionEvent event) {
+    public void setStatusComboBox () {
         String selectedItem = statusComboBox.getValue();
         int selectedValue = -1;
 

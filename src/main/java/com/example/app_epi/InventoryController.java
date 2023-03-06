@@ -1,8 +1,6 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
 import dao.ConnectionDAO;
-import dao.EmployeeDAO;
 import dao.EquipmentsDAO;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -22,8 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import models.Borrowed;
-import models.Employee;
 import models.Equipment;
 import java.io.IOException;
 import java.sql.Connection;
@@ -84,7 +80,7 @@ public class InventoryController {
         table.setItems(equipmentsStatus);
     }
 
-    public void onIncludeButtonClick(ActionEvent event) {
+    public void onIncludeButtonClick() {
         if (Objects.equals(name.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -113,7 +109,7 @@ public class InventoryController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
     }
@@ -129,7 +125,7 @@ public class InventoryController {
         y = event.getSceneY();
     }
 
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
 }

@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -19,17 +18,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import models.Equipment;
 import models.History;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Comparator;
 import java.util.Objects;
-
-import static java.lang.Integer.parseInt;
 
 public class HistoryController {
     private Stage stage;
@@ -80,7 +75,7 @@ public class HistoryController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
     }
@@ -96,7 +91,7 @@ public class HistoryController {
         y = event.getSceneY();
     }
 
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
     

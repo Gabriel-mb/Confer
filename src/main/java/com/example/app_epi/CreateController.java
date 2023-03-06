@@ -93,7 +93,7 @@ public class CreateController {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
     }
@@ -108,7 +108,7 @@ public class CreateController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
 }

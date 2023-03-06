@@ -58,11 +58,11 @@ public class CardController {
 
 
     @FXML
-    private void initialize() throws SQLException {
+    private void initialize() {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
-                ((TextField) node).setFocusTraversable(false);
+                node.setFocusTraversable(false);
             }
         }
     }
@@ -91,7 +91,7 @@ public class CardController {
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml")); //Diferente dos outros loads
-        Parent root = (Parent) loader.load();
+        Parent root = loader.load();
 
         CardController cardController = loader.getController();
         cardController.setTableEmployee(newEmployeeId.getText());
@@ -141,19 +141,6 @@ public class CardController {
         }
     }
 
-    /*public void onRemoveButtonClick(ActionEvent event) throws SQLException {
-        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
-        int selectedIndex = selectionModel.getSelectedIndex();
-        ObservableList<Borrowed> data = table.getItems();
-
-        Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        borrowedDAO.delete(data.get(selectedIndex).getIdEquipment());
-
-        data.remove(selectedIndex);
-        table.refresh();
-    }*/
-
     public void setTableEmployee(String id) throws SQLException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         employeeId.setText(id);
@@ -172,7 +159,7 @@ public class CardController {
         Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
         nameLabel.setText(employee.getName());
     }
-    public void onCloseButtonClick(ActionEvent event) {
+    public void onCloseButtonClick() {
         System.exit(0);
     }
     public void anchorPane_dragged(MouseEvent event) {
@@ -188,7 +175,7 @@ public class CardController {
     }
     public void onModifyButtonClick (ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
-        Parent root = (Parent) loader.load();
+        Parent root = loader.load();
         EquipmentInputsController equipmentInputsController = loader.getController();
         equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
         equipmentInputsController.setTable(borrowingsList, true);
