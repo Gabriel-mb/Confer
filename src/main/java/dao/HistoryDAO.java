@@ -13,17 +13,18 @@ public class HistoryDAO {
     public HistoryDAO(Connection connection) { this.connection = connection; }
 
     public void create(History history) throws SQLException {
-        String sql = "INSERT INTO HISTORY (idEquipment, supplierId, nameEquip, nameEmployee, borrowedDay, statusId, devolutionDay, fine ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO HISTORY (idEquipment, supplierId, nameEquip, idEmployee, nameEmployee, borrowedDay, statusId, devolutionDay, fine ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, history.getIdEquipment());
         pstm.setInt(2, history.getSupplierId());
         pstm.setString(3, history.getNameEquip());
-        pstm.setString(4, history.getNameEmployee());
-        pstm.setDate(5, history.getBorrowedDay());
-        pstm.setInt(6, history.getStatusId());
-        pstm.setDate(7, history.getDevolutionDay());
-        pstm.setBigDecimal(8, history.getFine());
+        pstm.setInt(4, history.getIdEmployee());
+        pstm.setString(5, history.getNameEmployee());
+        pstm.setDate(6, history.getBorrowedDay());
+        pstm.setInt(7, history.getStatusId());
+        pstm.setDate(8, history.getDevolutionDay());
+        pstm.setBigDecimal(9, history.getFine());
 
 
         pstm.execute();
@@ -70,6 +71,17 @@ public class HistoryDAO {
         ResultSet rst = pstm.getResultSet();
 
         rst.next();
+
+        return rst.getInt(1);
+    }
+
+    public int getEmployeeId(String name) throws SQLException{
+        String sql = "SELECT idEmployee FROM employee WHERE name = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setString(1, name);
+        pstm.execute();
+
+        ResultSet rst = pstm.getResultSet();
 
         return rst.getInt(1);
     }

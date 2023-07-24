@@ -48,24 +48,6 @@ public class EquipmentsDAO {
 
         return equipmentStatus;
     }
-
-/*    public void readName(String name) throws SQLException {
-        String sql = "SELECT * FROM EQUIPMENTS WHERE NAME LIKE ?";
-
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setString(1, "%" + name + "%");
-
-        pstm.execute();
-
-        ResultSet rst = pstm.getResultSet();
-        while (rst.next()) {
-            Equipment equipment = new Equipment(rst.getInt(1),rst.getString(2));
-        }
-
-        pstm.close();
-        rst.close();
-    }*/
-    //new
     public List<Equipment> readId(Integer id) throws SQLException{
         String sql = "SELECT e.idEquipment, e.name, sup.name AS supplierName " +
                 "FROM EQUIPMENTS e " +
