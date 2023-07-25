@@ -141,7 +141,7 @@ public class CardController {
         }
     }
 
-    public void setTableEmployee(String id) throws SQLException {
+    public void setTableEmployee(String id) throws SQLException, IOException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         employeeId.setText(id);
 

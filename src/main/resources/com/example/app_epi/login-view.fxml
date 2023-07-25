@@ -35,7 +35,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <PasswordField layoutX="300.0" layoutY="368.0" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
+      <PasswordField fx:id="passwordInput" layoutX="300.0" layoutY="368.0" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
          <font>
             <Font name="Segoe UI" size="30.0" />
          </font>

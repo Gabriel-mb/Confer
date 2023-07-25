@@ -95,7 +95,7 @@ public class HistoryController {
         System.exit(0);
     }
     
-    public void setTableHistory() throws SQLException {
+    public void setTableHistory() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         HistoryDAO historyDAO = new HistoryDAO(connection);
         historyList = FXCollections.observableList(historyDAO.listHistory());

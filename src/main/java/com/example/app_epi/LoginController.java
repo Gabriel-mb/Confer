@@ -1,11 +1,15 @@
 package com.example.app_epi;
 
+import dao.ConnectionDAO;
+import dao.LoginDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class LoginController {
@@ -21,6 +27,10 @@ public class LoginController {
     private Parent root;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private TextField nameInput;
+    @FXML
+    private PasswordField passwordInput;
     private Double x;
     private Double y;
 
@@ -48,15 +58,25 @@ public class LoginController {
         System.exit(0);
     }
 
-    public void onLoginButtonClick(ActionEvent event) throws IOException {
+    public void onLoginButtonClick(ActionEvent event) throws IOException, SQLException {
 
-        //verificar usuário e senha
+        Connection connection = new ConnectionDAO().connect();
+        LoginDAO loginDAO = new LoginDAO(connection);
 
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        scene.setFill(Color.TRANSPARENT);
-        stage.show();
+        if (loginDAO.verification(nameInput.getText(), passwordInput.getText())) {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            scene.setFill(Color.TRANSPARENT);
+            stage.show();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Informações de Acesso Incorretas!");
+            alert.setContentText("Tente Novamente!");
+            alert.showAndWait();
+        }
     }
 }

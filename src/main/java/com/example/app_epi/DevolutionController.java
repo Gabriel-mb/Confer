@@ -75,7 +75,7 @@ public class DevolutionController {
     private TableColumn<Borrowed, String> supplierColumn;
     private int statusId = -1;
 
-    public void setTableEmployee(String id) throws SQLException {
+    public void setTableEmployee(String id) throws SQLException, IOException {
         //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
         idLabel.setText(id);
 

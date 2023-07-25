@@ -126,7 +126,7 @@ public class EquipmentInputsController {
         }
     }
 
-    public void onSearchButtonClick() throws SQLException {
+    public void onSearchButtonClick() throws SQLException, IOException {
         if (Objects.equals(equipmentIdInput.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -208,7 +208,7 @@ public class EquipmentInputsController {
         equipName = sections[1];
     }
 
-    public void onRemoveButtonClick() throws SQLException {
+    public void onRemoveButtonClick() throws SQLException, IOException {
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
         Borrowed item = borrowingsList.get(selectedIndex);
@@ -219,7 +219,7 @@ public class EquipmentInputsController {
         table.setItems(borrowingsList);
     }
 
-    public void removeData(Integer idEquip, String supplierName) throws SQLException {
+    public void removeData(Integer idEquip, String supplierName) throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         HistoryDAO historyDAO = new HistoryDAO(connection);

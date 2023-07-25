@@ -1,4 +1,5 @@
 package com.example.app_epi;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +22,6 @@ public class Application extends javafx.application.Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
     public static void main(String[] args) {
         launch();
     }

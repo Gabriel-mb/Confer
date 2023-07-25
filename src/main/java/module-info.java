@@ -3,6 +3,7 @@ module com.example.app_epi {
     requires javafx.fxml;
     requires java.sql;
     requires MaterialFX;
+    requires java.prefs;
 
 
     opens com.example.app_epi to javafx.fxml;

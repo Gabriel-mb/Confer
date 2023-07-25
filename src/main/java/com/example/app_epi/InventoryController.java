@@ -66,7 +66,7 @@ public class InventoryController {
         stage.show();
     }
 
-    public void setTableEquipments() throws SQLException {
+    public void setTableEquipments() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         equipmentsStatus = FXCollections.observableList(equipmentsDAO.listEquipmentsStatus());
@@ -95,7 +95,7 @@ public class InventoryController {
             equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText());
 
             setTableEquipments();
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
