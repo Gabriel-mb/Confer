@@ -24,6 +24,21 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import static java.lang.Integer.parseInt;
 
@@ -186,5 +201,22 @@ public class CardController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
+    }
+
+    public void onPrintButtonClick () throws JRException, SQLException, IOException {
+
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("CollectionBeanParam", itemsJRBean);
+
+        InputStream inputStream = getClass().getResourceAsStream("/CardPrint.jrxml");
+
+        JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+        JasperViewer.viewReport(jasperPrint, false);
     }
 }

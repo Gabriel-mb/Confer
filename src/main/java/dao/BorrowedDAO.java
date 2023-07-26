@@ -12,7 +12,7 @@ public class BorrowedDAO {
     public BorrowedDAO(Connection connection) { this.connection = connection; }
 
     public void create(Borrowed borrowed) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
-        String sql = "INSERT INTO BORROWED (IDEMPLOYEE, IDEQUIPMENT, DATE, SUPPLIERID) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO borrowed (IDEMPLOYEE, IDEQUIPMENT, DATE, SUPPLIERID) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, borrowed.getIdEmployee());
@@ -54,7 +54,7 @@ public class BorrowedDAO {
     }
 
     public void readName(String name) throws SQLException { //FAZER INNER JOIN PARA USAR NOME DO FUNCIONÁRIO!
-        String sql = "SELECT * FROM BORROWED WHERE NAME LIKE ?";
+        String sql = "SELECT * FROM borrowed WHERE NAME LIKE ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, "%" + name + "%");
@@ -71,7 +71,7 @@ public class BorrowedDAO {
     }
 
     public Borrowed readId(Integer id) throws SQLException{
-        String sql = "SELECT * FROM BORROWED WHERE IDEQUIPMENT = ?";
+        String sql = "SELECT * FROM borrowed WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
@@ -93,7 +93,7 @@ public class BorrowedDAO {
     }
 
     public void updateQuantity(Integer id, Integer quantity) throws SQLException {
-        String sql = "UPDATE BORROWED SET QUANTITY = ? WHERE IDEQUIPMENT = ?";
+        String sql = "UPDATE borrowed SET QUANTITY = ? WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, quantity);
@@ -106,7 +106,7 @@ public class BorrowedDAO {
 
     public void delete(Integer idEquip, Integer supplierId) throws SQLException {
 
-        String sql = "DELETE FROM BORROWED WHERE IDEQUIPMENT = ? AND supplierId = ?";
+        String sql = "DELETE FROM borrowed WHERE IDEQUIPMENT = ? AND supplierId = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, idEquip);

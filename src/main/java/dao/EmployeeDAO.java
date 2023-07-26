@@ -10,7 +10,7 @@ public class EmployeeDAO {
     public EmployeeDAO(Connection connection) { this.connection = connection; }
 
     public void create(Employee employee) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
-        String sql = "INSERT INTO EMPLOYEE (IDEMPLOYEE, NAME) VALUES (?, ?)";
+        String sql = "INSERT INTO employee (IDEMPLOYEE, NAME) VALUES (?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, employee.getId());
@@ -22,7 +22,7 @@ public class EmployeeDAO {
     }
 
     public void readName(String name) throws SQLException {
-        String sql = "SELECT * FROM EMPLOYEE WHERE NAME LIKE ?";
+        String sql = "SELECT * FROM employee WHERE NAME LIKE ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, "%" + name + "%");
@@ -40,7 +40,7 @@ public class EmployeeDAO {
 
     public Employee readId(Integer id) throws SQLException{
         verifyId(id);
-        String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
+        String sql = "SELECT * FROM employee WHERE idemployee = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
@@ -62,7 +62,7 @@ public class EmployeeDAO {
     public void updateId(Integer id, Integer newid) throws SQLException{
         verifyId(id);
         verifyId(newid);
-        String sql = "UPDATE EMPLOYEE SET IDEMPLOYEE = ? WHERE IDEMPLOYEE = ?";
+        String sql = "UPDATE employee SET IDEMPLOYEE = ? WHERE IDEMPLOYEE = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, newid);
@@ -75,7 +75,7 @@ public class EmployeeDAO {
 
     public void updateName(Integer id, String name) throws SQLException {
         verifyId(id);
-        String sql = "UPDATE EMPLOYEE SET NAME = ? WHERE IDEMPLOYEE = ?";
+        String sql = "UPDATE employee SET NAME = ? WHERE IDEMPLOYEE = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, name);
@@ -88,7 +88,7 @@ public class EmployeeDAO {
 
     public void delete(Integer id) throws SQLException {
         verifyId(id);
-        String sql = "DELETE FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
+        String sql = "DELETE FROM employee WHERE IDEMPLOYEE = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
@@ -99,7 +99,7 @@ public class EmployeeDAO {
     }
 
     public List<Employee> listEmployees() throws SQLException{
-        String sql = "SELECT * FROM EMPLOYEE";
+        String sql = "SELECT * FROM employee";
         Statement stmt = connection.createStatement();
         ResultSet rst = stmt.executeQuery(sql);
         List<Employee> employees = new ArrayList<>();
@@ -118,7 +118,7 @@ public class EmployeeDAO {
         }
     }
     public Boolean checkIfIdExists(Integer id) throws SQLException {
-        String sql = "SELECT * FROM EMPLOYEE WHERE IDEMPLOYEE = ?";
+        String sql = "SELECT * FROM employee WHERE IDEMPLOYEE = ?";
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
         pstm.execute();

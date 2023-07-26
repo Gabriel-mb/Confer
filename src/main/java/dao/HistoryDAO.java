@@ -13,7 +13,7 @@ public class HistoryDAO {
     public HistoryDAO(Connection connection) { this.connection = connection; }
 
     public void create(History history) throws SQLException {
-        String sql = "INSERT INTO HISTORY (idEquipment, supplierId, nameEquip, idEmployee, nameEmployee, borrowedDay, statusId, devolutionDay, fine ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO history (idEquipment, supplierId, nameEquip, idEmployee, nameEmployee, borrowedDay, statusId, devolutionDay, fine ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, history.getIdEquipment());
@@ -62,7 +62,7 @@ public class HistoryDAO {
     }
 
     public Integer getSupplierId(String supplierName) throws SQLException {
-        String sql = "SELECT SUPPLIERID FROM SUPPLIER WHERE NAME = ?";
+        String sql = "SELECT supplierid FROM supplier WHERE NAME = ?";
         PreparedStatement pstm = connection.prepareStatement(sql);
 
         pstm.setString(1, supplierName);

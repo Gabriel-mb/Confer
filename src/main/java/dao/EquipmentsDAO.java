@@ -12,7 +12,7 @@ public class EquipmentsDAO {
     public EquipmentsDAO(Connection connection) { this.connection = connection; }
 
     public void create(Integer id, String name) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
-        String sql = "INSERT INTO EQUIPMENTS (IDEQUIPMENT, NAME) VALUES (?, ?)";
+        String sql = "INSERT INTO equipments (IDEQUIPMENT, NAME) VALUES (?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);
@@ -50,7 +50,7 @@ public class EquipmentsDAO {
     }
     public List<Equipment> readId(Integer id) throws SQLException{
         String sql = "SELECT e.idEquipment, e.name, sup.name AS supplierName " +
-                "FROM EQUIPMENTS e " +
+                "FROM equipments e " +
                 "JOIN supplier sup on e.supplierId = sup.supplierId " +
                 "WHERE IDEQUIPMENT = ?";
 
@@ -76,7 +76,7 @@ public class EquipmentsDAO {
     public void updateId(Integer id, Integer newid) throws SQLException{
         verifyId(id);
         verifyId(newid);
-        String sql = "UPDATE EQUIPMENTS SET IDEQUIPMENT = ? WHERE IDEQUIPMENT = ?";
+        String sql = "UPDATE equipments SET IDEQUIPMENT = ? WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, newid);
@@ -89,7 +89,7 @@ public class EquipmentsDAO {
 
     public void updateName(Integer id, String name) throws SQLException {
         verifyId(id);
-        String sql = "UPDATE EQUIPMENTS SET NAME = ? WHERE IDEQUIPMENT = ?";
+        String sql = "UPDATE equipments SET NAME = ? WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setString(1, name);
@@ -102,7 +102,7 @@ public class EquipmentsDAO {
 
     public void delete(Integer id) throws SQLException {
         verifyId(id);
-        String sql = "DELETE FROM EQUIPMENTS WHERE IDEQUIPMENT = ?";
+        String sql = "DELETE FROM equipments WHERE IDEQUIPMENT = ?";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
         pstm.setInt(1, id);

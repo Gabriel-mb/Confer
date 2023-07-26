@@ -138,7 +138,6 @@ public class EquipmentInputsController {
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         List<Equipment> equipmentList = equipmentsDAO.readId(parseInt(equipmentIdInput.getText()));
-        System.out.println(equipmentList);
         if (equipmentList.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
