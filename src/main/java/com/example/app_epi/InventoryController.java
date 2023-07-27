@@ -1,7 +1,9 @@
 package com.example.app_epi;
 
+import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
+import dao.HistoryDAO;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,22 +13,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.Borrowed;
 import models.Equipment;
+import models.Supplier;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 
@@ -39,6 +42,8 @@ public class InventoryController {
     private Double x;
     private Double y;
     private ObservableList<Equipment> equipmentsStatus;
+    private ObservableList<Supplier> suppliersNames;
+
     @FXML
     private TableView<Equipment> table;
     @FXML
@@ -46,11 +51,15 @@ public class InventoryController {
     @FXML
     private TableColumn<Equipment, String> nameEquipColumn;
     @FXML
+    private TableColumn<Equipment, String> nameSupplier;
+    @FXML
     private TableColumn<Equipment, String> statusColumn;
     @FXML
     private TableColumn<Equipment, String> nameEmployeeColumn;
     @FXML
     private TableColumn<Equipment, Date> dateColumn;
+    @FXML
+    private ComboBox<Supplier> supplierDropDown;
     @FXML
     private MFXTextField idEquipment;
     @FXML
@@ -74,10 +83,17 @@ public class InventoryController {
 
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
         nameEquipColumn.setCellValueFactory(new PropertyValueFactory<>("nameEquip"));
+        nameSupplier.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         nameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("nameEmployee"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         table.setItems(equipmentsStatus);
+    }
+    public void setSupplierDropDown() throws SQLException, IOException {
+        Connection connection = new ConnectionDAO().connect();
+        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+        suppliersNames = FXCollections.observableList(equipmentsDAO.selectSupplier());
+        supplierDropDown.setItems(suppliersNames);
     }
 
     public void onIncludeButtonClick() {
@@ -92,8 +108,7 @@ public class InventoryController {
         try {
             Connection connection = new ConnectionDAO().connect();
             EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-            equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText());
-
+            equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText(), String.valueOf(supplierDropDown.getValue()));
             setTableEquipments();
         } catch (SQLException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -127,5 +142,31 @@ public class InventoryController {
 
     public void onCloseButtonClick() {
         System.exit(0);
+    }
+    public void onRemoveButtonClick() throws SQLException, IOException {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Confirmação");
+        alert.setHeaderText("Tem certeza que deseja continuar?");
+        alert.setContentText("Esta ação não pode ser desfeita.");
+        ButtonType yesButton = new ButtonType("Sim");
+        ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(cancelButton, yesButton);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == yesButton) {
+            SelectionModel<Equipment> selectionModel = table.getSelectionModel();
+            int selectedIndex = selectionModel.getSelectedIndex();
+            Equipment item = equipmentsStatus.get(selectedIndex);
+
+            removeData(item.getIdEquipment(), item.getSupplierName());
+
+            equipmentsStatus.remove(selectedIndex);
+            table.setItems(equipmentsStatus);
+        }
+    }
+    public void removeData(Integer idEquip, String supplierName) throws SQLException, IOException {
+        Connection connection = new ConnectionDAO().connect();
+        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+        equipmentsDAO.delete(idEquip,equipmentsDAO.readId(supplierName));
     }
 }

@@ -171,6 +171,7 @@ public class SearchController {
         Parent root = loader.load();
         InventoryController inventoryController = loader.getController();
         inventoryController.setTableEquipments();
+        inventoryController.setSupplierDropDown();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

@@ -204,11 +204,12 @@ public class CardController {
     }
 
     public void onPrintButtonClick () throws JRException, SQLException, IOException {
-
         Connection connection = new ConnectionDAO().connect();
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
 
+        /*List<Borrowed> printBorrowed = borrowedDAO.printBorrowed(Integer.valueOf(employeeId.getText()));*/
+        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("CollectionBeanParam", itemsJRBean);
 

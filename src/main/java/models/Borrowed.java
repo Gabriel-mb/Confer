@@ -7,10 +7,10 @@ public class Borrowed {
     private Integer idEmployee;
     private Integer idEquipment;
     private String supplierName;
-    private Integer quantity;
     private String equipmentName;
     private Date date;
     private Integer supplierId;
+    private String employeeName;
 
     public Borrowed(String equipmentName, Integer idEquipment, Date date) {
         this.equipmentName = equipmentName;
@@ -30,6 +30,15 @@ public class Borrowed {
         this.idEquipment = idEquipment;
         this.date = date;
         this.supplierName = supplierName;
+    }
+
+    public Borrowed(Integer idEmployee, Integer idEquipment, String supplierName, String equipmentName, Date date, String employeeName) {
+        this.idEmployee = idEmployee;
+        this.idEquipment = idEquipment;
+        this.supplierName = supplierName;
+        this.equipmentName = equipmentName;
+        this.date = date;
+        this.employeeName = employeeName;
     }
 
     public Integer getSupplierId() {
@@ -54,14 +63,6 @@ public class Borrowed {
 
     public void setIdEquipment(Integer idEquipment) {
         this.idEquipment = idEquipment;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public String getEquipmentName() {
@@ -94,9 +95,10 @@ public class Borrowed {
                 "idEmployee=" + idEmployee +
                 ", idEquipment=" + idEquipment +
                 ", supplierName='" + supplierName + '\'' +
-                ", quantity=" + quantity +
                 ", equipmentName='" + equipmentName + '\'' +
                 ", date=" + date +
+                ", supplierId=" + supplierId +
+                ", employeeName='" + employeeName + '\'' +
                 '}';
     }
 }

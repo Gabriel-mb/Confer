@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.InventoryController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.InventoryController">
    <children>
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="983.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
          <font>
@@ -70,27 +70,27 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <TableView fx:id="table" layoutX="69.0" layoutY="146.0" prefHeight="584.0" prefWidth="889.0" style="-fx-border-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-border-radius: 5; -fx-background-radius: 4; -fx-background-color: transparent; -fx-border-width: 2;">
+      <TableView fx:id="table" layoutX="69.0" layoutY="132.0" prefHeight="584.0" prefWidth="889.0" style="-fx-border-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-border-radius: 5; -fx-background-radius: 4; -fx-background-color: transparent; -fx-border-width: 2;">
          <columns>
             <TableColumn fx:id="idColumn" editable="false" prefWidth="108.0" text="Patrimônio" />
             <TableColumn fx:id="nameEquipColumn" editable="false" prefWidth="265.0" text="Ferramenta" />
-            <TableColumn prefWidth="110.0" text="Fornecedora" />
+            <TableColumn fx:id="nameSupplier" prefWidth="110.0" text="Fornecedora" />
             <TableColumn fx:id="statusColumn" prefWidth="94.0" text="Status" />
             <TableColumn fx:id="nameEmployeeColumn" prefWidth="206.0" text="Funcionário" />
             <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="100.0" text="Data" />
          </columns>
       </TableView>
-      <MFXTextField fx:id="idEquipment" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="69.0" layoutY="98.0" prefHeight="28.0" prefWidth="158.0" promptText="Patrimônio" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+      <MFXTextField fx:id="idEquipment" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="69.0" layoutY="84.0" prefHeight="28.0" prefWidth="158.0" promptText="Patrimônio" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <MFXTextField fx:id="name" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="98.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+      <MFXTextField fx:id="name" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="84.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <Button layoutX="745.0" layoutY="98.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Incluir" textFill="WHITE">
+      <Button layoutX="745.0" layoutY="84.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Incluir" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -98,10 +98,18 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <ComboBox layoutX="580.0" layoutY="98.0" prefHeight="36.0" prefWidth="158.0" promptText="Forncedora" style="-fx-border-color: #0e1c6b; -fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: white;">
+      <ComboBox fx:id="supplierDropDown" layoutX="580.0" layoutY="84.0" prefHeight="36.0" prefWidth="158.0" promptText="Forncedora" style="-fx-border-color: #0e1c6b; -fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: white;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </ComboBox>
+      <Button fx:id="removeButton" layoutX="67.0" layoutY="725.0" mnemonicParsing="false" onAction="#onRemoveButtonClick" prefHeight="30.0" prefWidth="67.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Remover" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>

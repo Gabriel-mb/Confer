@@ -129,4 +129,33 @@ public class BorrowedDAO {
         }
         return 0;
     }
+    public List<Borrowed> printBorrowed(Integer id) throws SQLException {
+        String sql = "SELECT equipments.name, borrowed.idEquipment, borrowed.date, sup.name AS supplier_name, employee.name AS employee_name, employee.idEmployee " +
+                "FROM equipments " +
+                "INNER JOIN borrowed ON equipments.idEquipment = borrowed.idEquipment " +
+                "INNER JOIN employee ON borrowed.idEmployee = employee.idEmployee " +
+                "INNER JOIN supplier sup ON equipments.supplierId = sup.supplierId " +
+                "WHERE borrowed.idEmployee = ?";
+
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, id);
+        pstm.execute();
+        ResultSet rst = pstm.getResultSet();
+        List<Borrowed> borrowings = new ArrayList<>();
+
+        while  (rst.next()) {
+            String name = rst.getString(1);
+            Integer idEquip = rst.getInt(2);
+            Date date = rst.getDate(3);
+            String supplierName = rst.getString(4);
+            String employeeName = rst.getString(5);
+
+            borrowings.add(new Borrowed(id, idEquip,supplierName ,name, date, employeeName));
+        }
+        pstm.close();
+        rst.close();
+        System.out.println(borrowings);
+
+        return borrowings;
+    }
 }

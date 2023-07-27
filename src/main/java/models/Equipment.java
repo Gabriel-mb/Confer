@@ -24,6 +24,15 @@ public class Equipment {
         this.date = date;
     }
 
+    public Equipment(Integer idEquipment, String nameEquip, String supplierName, String status, String nameEmployee, Date date) {
+        this.idEquipment = idEquipment;
+        this.nameEquip = nameEquip;
+        this.status = status;
+        this.nameEmployee = nameEmployee;
+        this.date = date;
+        this.supplierName = supplierName;
+    }
+
     public Integer getIdEquipment() {
         return idEquipment;
     }
@@ -70,6 +79,11 @@ public class Equipment {
 
     @Override
     public String toString() {
-        return idEquipment + ", " + nameEquip;
+        return "Equipment{" +
+                "idEquipment=" + idEquipment +
+                ", nameEquip='" + nameEquip + '\'' +
+                ", status='" + status + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                '}';
     }
 }
