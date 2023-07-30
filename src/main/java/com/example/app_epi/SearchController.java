@@ -172,6 +172,7 @@ public class SearchController {
         InventoryController inventoryController = loader.getController();
         inventoryController.setTableEquipments();
         inventoryController.setSupplierDropDown();
+        inventoryController.table.autosizeColumnsOnInitialization();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

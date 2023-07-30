@@ -4,12 +4,18 @@ import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
 import dao.HistoryDAO;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.IntegerFilter;
+import io.github.palexdev.materialfx.filter.StringFilter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,12 +30,10 @@ import models.Equipment;
 import models.Supplier;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -45,19 +49,8 @@ public class InventoryController {
     private ObservableList<Supplier> suppliersNames;
 
     @FXML
-    private TableView<Equipment> table;
-    @FXML
-    private TableColumn<Equipment, Integer> idColumn;
-    @FXML
-    private TableColumn<Equipment, String> nameEquipColumn;
-    @FXML
-    private TableColumn<Equipment, String> nameSupplier;
-    @FXML
-    private TableColumn<Equipment, String> statusColumn;
-    @FXML
-    private TableColumn<Equipment, String> nameEmployeeColumn;
-    @FXML
-    private TableColumn<Equipment, Date> dateColumn;
+    MFXTableView<Equipment> table;
+
     @FXML
     private ComboBox<Supplier> supplierDropDown;
     @FXML
@@ -78,16 +71,32 @@ public class InventoryController {
     public void setTableEquipments() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-        equipmentsStatus = FXCollections.observableList(equipmentsDAO.listEquipmentsStatus());
-        equipmentsStatus.sort(Comparator.comparingInt(Equipment::getIdEquipment));
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
-        nameEquipColumn.setCellValueFactory(new PropertyValueFactory<>("nameEquip"));
-        nameSupplier.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        nameEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("nameEmployee"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        table.setItems(equipmentsStatus);
+        MFXTableColumn<Equipment> idColumn = new MFXTableColumn<>("Patrimônio", Comparator.comparing(Equipment::getIdEquipment));
+        MFXTableColumn<Equipment> nameEquipColumn = new MFXTableColumn<>("Ferramenta", Comparator.comparing(Equipment::getNameEquip));
+        MFXTableColumn<Equipment> nameSupplier = new MFXTableColumn<>("Fornecedor", Comparator.comparing(Equipment::getSupplierName));
+        MFXTableColumn<Equipment> statusColumn = new MFXTableColumn<>("Status", Comparator.comparing(Equipment::getStatus));
+        MFXTableColumn<Equipment> nameEmployeeColumn = new MFXTableColumn<>("Funcionário");
+        MFXTableColumn<Equipment> dateColumn = new MFXTableColumn<>("Data");
+
+        idColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getIdEquipment));
+        nameEquipColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEquip));
+        nameSupplier.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getSupplierName));
+        statusColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getStatus));
+        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEmployee));
+        dateColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getDate));
+        nameEquipColumn.setAlignment(Pos.CENTER_LEFT);
+        nameEquipColumn.setPrefWidth(330);
+
+        table.getTableColumns().addAll(idColumn, nameEquipColumn, nameSupplier, statusColumn, nameEmployeeColumn, dateColumn);
+        table.getFilters().addAll(
+                new IntegerFilter<>("Patrimônio", Equipment::getIdEquipment),
+                new StringFilter<>("Ferramenta", Equipment::getNameEquip),
+                new StringFilter<>("Fornecedor", Equipment::getSupplierName),
+                new StringFilter<>("Status", Equipment::getStatus),
+                new StringFilter<>("Funcionário", Equipment::getNameEmployee)
+        );
+        table.setItems(FXCollections.observableList(equipmentsDAO.listEquipmentsStatus()));
     }
     public void setSupplierDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
@@ -120,7 +129,7 @@ public class InventoryController {
     }
 
     @FXML
-    private void initialize() {
+    private void initialize(URL location, ResourceBundle resources) {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
@@ -154,7 +163,7 @@ public class InventoryController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == yesButton) {
-            SelectionModel<Equipment> selectionModel = table.getSelectionModel();
+            SelectionModel<Equipment> selectionModel = (SelectionModel<Equipment>) table.getSelectionModel();
             int selectedIndex = selectionModel.getSelectedIndex();
             Equipment item = equipmentsStatus.get(selectedIndex);
 
