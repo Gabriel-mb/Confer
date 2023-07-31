@@ -1,10 +1,12 @@
 package dao;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
+import java.util.stream.Collectors;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import models.Equipment;
 import models.Supplier;
 
@@ -27,21 +29,21 @@ public class EquipmentsDAO {
         pstm.close();
     }
 
-    public List<Equipment> listEquipmentsStatus() throws SQLException {
-        String sql = "SELECT e.idEquipment AS equipments_idEquipment, " +
-                "e.name AS equipmentName, " +
-                "s.name AS supplierName, " +
-                "emp.name AS employeeName, " +
-                "CASE WHEN b.idEquipment IS NOT NULL THEN 'em uso' ELSE 'Armazenado' END AS Status, " +
-                "b.date " +
-                "FROM equipments e " +
-                "LEFT JOIN borrowed b ON e.idEquipment = b.idEquipment " +
-                "LEFT JOIN employee emp ON emp.idEmployee = b.idEmployee " +
-                "LEFT JOIN supplier s ON e.supplierId = s.supplierId;";
+    public ObservableList<Equipment> listEquipmentsStatus() throws SQLException {
+        String sql = "SELECT e.idEquipment AS equipments_idEquipment,\n" +
+                "       e.name AS equipmentName,\n" +
+                "       s.name AS supplierName,\n" +
+                "       emp.name AS employeeName,\n" +
+                "       CASE WHEN b.idEquipment IS NOT NULL THEN 'em uso' ELSE 'Armazenado' END AS Status,\n" +
+                "       b.date\n" +
+                "FROM supplier s\n" +
+                "LEFT JOIN equipments e ON e.supplierId = s.supplierId\n" +
+                "LEFT JOIN borrowed b ON e.idEquipment = b.idEquipment\n" +
+                "LEFT JOIN employee emp ON emp.idEmployee = b.idEmployee;\n";
         PreparedStatement pstm = connection.prepareStatement(sql);
         ResultSet rst = pstm.executeQuery();
 
-        List<Equipment> equipmentStatus = new ArrayList<>();
+        ObservableList<Equipment> equipmentStatus = FXCollections.observableArrayList();
 
         while (rst.next()) {
             Integer idEquipment = rst.getInt("equipments_idEquipment");
@@ -59,6 +61,7 @@ public class EquipmentsDAO {
 
         return equipmentStatus;
     }
+
     public List<Equipment> readId(Integer id) throws SQLException{
         String sql = "SELECT e.idEquipment, e.name, sup.name AS supplierName " +
                 "FROM equipments e " +

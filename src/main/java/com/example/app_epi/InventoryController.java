@@ -1,31 +1,27 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
-import dao.HistoryDAO;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import models.Borrowed;
 import models.Equipment;
 import models.Supplier;
 
@@ -33,19 +29,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
 public class InventoryController {
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
     @FXML
     private AnchorPane anchorPane;
     private Double x;
     private Double y;
-    private ObservableList<Equipment> equipmentsStatus;
     private ObservableList<Supplier> suppliersNames;
 
     @FXML
@@ -60,9 +53,9 @@ public class InventoryController {
 
 
     public void onMenuButtonClick(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
@@ -83,9 +76,14 @@ public class InventoryController {
         nameEquipColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEquip));
         nameSupplier.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getSupplierName));
         statusColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getStatus));
-        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEmployee));
-        dateColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getDate));
-        nameEquipColumn.setAlignment(Pos.CENTER_LEFT);
+        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> {
+            return Optional.ofNullable(item.getNameEmployee()).orElse(" ");
+        }));
+        dateColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> {
+            Date dateValue = Optional.ofNullable(item.getDate()).orElse(null);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateValue != null ? dateFormat.format(dateValue) : " ";
+        }));
         nameEquipColumn.setPrefWidth(330);
 
         table.getTableColumns().addAll(idColumn, nameEquipColumn, nameSupplier, statusColumn, nameEmployeeColumn, dateColumn);
@@ -96,7 +94,8 @@ public class InventoryController {
                 new StringFilter<>("Status", Equipment::getStatus),
                 new StringFilter<>("Funcionário", Equipment::getNameEmployee)
         );
-        table.setItems(FXCollections.observableList(equipmentsDAO.listEquipmentsStatus()));
+        table.setItems(equipmentsDAO.listEquipmentsStatus());
+        System.out.println(equipmentsDAO.listEquipmentsStatus());
     }
     public void setSupplierDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
@@ -118,7 +117,7 @@ public class InventoryController {
             Connection connection = new ConnectionDAO().connect();
             EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
             equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText(), String.valueOf(supplierDropDown.getValue()));
-            setTableEquipments();
+            table.setItems(equipmentsDAO.listEquipmentsStatus());
         } catch (SQLException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -163,14 +162,17 @@ public class InventoryController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == yesButton) {
-            SelectionModel<Equipment> selectionModel = (SelectionModel<Equipment>) table.getSelectionModel();
-            int selectedIndex = selectionModel.getSelectedIndex();
-            Equipment item = equipmentsStatus.get(selectedIndex);
+            Connection connection = new ConnectionDAO().connect();
+            EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+            ObservableList<Equipment> equipmentsStatus = FXCollections.observableArrayList();
+            MultipleSelectionModel<Equipment> selectionModel = (MultipleSelectionModel<Equipment>) table.getSelectionModel();
+            List<Equipment> selectedItems = selectionModel.getSelectedValues();
 
-            removeData(item.getIdEquipment(), item.getSupplierName());
-
-            equipmentsStatus.remove(selectedIndex);
-            table.setItems(equipmentsStatus);
+            for (Equipment item : selectedItems) {
+                removeData(item.getIdEquipment(), item.getSupplierName());
+                equipmentsStatus.remove(item);
+            }
+            table.setItems(equipmentsDAO.listEquipmentsStatus());
         }
     }
     public void removeData(Integer idEquip, String supplierName) throws SQLException, IOException {

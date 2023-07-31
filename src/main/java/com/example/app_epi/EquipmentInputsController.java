@@ -86,20 +86,16 @@ public class EquipmentInputsController {
             Connection connection = new ConnectionDAO().connect();
             BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
             borrowingsList.sort(Comparator.comparingInt(Borrowed::getIdEquipment));
-            if (!confirmation) {
-                for (Borrowed item : borrowingsList) {
-                    id = item.getIdEquipment();
-                    supplierId = borrowedDAO.getSupplierId(supplierName);
+            for (Borrowed item : borrowingsList) {
+                id = item.getIdEquipment();
+                // Get the supplierId for the current supplierName
+                int supplierId = borrowedDAO.getSupplierId(item.getSupplierName());
+
+                if (!confirmation || borrowedDAO.readId(item.getIdEquipment()) == null) {
+                    // Either confirmation is false, or the item doesn't exist in the database.
                     borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate(), supplierId));
-                    index++;
                 }
-            } else {
-                for (Borrowed item : borrowingsList) {
-                    if (borrowedDAO.readId(item.getIdEquipment()) == null && confirmation) {
-                        supplierId = borrowedDAO.getSupplierId(supplierName);
-                        borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate(), supplierId));
-                    }
-                }
+                index++;
             }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -108,20 +104,23 @@ public class EquipmentInputsController {
             alert.setContentText("Ferramentas inseridas com sucesso!");
             alert.showAndWait();
 
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("search-view.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+            Parent root = loader.load();
+            CardController cardController = loader.getController();
+            cardController.setTableEmployee(idLabel.getText());
+
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             scene.setFill(Color.TRANSPARENT);
             stage.show();
+
         } catch (SQLException e) {
-            /*Alert alert = new Alert(Alert.AlertType.ERROR);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Ferramenta com matrícula: " + id + " já alocada!");
-            alert.showAndWait();*/
-            e.printStackTrace();
-
+            alert.showAndWait();
             borrowingsList.remove(index);
         }
     }

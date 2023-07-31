@@ -10,6 +10,7 @@ public class Equipment {
     private Date date;
     private String supplierName;
 
+
     public Equipment(Integer idEquipment, String nameEquip, String supplierName) {
         this.idEquipment = idEquipment;
         this.nameEquip = nameEquip;
@@ -75,6 +76,13 @@ public class Equipment {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getEmployeeEmpty() {
+        return " ";
+    }
+    public void getDateEmpty() {
+        this.date = null;
     }
 
     @Override

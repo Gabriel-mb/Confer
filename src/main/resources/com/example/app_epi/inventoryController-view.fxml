@@ -74,7 +74,7 @@
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <MFXTextField fx:id="name" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="84.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+      <MFXTextField fx:id="name" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="234.0" layoutY="84.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome da Ferramenta" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;">
          <font>
             <Font size="17.0" />
          </font>
