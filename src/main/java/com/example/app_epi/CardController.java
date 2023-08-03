@@ -212,6 +212,9 @@ public class CardController {
         JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("CollectionBeanParam", itemsJRBean);
+        parameters.put("employeeName", nameLabel.getText());
+        parameters.put("employeeId", parseInt(employeeId.getText()));
+
 
         InputStream inputStream = getClass().getResourceAsStream("/CardPrint.jrxml");
 
