@@ -1,9 +1,6 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
-import dao.ConnectionDAO;
-import dao.EmployeeDAO;
-import dao.HistoryDAO;
+import dao.*;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -131,12 +128,29 @@ public class DevolutionController {
                 stage.show();
                 break;
                 //casos 2, 3 e 4 excluir de equipments e salvar no history.
-            case 2:
-                break;
-            case 3, 4:
+            case 2, 3, 4:
+                historyDAO = new HistoryDAO(connection);
+                borrowedDAO = new BorrowedDAO(connection);
+                supId = historyDAO.getSupplierId(supplierLabel.getText());
+                historyDAO.create(new History(parseInt(idEquipmentLabel.getText()), supId, equipmentNameLabel.getText(), parseInt(idLabel.getText()), nameLabel.getText(), Date.valueOf(dateBorrowedLabel.getText()), statusId, Date.valueOf(dateDevolution.getValue()), BigDecimal.valueOf(Float.parseFloat(fine.getText()))));
+                EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+                equipmentsDAO.delete(parseInt(idEquipmentLabel.getText()), supId);
+
+                loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+                root = loader.load();
+
+                borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(idLabel.getText())));
+                equipmentInputsController = loader.getController();
+                equipmentInputsController.setEmployee(idLabel.getText(), nameLabel.getText());
+                equipmentInputsController.setTable(borrowingsList, true);
+
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                scene.setFill(Color.TRANSPARENT);
+                stage.show();
                 break;
         }
-
     }
 
 

@@ -93,18 +93,6 @@ public class BorrowedDAO {
         return null;
     }
 
-    public void updateQuantity(Integer id, Integer quantity) throws SQLException {
-        String sql = "UPDATE borrowed SET QUANTITY = ? WHERE IDEQUIPMENT = ?";
-
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setInt(1, quantity);
-        pstm.setInt(2, id);
-
-        pstm.execute();
-
-        pstm.close();
-    }
-
     public void delete(Integer idEquip, Integer supplierId) throws SQLException {
 
         String sql = "DELETE FROM borrowed WHERE IDEQUIPMENT = ? AND supplierId = ?";
@@ -129,5 +117,19 @@ public class BorrowedDAO {
             return rst.getInt(1);
         }
         return 0;
+    }
+    public Boolean searchBorrowed(Integer EquipmentId, Integer supplierId) throws SQLException {
+        String sql = "SELECT * FROM borrowed WHERE idEquipment = ? AND supplierId = ?";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, EquipmentId);
+        pstm.setInt(2, supplierId);
+        pstm.execute();
+
+        ResultSet rst = pstm.getResultSet();
+
+        if (rst.next()) {
+            return true;
+        }
+        return false;
     }
 }

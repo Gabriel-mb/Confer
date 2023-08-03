@@ -153,7 +153,9 @@ public class EquipmentInputsController {
         equipmentName.getSelectionModel().selectFirst();
     }
 
-    public void onIncludeButtonClick() {
+    public void onIncludeButtonClick() throws SQLException, IOException {
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         splitSelection();
         for (Borrowed borrowed : table.getItems()) {
             Integer id = idColumn.getCellData(borrowed);
@@ -183,6 +185,12 @@ public class EquipmentInputsController {
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma data válida");
+            alert.showAndWait();
+        } else if (borrowedDAO.searchBorrowed(parseInt(equipmentIdInput.getText()),borrowedDAO.getSupplierId(supplierName))) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ferramenta já Alocada");
+            alert.setContentText("Por favor selecione outra ferramenta!");
             alert.showAndWait();
         } else {
             borrowingsList.add(new Borrowed(equipName, parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), supplierName));
