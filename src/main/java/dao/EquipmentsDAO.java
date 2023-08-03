@@ -38,7 +38,12 @@ public class EquipmentsDAO {
                 "       b.date\n" +
                 "FROM supplier s\n" +
                 "LEFT JOIN equipments e ON e.supplierId = s.supplierId\n" +
-                "LEFT JOIN borrowed b ON e.idEquipment = b.idEquipment\n" +
+                "LEFT JOIN (\n" +
+                "    SELECT b1.idEquipment, b1.supplierId, b1.idEmployee, b1.date\n" +
+                "    FROM borrowed b1\n" +
+                "    WHERE b1.supplierId = b1.supplierId\n" +
+                "    ORDER BY b1.date DESC\n" +
+                ") b ON e.idEquipment = b.idEquipment AND s.supplierId = b.supplierId\n" +
                 "LEFT JOIN employee emp ON emp.idEmployee = b.idEmployee;\n";
         PreparedStatement pstm = connection.prepareStatement(sql);
         ResultSet rst = pstm.executeQuery();
@@ -58,7 +63,6 @@ public class EquipmentsDAO {
 
         pstm.close();
         rst.close();
-
         return equipmentStatus;
     }
 

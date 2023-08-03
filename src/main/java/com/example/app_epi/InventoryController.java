@@ -95,7 +95,6 @@ public class InventoryController {
                 new StringFilter<>("Funcionário", Equipment::getNameEmployee)
         );
         table.setItems(equipmentsDAO.listEquipmentsStatus());
-        System.out.println(equipmentsDAO.listEquipmentsStatus());
     }
     public void setSupplierDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
