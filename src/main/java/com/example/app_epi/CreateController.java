@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -110,5 +112,24 @@ public class CreateController {
     }
     public void onCloseButtonClick() {
         System.exit(0);
+    }
+    @FXML
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.TAB) {
+            if (!event.isShiftDown()) {
+                if (event.getSource() == employeeId) {
+                    nameInput.requestFocus();
+                } else {
+                    employeeId.requestFocus();
+                }
+            } else {
+                if (event.getSource() == employeeId) {
+                    nameInput.requestFocus();
+                } else {
+                    nameInput.requestFocus();
+                }
+            }
+            event.consume();
+        }
     }
 }

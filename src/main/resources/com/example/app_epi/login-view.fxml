@@ -19,7 +19,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <TextField fx:id="nameInput" cache="true" layoutX="300.0" layoutY="294.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="0.0" prefWidth="424.0" promptText="Usuario" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #0e1c6b; -fx-border-width: 2;">
+      <TextField fx:id="nameInput" cache="true" layoutX="300.0" layoutY="294.0" nodeOrientation="LEFT_TO_RIGHT" onKeyPressed="#handleKeyPressed" prefHeight="0.0" prefWidth="424.0" promptText="Usuario" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-style: solid; -fx-border-radius: 11; -fx-border-color: #0e1c6b; -fx-border-width: 2;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -35,7 +35,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <PasswordField fx:id="passwordInput" layoutX="300.0" layoutY="368.0" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
+      <PasswordField fx:id="passwordInput" layoutX="300.0" layoutY="368.0" onKeyPressed="#handleKeyPressed" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
          <font>
             <Font name="Segoe UI" size="30.0" />
          </font>

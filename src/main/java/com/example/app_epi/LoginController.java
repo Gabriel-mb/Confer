@@ -11,11 +11,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -79,4 +83,24 @@ public class LoginController {
             alert.showAndWait();
         }
     }
+    @FXML
+    private void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.TAB) {
+            if (!event.isShiftDown()) {
+                if (event.getSource() == passwordInput) {
+                    nameInput.requestFocus();
+                } else {
+                    passwordInput.requestFocus();
+                }
+            } else {
+                if (event.getSource() == passwordInput) {
+                    nameInput.requestFocus();
+                } else {
+                    nameInput.requestFocus();
+                }
+            }
+            event.consume();
+        }
+    }
 }
+

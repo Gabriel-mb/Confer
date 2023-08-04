@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
+import io.github.palexdev.materialfx.i18n.Language;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
