@@ -21,6 +21,7 @@ import models.Employee;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -35,6 +36,10 @@ public class SearchController {
     private TextField employeeId;
     private Double x = 0.0;
     private Double y = 0.0;
+    private final StringBuffer barcode = new StringBuffer();
+    private long lastEventTimeStamp = 0L;
+    private long threshold = 300; // Defina o valor desejado para o threshold (em milissegundos)
+    private int minBarcodeLength = 0; // Defina o valor desejado para o comprimento mínimo do código de barras
 
 
     public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
@@ -95,7 +100,43 @@ public class SearchController {
                 node.setFocusTraversable(false);
             }
         }
-        employeeId.setOnKeyPressed(this::pressEnter);
+        /*employeeId.setOnKeyPressed(this::pressEnter);*/
+        employeeId.setOnAction(event -> {
+            // Limpe o campo de texto
+            Connection connection = null;
+            try {
+                connection = new ConnectionDAO().connect();
+                EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+                Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
+
+                if (employee == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText("Ocorreu um erro");
+                    alert.setContentText("Nenhum funcionário encontrado!");
+                    alert.showAndWait();
+                    return;
+                }
+
+                //Envia o id para o cardController
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+                Parent root = loader.load();
+                CardController cardController = loader.getController();
+                cardController.setTableEmployee(employeeId.getText());
+
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                scene.setFill(Color.TRANSPARENT);
+                stage.show();
+
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void pressEnter(KeyEvent keyEvent) {
@@ -166,7 +207,7 @@ public class SearchController {
         y = event.getSceneY();
     }
 
-    public void onInventoryButtonClick (ActionEvent event) throws IOException, SQLException {
+    public void onInventoryButtonClick(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("inventoryController-view.fxml"));
         Parent root = loader.load();
         InventoryController inventoryController = loader.getController();
@@ -181,7 +222,7 @@ public class SearchController {
         stage.show();
     }
 
-    public void onHistoryButtonClick (ActionEvent event) throws IOException, SQLException {
+    public void onHistoryButtonClick(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("history-view.fxml"));
         Parent root = loader.load();
         HistoryController historyController = loader.getController();
