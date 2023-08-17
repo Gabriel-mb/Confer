@@ -10,8 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -21,7 +19,6 @@ import models.Employee;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
@@ -36,10 +33,6 @@ public class SearchController {
     private TextField employeeId;
     private Double x = 0.0;
     private Double y = 0.0;
-    private final StringBuffer barcode = new StringBuffer();
-    private long lastEventTimeStamp = 0L;
-    private long threshold = 300; // Defina o valor desejado para o threshold (em milissegundos)
-    private int minBarcodeLength = 0; // Defina o valor desejado para o comprimento mínimo do código de barras
 
 
     public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
@@ -100,9 +93,7 @@ public class SearchController {
                 node.setFocusTraversable(false);
             }
         }
-        /*employeeId.setOnKeyPressed(this::pressEnter);*/
         employeeId.setOnAction(event -> {
-            // Limpe o campo de texto
             Connection connection = null;
             try {
                 connection = new ConnectionDAO().connect();
@@ -131,62 +122,8 @@ public class SearchController {
                 stage.show();
 
                 connection.close();
-            } catch (SQLException e) {
+            } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public void pressEnter(KeyEvent keyEvent) {
-        employeeId.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                event.consume();
-                if (event.isShiftDown()) {
-                    employeeId.appendText(System.getProperty("line.separator"));
-                } else {
-                    //como fazer uma condition que exiba mensagem de erro caso id seja menor do que 8 caracteres ou que nenhum funcionario foi encontrado
-                    //Criar connection no search e fechar apenas quando voltar ao menu/deletar?
-                    if (employeeId.getText().length() != 8) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Erro");
-                        alert.setHeaderText("Ocorreu um erro");
-                        alert.setContentText("Matrícula deve ter 8 digitos!");
-                        alert.showAndWait();
-                        return;
-                    }
-                    try {
-                        Connection connection = new ConnectionDAO().connect();
-                        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-                        Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
-
-                        if (employee == null) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Erro");
-                            alert.setHeaderText("Ocorreu um erro");
-                            alert.setContentText("Nenhum funcionário encontrado!");
-                            alert.showAndWait();
-                            return;
-                        }
-
-                        //Envia o id para o cardController
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
-                        Parent root = loader.load();
-                        CardController cardController = loader.getController();
-                        cardController.setTableEmployee(employeeId.getText());
-
-                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        scene = new Scene(root);
-                        stage.setScene(scene);
-                        scene.setFill(Color.TRANSPARENT);
-                        stage.show();
-
-                        connection.close();
-                    } catch (SQLException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         });
     }

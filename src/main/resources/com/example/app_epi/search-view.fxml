@@ -39,7 +39,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="42.0" fitWidth="42.0" onKeyTyped="#pressEnter" onMouseClicked="#onSearchButtonClick">
+            <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#onSearchButtonClick">
                <Image url="@../assets/search-2906.png" />
             </ImageView>
          </graphic>

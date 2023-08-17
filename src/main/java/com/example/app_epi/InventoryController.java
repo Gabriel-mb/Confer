@@ -8,7 +8,6 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
-import io.github.palexdev.materialfx.i18n.Language;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -67,7 +66,7 @@ public class InventoryController {
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
 
         MFXTableColumn<Equipment> idColumn = new MFXTableColumn<>("Patrimônio", Comparator.comparing(Equipment::getIdEquipment));
-        MFXTableColumn<Equipment> nameEquipColumn = new MFXTableColumn<>("Ferramenta", Comparator.comparing(Equipment::getNameEquip));
+        MFXTableColumn<Equipment> nameEquipColumn = new MFXTableColumn<>("Ferramenta");
         MFXTableColumn<Equipment> nameSupplier = new MFXTableColumn<>("Fornecedor", Comparator.comparing(Equipment::getSupplierName));
         MFXTableColumn<Equipment> statusColumn = new MFXTableColumn<>("Status", Comparator.comparing(Equipment::getStatus));
         MFXTableColumn<Equipment> nameEmployeeColumn = new MFXTableColumn<>("Funcionário");
@@ -77,15 +76,13 @@ public class InventoryController {
         nameEquipColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEquip));
         nameSupplier.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getSupplierName));
         statusColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getStatus));
-        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> {
-            return Optional.ofNullable(item.getNameEmployee()).orElse(" ");
-        }));
+        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> Optional.ofNullable(item.getNameEmployee()).orElse(" ")));
         dateColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> {
-            Date dateValue = Optional.ofNullable(item.getDate()).orElse(null);
+            Date dateValue = item.getDate();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateValue != null ? dateFormat.format(dateValue) : " ";
         }));
-        nameEquipColumn.setPrefWidth(330);
+        nameEquipColumn.setPrefWidth(300);
 
         table.getTableColumns().addAll(idColumn, nameEquipColumn, nameSupplier, statusColumn, nameEmployeeColumn, dateColumn);
         table.getFilters().addAll(

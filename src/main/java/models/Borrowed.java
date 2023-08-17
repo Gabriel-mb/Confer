@@ -11,6 +11,7 @@ public class Borrowed {
     private Date date;
     private Integer supplierId;
     private String employeeName;
+    private Integer quantity;
 
     public Borrowed(String equipmentName, Integer idEquipment, Date date) {
         this.equipmentName = equipmentName;
@@ -39,6 +40,29 @@ public class Borrowed {
         this.equipmentName = equipmentName;
         this.date = date;
         this.employeeName = employeeName;
+    }
+
+    public Borrowed(Integer idEmployee, String equipmentName, Date date, String supplierName, Integer quantity) {
+        this.idEmployee = idEmployee;
+        this.equipmentName = equipmentName;
+        this.date = date;
+        this.supplierName = supplierName;
+        this.quantity = quantity;
+    }
+
+    public Borrowed(String supplierName, String equipmentName, Date date, Integer quantity) {
+        this.supplierName = supplierName;
+        this.equipmentName = equipmentName;
+        this.date = date;
+        this.quantity = quantity;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Integer getSupplierId() {

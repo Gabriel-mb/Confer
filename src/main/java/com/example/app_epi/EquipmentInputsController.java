@@ -76,7 +76,6 @@ public class EquipmentInputsController {
     private Boolean confirmation = false;
     private String equipName;
     private String supplierName;
-    private int supplierId;
 
 
     public void onSaveButtonClick(ActionEvent event) throws IOException {

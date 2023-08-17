@@ -3,6 +3,7 @@ package com.example.app_epi;
 import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import dao.StockDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,30 +20,21 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import models.Borrowed;
 import models.Employee;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.*;
+
 import static java.lang.Integer.parseInt;
 
-public class CardController {
+public class StockEquipCardController {
 
     private Stage stage;
     private Scene scene;
@@ -60,7 +52,7 @@ public class CardController {
     @FXML
     private TableColumn<Borrowed, String> nameColumn;
     @FXML
-    private TableColumn<Borrowed, Integer> idColumn;
+    private TableColumn<Borrowed, Integer> quantityColumn;
     @FXML
     private TableColumn<Borrowed, Date> dateColumn;
     @FXML
@@ -105,11 +97,11 @@ public class CardController {
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml")); //Diferente dos outros loads
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
         Parent root = loader.load();
 
-        CardController cardController = loader.getController();
-        cardController.setTableEmployee(newEmployeeId.getText());
+        StockEquipCardController stockEquipCardController = loader.getController();
+        stockEquipCardController.setTableEmployee(newEmployeeId.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -161,11 +153,11 @@ public class CardController {
         employeeId.setText(id);
 
         Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+        StockDAO stockDAO = new StockDAO(connection);
+        borrowingsList = FXCollections.observableList(stockDAO.stockListBorrowed(Integer.valueOf(employeeId.getText())));
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
         table.setItems(borrowingsList);
@@ -188,13 +180,12 @@ public class CardController {
         x = event.getSceneX();
         y = event.getSceneY();
     }
-    public void onModifyButtonClick (ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+    public void onModifyButtonClick (ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiInputsModify-view.fxml"));
         Parent root = loader.load();
-        EquipmentInputsController equipmentInputsController = loader.getController();
-        equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
-        equipmentInputsController.setTable(borrowingsList, true);
-
+        StockEquipInputsController stockEquipInputsController = loader.getController();
+        stockEquipInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
+        stockEquipInputsController.setTable(borrowingsList, true);
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -205,9 +196,9 @@ public class CardController {
 
     public void onPrintButtonClick () throws JRException, SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        StockDAO stockDAO = new StockDAO(connection);
 
-        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(stockDAO.stockListBorrowed(Integer.valueOf(employeeId.getText())));
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("CollectionBeanParam", itemsJRBean);
         parameters.put("employeeName", nameLabel.getText());
@@ -220,19 +211,5 @@ public class CardController {
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
         JasperViewer.viewReport(jasperPrint, false);
-    }
-    public void onEquipButtonClick(ActionEvent event) throws SQLException, IOException {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
-        Parent root = loader.load();
-
-        StockEquipCardController stockEquipCardController = loader.getController();
-        stockEquipCardController.setTableEmployee(employeeId.getText());
-
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        scene.setFill(Color.TRANSPARENT);
-        stage.show();
     }
 }

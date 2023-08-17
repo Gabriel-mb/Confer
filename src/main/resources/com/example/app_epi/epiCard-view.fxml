@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.CardController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.StockEquipCardController">
    <children>
       <Label fx:id="nameLabel" layoutX="153.0" layoutY="94.0" prefHeight="0.0" prefWidth="255.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-padding: 4;">
          <font>
@@ -27,7 +27,7 @@
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button layoutX="896.0" layoutY="674.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Excluir Ficha" textFill="WHITE">
+      <Button layoutX="893.0" layoutY="676.0" mnemonicParsing="false" onAction="#onDeleteButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Excluir Ficha" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -117,13 +117,13 @@
       </ImageView>
       <TableView fx:id="table" layoutX="153.0" layoutY="135.0" prefHeight="584.0" prefWidth="719.0" style="-fx-border-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-border-radius: 5; -fx-background-radius: 4; -fx-background-color: transparent; -fx-border-width: 2;">
         <columns>
-          <TableColumn fx:id="idColumn" editable="false" prefWidth="130.0" text="Patrimônio" />
             <TableColumn fx:id="supplierColumn" prefWidth="105.0" text="Fornecedor" />
-          <TableColumn fx:id="nameColumn" editable="false" prefWidth="352.0" text="Ferramenta" />
-            <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="127.0" text="Data" />
+          <TableColumn fx:id="nameColumn" editable="false" prefWidth="383.20001220703125" text="Ferramenta" />
+            <TableColumn fx:id="dateColumn" editable="false" minWidth="0.0" prefWidth="133.59991455078125" text="Data" />
+            <TableColumn fx:id="quantityColumn" prefWidth="92.800048828125" text="Quantidade" />
         </columns>
       </TableView>
-      <Button layoutX="896.0" layoutY="618.0" mnemonicParsing="false" onAction="#onModifyButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Modificar Ficha" textFill="WHITE">
+      <Button layoutX="893.0" layoutY="616.0" mnemonicParsing="false" onAction="#onModifyButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Modificar Ficha" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -138,22 +138,7 @@
             </DropShadow>
          </effect>
       </Button>
-      <Button fx:id="printButton" layoutX="153.0" layoutY="723.0" mnemonicParsing="false" onAction="#onPrintButtonClick" prefHeight="31.0" prefWidth="74.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Imprimir" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-         <effect>
-            <DropShadow height="28.76" offsetX="4.0" offsetY="3.0" radius="13.8875" width="28.79">
-               <color>
-                  <Color red="0.30000001192092896" green="0.2939999997615814" blue="0.2939999997615814" opacity="0.550000011920929" />
-               </color>
-            </DropShadow>
-         </effect>
-      </Button>
-      <Button layoutX="718.0" layoutY="723.0" mnemonicParsing="false" onAction="#onEquipButtonClick" prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Ficha de Equipamentos" textFill="WHITE">
+      <Button fx:id="printButton" layoutX="893.0" layoutY="556.0" mnemonicParsing="false" onAction="#onPrintButtonClick" prefHeight="43.0" prefWidth="107.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Imprimir" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

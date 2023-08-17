@@ -18,6 +18,7 @@ public class Supplier {
         return supplierName;
     }
 
+
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
     }

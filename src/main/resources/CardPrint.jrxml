@@ -47,56 +47,83 @@
 	<parameter name="CollectionBeanParam" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="employeeName" class="java.lang.String"/>
 	<parameter name="employeeId" class="java.lang.Integer"/>
+	<parameter name="image" class="java.io.InputStream"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="13" splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="67" splitType="Stretch">
-			<staticText>
-				<reportElement x="2" y="0" width="550" height="67" uuid="a507b202-e09e-417f-a194-94fa5fce870d"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="26" isBold="true"/>
-				</textElement>
-				<text><![CDATA[FICHA DE FERRAMENTA]]></text>
-			</staticText>
-		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="69" splitType="Stretch">
+		<band height="52" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="2" y="0" width="552" height="40" uuid="eb0168f5-d605-4e11-921d-5e4ae83ae56a"/>
+			</rectangle>
+			<line>
+				<reportElement x="125" y="0" width="1" height="40" uuid="8d939971-8e52-4949-b661-9773aa2719f7"/>
+			</line>
+			<line>
+				<reportElement x="410" y="0" width="1" height="40" uuid="1e0d420a-bde2-4363-966a-c7e0fbc44b13"/>
+			</line>
 			<textField>
-				<reportElement x="3" y="8" width="100" height="30" uuid="c7fbcce0-02a8-40e8-bf44-56aec89a2733"/>
+				<reportElement x="176" y="6" width="230" height="30" uuid="c7fbcce0-02a8-40e8-bf44-56aec89a2733"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{employeeName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="110" y="8" width="100" height="30" uuid="3195d251-cd5a-498b-b92e-6069e01b9200"/>
+				<reportElement x="480" y="6" width="74" height="30" uuid="3195d251-cd5a-498b-b92e-6069e01b9200"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{employeeId}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="130" y="12" width="100" height="22" uuid="625c20cf-aceb-4d51-9f99-fb8963bb2c95"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="12" width="100" height="22" uuid="673cc8cd-8c23-4613-b8bb-58b6f2f929ec"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Matrícula:]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="5" y="3" width="117" height="35" uuid="e1471999-5a29-4851-9084-841ff30ba03a"/>
+				<imageExpression><![CDATA[$P{image}]]></imageExpression>
+			</image>
 		</band>
-	</columnHeader>
-	<detail>
-		<band height="62" splitType="Stretch">
+	</title>
+	<pageHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement x="7" y="6" width="550" height="36" uuid="014e1796-a9af-4295-938c-9e338d7517ef"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Eu, mediante o presente termo, responsabilizo-me pelo uso e conservação das ferramentas entregues sob minha guarda e tutela, sendo:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="67">
 			<componentElement>
-				<reportElement isPrintRepeatedValues="false" x="2" y="2" width="550" height="60" uuid="bfd31ab8-d166-45f6-b013-a824f43f24c8">
+				<reportElement isPrintRepeatedValues="false" x="2" y="4" width="550" height="60" uuid="3305fc3c-dddd-4a21-ae02-8d1c8399d0d0">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Dataset1" uuid="2ee38ac1-dd87-4f5a-83c8-d0ca1236fd27">
+					<datasetRun subDataset="Dataset1" uuid="0105896a-f9b9-463b-99a7-efe0e02d5b59">
 						<dataSourceExpression><![CDATA[$P{CollectionBeanParam}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="60" uuid="b4865219-f125-4644-be40-1915694755c8">
+					<jr:column width="60" uuid="4ed5b753-0666-4bc8-8ae6-6659b7881f6a">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" uuid="479b7672-354d-4008-b5fd-4e338c75cd0e"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="dd4f5fa8-9dae-4438-852d-570c75beb0ac"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -105,7 +132,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="60" height="30" uuid="de546068-8aee-421f-bed5-07dfca4ed69b"/>
+								<reportElement style="TextStyle" x="0" y="0" width="60" height="30" uuid="56f46d1a-8f37-4add-abff-63982ce4d0ba"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -113,11 +140,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="80" uuid="07f73794-ef55-4271-ab15-104c18fec34c">
+					<jr:column width="80" uuid="e9c95888-ebe4-455d-8877-d3a58316c911">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="80" height="30" uuid="6ad51107-d641-4d5d-8732-f769e38bb680"/>
+								<reportElement x="0" y="0" width="80" height="30" uuid="e2eb9d74-50a9-4a3b-98ef-8e507a05db9f"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -126,7 +153,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="80" height="30" uuid="7df82d1c-1d86-448f-a863-0e91d56ef9f7"/>
+								<reportElement style="TextStyle" x="0" y="0" width="80" height="30" uuid="c5b02421-c1d3-4078-be78-b2d9dc84c731"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -134,11 +161,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="310" uuid="cf4b593b-ef4d-4d36-a0c0-587dd3945a20">
+					<jr:column width="310" uuid="edcc3b3f-a9c5-4002-9ba7-ae2560ec7746">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="310" height="30" uuid="ac8b1a5f-9173-4966-868a-a34fcb87c99d"/>
+								<reportElement x="0" y="0" width="310" height="30" uuid="3213588d-648b-4161-9b4a-3f75e8c61d52"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -147,7 +174,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="310" height="30" uuid="3efa1957-fcc9-4353-b9a9-73e699130ffd"/>
+								<reportElement style="TextStyle" x="0" y="0" width="310" height="30" uuid="c803504a-ba61-4339-bd6a-51b6c8595c21"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -155,11 +182,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="100" uuid="1a76ce7d-19da-4e46-814f-e13b8784a4f7">
+					<jr:column width="100" uuid="0558594f-9133-4248-a1be-05a56c9e90fc">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="100" height="30" uuid="bc352e08-df2c-4f80-aa8c-59067568e717"/>
+								<reportElement x="0" y="0" width="100" height="30" uuid="0e1796c1-eb4b-41ce-93e6-9bac030d9861"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -168,7 +195,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="tableDate_Style" x="0" y="0" width="100" height="30" uuid="9d886b2d-4045-48a3-b6c1-a38140062211"/>
+								<reportElement style="tableDate_Style" x="0" y="0" width="100" height="30" uuid="5ff420bb-c13e-4ec6-93f2-7e025ef4d72f"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -179,12 +206,50 @@
 				</jr:table>
 			</componentElement>
 		</band>
+	</columnHeader>
+	<detail>
+		<band height="193" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="11" width="548" height="176" uuid="b88e24d1-8629-4d69-84e8-be2c81817913"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[As ferramentas acima citadas são de propriedade da empresa SERVILUB SERVIÇO DE LUBRIFICAÇÃO E ELETROMECÂNICA LTDA, inscrita no CNPJ sob nº 10.968.017/0001-90, e foram disponibilizadas para exercício pleno de minha função laboral. 
+
+Comprometo-me a restituir tais ferramentas em perfeito estado de conservação ao final do contrato de trabalho, ou da prestação de serviço, conforme determinação da empresa.
+
+Em caso de uso inadequado, perda ou extravio das ferramentas, dano total ou parcial, farei o ressarcimento a empresa SERVILUB SERVIÇO DE LUBRIFICAÇÃO E ELETROMECANICA LTDA, proprietária das ferramentas acima citadas, dos prejuízos decorrentes de seu dano ou inutilização, seja parcial ou total. O ressarcimento dos danos estão desde já autorizados a serem descontados em folha, sendo também plenamente exigíveis judicialmente os valores no caso de insuficiência de saldo para desconto em folha. 
+]]></text>
+			</staticText>
+		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="133" splitType="Stretch">
+			<textField>
+				<reportElement x="162" y="16" width="230" height="30" uuid="c6e2807e-a7c8-4c01-bd22-f97a6b0324e8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{employeeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="33" width="74" height="30" uuid="9586774a-ec83-4bce-900f-634a836f6a9b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{employeeId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="227" y="62" width="100" height="30" uuid="6e69f649-3e35-49a8-9fa5-4376070970c3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="22"/>
+				</textElement>
+				<text><![CDATA[__/__/____]]></text>
+			</staticText>
+			<line>
+				<reportElement x="172" y="117" width="210" height="1" uuid="a240dc6e-a94c-479d-aba2-5aa9b6cf69d3"/>
+			</line>
+		</band>
 	</pageFooter>
 	<summary>
 		<band splitType="Stretch"/>
