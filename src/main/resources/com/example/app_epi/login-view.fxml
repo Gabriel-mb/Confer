@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.LoginController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 15;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.LoginController">
    <children>
       <Button layoutX="578.0" layoutY="443.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="55.0" prefWidth="146.0" style="-fx-background-color: #fff; -fx-border-color: #0e1c6b; -fx-border-radius: 11; -fx-border-width: 2; -fx-background-radius: 11;" text="Login" textAlignment="CENTER">
          <font>
@@ -27,7 +27,12 @@
             <Font name="Segoe UI" size="30.0" />
          </font>
       </TextField>
-      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="983.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
+      <PasswordField fx:id="passwordInput" layoutX="300.0" layoutY="368.0" onKeyPressed="#handleKeyPressed" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
+         <font>
+            <Font name="Segoe UI" size="30.0" />
+         </font>
+      </PasswordField>
+      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="980.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="10.0" />
          </font>
@@ -35,10 +40,13 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <PasswordField fx:id="passwordInput" layoutX="300.0" layoutY="368.0" onKeyPressed="#handleKeyPressed" prefHeight="55.0" prefWidth="424.0" promptText="Senha" style="-fx-padding: 7; -fx-background-radius: 11; -fx-border-radius: 11; -fx-border-width: 2; -fx-border-color: #0e1c6b; -fx-border-style: solid;">
+      <MFXButton fx:id="minimizeButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="953.0" layoutY="10.0" onMouseClicked="#minimizeClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #ADADAD;" text="-" textFill="WHITE">
          <font>
-            <Font name="Segoe UI" size="30.0" />
+            <Font name="Arial Bold" size="10.0" />
          </font>
-      </PasswordField>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MFXButton>
    </children>
 </AnchorPane>

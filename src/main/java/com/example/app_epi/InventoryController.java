@@ -2,6 +2,7 @@ package com.example.app_epi;
 
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -50,6 +51,8 @@ public class InventoryController {
     private MFXTextField idEquipment;
     @FXML
     private MFXTextField name;
+    @FXML
+    private MFXButton minimizeButton;
 
 
     public void onMenuButtonClick(ActionEvent event) throws IOException {
@@ -115,6 +118,11 @@ public class InventoryController {
             EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
             equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText(), String.valueOf(supplierDropDown.getValue()));
             table.setItems(equipmentsDAO.listEquipmentsStatus());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sucesso");
+            alert.setHeaderText(null);
+            alert.setContentText("Ferramenta inserida com sucesso!");
+            alert.showAndWait();
         } catch (SQLException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -176,5 +184,11 @@ public class InventoryController {
         Connection connection = new ConnectionDAO().connect();
         EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         equipmentsDAO.delete(idEquip,equipmentsDAO.readId(supplierName));
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

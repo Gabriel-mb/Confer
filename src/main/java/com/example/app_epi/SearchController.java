@@ -2,6 +2,7 @@ package com.example.app_epi;
 
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +33,8 @@ public class SearchController {
     private Parent root;
     @FXML
     private TextField employeeId;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x = 0.0;
     private Double y = 0.0;
 
@@ -158,6 +162,21 @@ public class SearchController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
+    public void onStockButtonClick(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Stock-view.fxml"));
+        Parent root = loader.load();
+        StockController StockController = loader.getController();
+        StockController.setTableEquipments();
+        StockController.setSupplierDropDown();
+        StockController.setEquipmentDropDown();
+        StockController.table.autosizeColumnsOnInitialization();
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
 
     public void onHistoryButtonClick(ActionEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("history-view.fxml"));
@@ -170,5 +189,11 @@ public class SearchController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

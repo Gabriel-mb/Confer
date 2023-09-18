@@ -2,6 +2,7 @@ package com.example.app_epi;
 
 import dao.ConnectionDAO;
 import dao.LoginDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -35,6 +37,8 @@ public class LoginController {
     private TextField nameInput;
     @FXML
     private PasswordField passwordInput;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x;
     private Double y;
 
@@ -101,6 +105,12 @@ public class LoginController {
             }
             event.consume();
         }
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }
 

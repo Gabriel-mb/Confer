@@ -1,6 +1,7 @@
 package com.example.app_epi;
 
 import dao.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.lang.Integer.parseInt;
@@ -59,6 +61,8 @@ public class StockEquipInputsController {
     private TableColumn<Borrowed, java.util.Date> dateColumn;
     @FXML
     private TableColumn<Borrowed, String> supplierColumn;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x;
     private Double y;
     private Boolean confirmation = false;
@@ -157,11 +161,25 @@ public class StockEquipInputsController {
         if (selectedBorrowed != null) {
             // Check if the selected tool is already allocated in stockBorrowed
             if (stockDAO.searchBorrowed(selectedBorrowed)) {
-                showErrorAlert("Erro", "Ferramenta Alocada", "Não é possível remover uma ferramenta já alocada.");
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Confirmação");
+                alert.setHeaderText("Tem certeza que deseja continuar?");
+                alert.setContentText("Esta ação não pode ser desfeita.");
+                ButtonType yesButton = new ButtonType("Sim");
+                ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                alert.getButtonTypes().setAll(cancelButton, yesButton);
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == yesButton) {
+                    stockDAO.remove(selectedBorrowed.getEquipmentName(), stockDAO.getSupplierId(selectedBorrowed.getSupplierName()));
+                    borrowingsList.remove(selectedBorrowed);
+                    table.getItems().remove(selectedBorrowed);
+                    showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta retornada ao estoque.");
+                }
             } else {
-                // Perform the removal from the TableView and update the UI
                 borrowingsList.remove(selectedBorrowed);
                 table.getItems().remove(selectedBorrowed);
+                showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta removida com scuesso.");
             }
         }
     }
@@ -223,30 +241,6 @@ public class StockEquipInputsController {
         stage.show();
     }
 
-    public void onDevolutionClick(ActionEvent event) throws IOException {
-        //remover o dado do borrowed e gerar dado no histórico
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("devolution-view.fxml"));
-        Parent root = loader.load();
-        DevolutionController devolutionController = loader.getController();
-
-        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
-        int selectedIndex = selectionModel.getSelectedIndex();
-
-        if (selectedIndex == -1) {
-            showErrorAlert("Erro", "Ocorreu um erro", "Selecione um item para devolver!");
-            return;
-        }
-
-        Borrowed itemSelected = borrowingsList.get(selectedIndex);
-        devolutionController.setData(nameLabel.getText(), idLabel.getText(), String.valueOf(itemSelected.getIdEquipment()), itemSelected.getEquipmentName(), String.valueOf(itemSelected.getDate()), itemSelected.getSupplierName());
-
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        scene.setFill(Color.TRANSPARENT);
-        stage.show();
-    }
-
     public void setStockItemsDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         StockDAO stockDAO = new StockDAO(connection);
@@ -267,5 +261,32 @@ public class StockEquipInputsController {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.showAndWait();
+    }
+
+    private void showSucessAlert(String title, String headerText, String contentText) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
+        Parent root = loader.load();
+
+        StockEquipCardController stockEquipCardController = loader.getController();
+        stockEquipCardController.setTableEmployee(idLabel.getText());
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

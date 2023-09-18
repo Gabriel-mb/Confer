@@ -2,6 +2,7 @@ package com.example.app_epi;
 
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -35,12 +37,14 @@ public class CreateController {
     private TextField employeeId;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x;
     private Double y;
 
     public void onSaveButtonClick(ActionEvent event) throws IOException, SQLException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputs-view.fxml")); //Diferente dos outros loads
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml")); //Diferente dos outros loads
         Parent root = loader.load();
 
         //como fazer uma condition que exiba mensagem de erro caso id seja menor do que 8 caracteres ou que nenhum funcionario foi encontrado
@@ -131,5 +135,11 @@ public class CreateController {
             }
             event.consume();
         }
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

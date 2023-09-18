@@ -2,6 +2,7 @@ package com.example.app_epi;
 
 
 import dao.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -54,6 +56,8 @@ public class HistoryController {
     private TableColumn<History, Date> dateDevolutionColumn;
     @FXML
     private TableColumn<History, BigDecimal> fineColumn;
+    @FXML
+    private MFXButton minimizeButton;
 
     private ObservableList<History> historyList;
 
@@ -111,5 +115,11 @@ public class HistoryController {
         fineColumn.setCellValueFactory(new PropertyValueFactory<>("fine"));
 
         table.setItems(historyList);
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

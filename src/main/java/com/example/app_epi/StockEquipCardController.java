@@ -4,6 +4,7 @@ import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import dao.StockDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -57,6 +58,8 @@ public class StockEquipCardController {
     private TableColumn<Borrowed, Date> dateColumn;
     @FXML
     private TableColumn<Borrowed, String> supplierColumn;
+    @FXML
+    private MFXButton minimizeButton;
 
     private ObservableList<Borrowed> borrowingsList;
 
@@ -205,11 +208,30 @@ public class StockEquipCardController {
         parameters.put("employeeId", parseInt(employeeId.getText()));
         parameters.put("image", ClassLoader.getSystemResourceAsStream("LogoCorel.png"));
 
-        InputStream inputStream = getClass().getResourceAsStream("/CardPrint.jrxml");
+        InputStream inputStream = getClass().getResourceAsStream("/StockCardPrint.jrxml");
 
         JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
         JasperViewer.viewReport(jasperPrint, false);
+    }
+    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+        Parent root = loader.load();
+
+        CardController cardController = loader.getController();
+        cardController.setTableEmployee(employeeId.getText());
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

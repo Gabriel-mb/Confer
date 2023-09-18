@@ -3,6 +3,7 @@ package com.example.app_epi;
 import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,6 +66,8 @@ public class CardController {
     private TableColumn<Borrowed, Date> dateColumn;
     @FXML
     private TableColumn<Borrowed, String> supplierColumn;
+    @FXML
+    private MFXButton minimizeButton;
 
     private ObservableList<Borrowed> borrowingsList;
 
@@ -222,7 +225,6 @@ public class CardController {
         JasperViewer.viewReport(jasperPrint, false);
     }
     public void onEquipButtonClick(ActionEvent event) throws SQLException, IOException {
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
         Parent root = loader.load();
 
@@ -234,5 +236,11 @@ public class CardController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

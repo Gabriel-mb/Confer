@@ -1,6 +1,9 @@
 package dao;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import models.Borrowed;
+import models.Equipment;
 import models.Stock;
 import models.Supplier;
 
@@ -165,6 +168,21 @@ public class StockDAO {
         rst.close();
         return suppliers;
     }
+    public List<Stock> selectNames() throws SQLException {
+
+        String sql = "SELECT equipmentName FROM stock;";
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        ResultSet rst = pstm.executeQuery(sql);
+        List<Stock> stockNames = new ArrayList<>();
+
+        while (rst.next()) {
+            Stock stock = new Stock(rst.getString(1));
+            stockNames.add(stock);
+        }
+        pstm.close();
+        rst.close();
+        return stockNames;
+    }
 
     public Boolean searchStock(String name, Integer supplierId) {
         String query = "SELECT * FROM stock WHERE equipmentName = ? AND supplier = ?";
@@ -187,4 +205,125 @@ public class StockDAO {
         }
         return true;
     }
+
+    public void remove(String equipmentName, Integer supplierId) throws SQLException {
+        String updateQuery = "UPDATE stock s\n" +
+                "JOIN stockBorrowed sb ON s.equipmentName = sb.equipmentName AND s.supplier = sb.supplierId\n" +
+                "SET s.quantity = s.quantity + sb.quantity\n" +
+                "WHERE sb.equipmentName = ? AND sb.supplierId = ?";
+
+        String deleteQuery = "DELETE FROM stockBorrowed WHERE equipmentName = ? AND supplierId = ?";
+
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
+             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+
+            updateStatement.setString(1, equipmentName);
+            updateStatement.setInt(2, supplierId);
+            updateStatement.executeUpdate();
+
+            deleteStatement.setString(1, equipmentName);
+            deleteStatement.setInt(2, supplierId);
+            deleteStatement.executeUpdate();
+        }
+    }
+
+    public ObservableList<Stock> listStock() throws SQLException {
+        ObservableList<Stock> stockList = FXCollections.observableArrayList();
+        String sql = "SELECT stock.equipmentName, stock.quantity, supplier.name AS supplierName " +
+                "FROM stock " +
+                "INNER JOIN supplier ON stock.supplier = supplier.supplierId";
+        try (
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                String equipmentName = rs.getString("equipmentName");
+                int quantity = rs.getInt("quantity");
+                String supplierName = rs.getString("supplierName");
+
+                Stock stock = new Stock(quantity, equipmentName, supplierName);
+                stockList.add(stock);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return stockList;
+    }
+
+    public void createOrUpdateStock(Integer quantity, String equipmentName, String supplierName) {
+
+        // Primeiro, verifique se o equipamento já existe no estoque
+        String checkIfExistsQuery = "SELECT COUNT(*) FROM stock WHERE equipmentName = ? AND supplier = ?";
+        String insertQuery = "INSERT INTO stock (quantity, equipmentName, supplier) VALUES (?, ?, ?)";
+        String updateQuery = "UPDATE stock SET quantity = quantity + ? WHERE equipmentName = ? AND supplier = ?";
+
+        try (Connection connection = new ConnectionDAO().connect();
+             PreparedStatement checkIfExistsStmt = connection.prepareStatement(checkIfExistsQuery);
+             PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+             PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+
+            checkIfExistsStmt.setString(1, equipmentName);
+            checkIfExistsStmt.setInt(2, getSupplierId(supplierName));
+
+            ResultSet resultSet = checkIfExistsStmt.executeQuery();
+
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                // O equipamento já existe no estoque, atualize a quantidade
+                updateStmt.setInt(1, quantity);
+                updateStmt.setString(2, equipmentName);
+                updateStmt.setInt(3, getSupplierId(supplierName));
+                updateStmt.executeUpdate();
+            } else {
+                // O equipamento não existe no estoque, insira um novo registro
+                insertStmt.setInt(1, quantity);
+                insertStmt.setString(2, equipmentName);
+                insertStmt.setInt(3, getSupplierId(supplierName));
+                insertStmt.executeUpdate();
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void decreaseOrDeleteStock(Integer quantity, String equipmentName, String supplierName) {
+
+        // Primeiro, verifique se o equipamento já existe no estoque
+        String checkIfExistsQuery = "SELECT quantity FROM stock WHERE equipmentName = ? AND supplier = ?";
+        String updateQuery = "UPDATE stock SET quantity = quantity - ? WHERE equipmentName = ? AND supplier = ?";
+        String deleteQuery = "DELETE FROM stock WHERE equipmentName = ? AND supplier = ?";
+
+        try (Connection connection = new ConnectionDAO().connect();
+             PreparedStatement checkIfExistsStmt = connection.prepareStatement(checkIfExistsQuery);
+             PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
+             PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery)) {
+
+            checkIfExistsStmt.setString(1, equipmentName);
+            checkIfExistsStmt.setInt(2, getSupplierId(supplierName));
+
+            ResultSet resultSet = checkIfExistsStmt.executeQuery();
+
+            if (resultSet.next()) {
+                int currentQuantity = resultSet.getInt("quantity");
+                if (quantity >= currentQuantity) {
+                    // A quantidade é maior ou igual ao estoque atual, então exclua o item
+                    deleteStmt.setString(1, equipmentName);
+                    deleteStmt.setInt(2, getSupplierId(supplierName));
+                    deleteStmt.executeUpdate();
+                } else {
+                    // A quantidade é menor que o estoque atual, atualize a quantidade
+                    updateStmt.setInt(1, quantity);
+                    updateStmt.setString(2, equipmentName);
+                    updateStmt.setInt(3, getSupplierId(supplierName));
+
+                    updateStmt.executeUpdate();
+                }
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -4,6 +4,7 @@ import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
 import dao.HistoryDAO;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,6 +72,8 @@ public class EquipmentInputsController {
     private TableColumn<Borrowed, java.util.Date> dateColumn;
     @FXML
     private TableColumn<Borrowed, String> supplierColumn;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x;
     private Double y;
     private Boolean confirmation = false;
@@ -313,5 +316,24 @@ public class EquipmentInputsController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
+    }
+    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+        Parent root = loader.load();
+
+        CardController cardController = loader.getController();
+        cardController.setTableEmployee(idLabel.getText());
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 }

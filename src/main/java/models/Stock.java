@@ -15,6 +15,13 @@ public class Stock {
         this.supplierId = supplierId;
     }
 
+    public Stock(Integer quantity, String equipmentName, String supplierName) {
+        this.quantity = quantity;
+        this.equipmentName = equipmentName;
+        this.supplierName = supplierName;
+    }
+
+
     public Stock() {
     }
 

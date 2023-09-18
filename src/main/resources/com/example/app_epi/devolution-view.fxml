@@ -15,10 +15,11 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 25;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.DevolutionController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 15;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.DevolutionController">
    <children>
       <Rectangle arcHeight="32.0" arcWidth="27.0" height="256.0" layoutX="186.0" layoutY="256.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="653.0">
          <fill>
@@ -58,16 +59,16 @@
             <Insets />
          </opaqueInsets>
       </Label>
-      <MFXDatePicker fx:id="dateDevolution" layoutX="513.0" layoutY="435.0" prefHeight="38.0" prefWidth="158.0" promptText="Data devolucao" style="-fx-border-color: #0e1c6b;">
+      <MFXDatePicker fx:id="dateDevolution" layoutX="576.0" layoutY="435.0" prefHeight="38.0" prefWidth="158.0" promptText="Data devolucao" style="-fx-border-color: #0e1c6b;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></MFXDatePicker>
-      <MFXTextField fx:id="fine" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="361.0" layoutY="436.0" prefHeight="36.0" prefWidth="139.0" promptText="Multa" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1; -fx-padding: 4;" text="0" textLimit="8">
+      <MFXTextField fx:id="fine" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="424.0" layoutY="436.0" prefHeight="36.0" prefWidth="139.0" promptText="Multa" style="-fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1; -fx-padding: 4;" text="0" textLimit="8">
          <font>
             <Font size="17.0" />
          </font>
       </MFXTextField>
-      <Rectangle arcHeight="32.0" arcWidth="27.0" height="80.0" layoutX="77.0" layoutY="-13.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="139.0">
+      <Rectangle arcHeight="32.0" arcWidth="27.0" height="80.0" layoutX="77.0" layoutY="-13.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="174.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -92,7 +93,7 @@
             </DropShadow>
          </effect>
       </Rectangle>
-      <MFXButton contentDisplay="TOP" layoutX="113.0" layoutY="2.0" onMouseClicked="#onMenuButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Menu" textAlignment="CENTER" textFill="WHITE">
+      <MFXButton contentDisplay="TOP" layoutX="169.0" layoutY="2.0" onMouseClicked="#onMenuButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Menu" textAlignment="CENTER" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="34.0" onMouseClicked="#onMenuButtonClick">
                <cursor>
@@ -118,7 +119,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: red;" text="X" textFill="WHITE">
+      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="981.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="10.0" />
          </font>
@@ -126,7 +127,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <ComboBox fx:id="statusComboBox" layoutX="206.0" layoutY="436.0" onAction="#setStatusComboBox" prefHeight="36.0" prefWidth="143.0" promptText="Status" style="-fx-padding: 4; -fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5;">
+      <ComboBox fx:id="statusComboBox" layoutX="269.0" layoutY="436.0" onAction="#setStatusComboBox" prefHeight="36.0" prefWidth="143.0" promptText="Status" style="-fx-padding: 4; -fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5;">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></ComboBox>
@@ -151,6 +152,33 @@
             <Font size="17.0" />
          </font>
       </Label>
+      <Line endX="-100.0" endY="-48.0" layoutX="259.0" layoutY="52.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
+      <MFXButton contentDisplay="TOP" layoutX="87.0" layoutY="2.0" onMouseClicked="#onBackButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Voltar" textAlignment="CENTER" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="34.0" onMouseClicked="#onBackButtonClick">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <image>
+                  <Image url="@../assets/Back_button.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MFXButton>
+      <MFXButton fx:id="minimizeButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="954.0" layoutY="10.0" onMouseClicked="#minimizeClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #ADADAD;" text="-" textFill="WHITE">
+         <font>
+            <Font name="Arial Bold" size="10.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </MFXButton>
       <!---->
    </children>
 </AnchorPane>

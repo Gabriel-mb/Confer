@@ -1,6 +1,7 @@
 package com.example.app_epi;
 
 import dao.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
@@ -58,38 +59,13 @@ public class DevolutionController {
     private ComboBox<String> statusComboBox;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private MFXButton minimizeButton;
     private Double x;
     private Double y;
     private ObservableList<Borrowed> borrowingsList;
-    private TableView<Borrowed> table;
-    @FXML
-    private TableColumn<Borrowed, String> nameColumn;
-    @FXML
-    private TableColumn<Borrowed, Integer> idColumn;
-    @FXML
-    private TableColumn<Borrowed, java.util.Date> dateColumn;
-    @FXML
-    private TableColumn<Borrowed, String> supplierColumn;
     private int statusId = -1;
 
-    public void setTableEmployee(String id) throws SQLException, IOException {
-        //Preenche a TableView de ferramentas pesquisando o ID do funcionario na DataBase
-        idLabel.setText(id);
-
-        Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-        borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(idLabel.getText())));
-
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
-        table.setItems(borrowingsList);
-
-        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-        Employee employee = employeeDAO.readId(parseInt(idLabel.getText()));
-        nameLabel.setText(employee.getName());
-    }
     public void onSaveButtonClick(MouseEvent event) throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         if (statusId == -1) {
@@ -214,5 +190,27 @@ public class DevolutionController {
         }
         statusId = selectedValue;
     }
+    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+        Parent root = loader.load();
+        EquipmentInputsController equipmentInputsController = loader.getController();
+        equipmentInputsController.setEmployee(idLabel.getText(), nameLabel.getText());
+        Connection connection = new ConnectionDAO().connect();
+        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
+        borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(idLabel.getText())));
+        equipmentInputsController.setTable(borrowingsList, true);
 
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+    @FXML
+    public void minimizeClick() {
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
+    }
 }
