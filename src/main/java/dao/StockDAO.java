@@ -3,7 +3,6 @@ package dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Borrowed;
-import models.Equipment;
 import models.Stock;
 import models.Supplier;
 
@@ -168,6 +167,7 @@ public class StockDAO {
         rst.close();
         return suppliers;
     }
+
     public List<Stock> selectNames() throws SQLException {
 
         String sql = "SELECT equipmentName FROM stock;";
@@ -184,48 +184,29 @@ public class StockDAO {
         return stockNames;
     }
 
-    public Boolean searchStock(String name, Integer supplierId) {
-        String query = "SELECT * FROM stock WHERE equipmentName = ? AND supplier = ?";
-
-        try (Connection connection = new ConnectionDAO().connect();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            preparedStatement.setString(1, name);
-            preparedStatement.setInt(2, supplierId);
-
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (!resultSet.next()) {
-                    return false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return true;
-    }
-
-    public void remove(String equipmentName, Integer supplierId) throws SQLException {
+    public void remove(String equipmentName, Integer supplierId, Date date) throws SQLException {
         String updateQuery = "UPDATE stock s\n" +
                 "JOIN stockBorrowed sb ON s.equipmentName = sb.equipmentName AND s.supplier = sb.supplierId\n" +
                 "SET s.quantity = s.quantity + sb.quantity\n" +
-                "WHERE sb.equipmentName = ? AND sb.supplierId = ?";
+                "WHERE sb.equipmentName = ? AND sb.supplierId = ? AND DATE(sb.date) = ?";
 
-        String deleteQuery = "DELETE FROM stockBorrowed WHERE equipmentName = ? AND supplierId = ?";
+        String deleteQuery = "DELETE FROM stockBorrowed WHERE equipmentName = ? AND supplierId = ? AND DATE(date) = ?";
 
         try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
              PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
 
             updateStatement.setString(1, equipmentName);
             updateStatement.setInt(2, supplierId);
+            updateStatement.setDate(3, new java.sql.Date(date.getTime()));
             updateStatement.executeUpdate();
 
             deleteStatement.setString(1, equipmentName);
             deleteStatement.setInt(2, supplierId);
+            deleteStatement.setDate(3, new java.sql.Date(date.getTime()));
             deleteStatement.executeUpdate();
         }
     }
+
 
     public ObservableList<Stock> listStock() throws SQLException {
         ObservableList<Stock> stockList = FXCollections.observableArrayList();
@@ -286,6 +267,7 @@ public class StockDAO {
             e.printStackTrace();
         }
     }
+
     public void decreaseOrDeleteStock(Integer quantity, String equipmentName, String supplierName) {
 
         // Primeiro, verifique se o equipamento já existe no estoque
@@ -322,6 +304,36 @@ public class StockDAO {
 
         } catch (SQLException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean checkDate(Borrowed newItem) throws SQLException {
+        String query = "SELECT * FROM stockBorrowed WHERE equipmentName = ? AND supplierId = ? AND DATE(date) = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, newItem.getEquipmentName());
+            stmt.setInt(2, getSupplierId(newItem.getSupplierName()));
+
+            // Ajuste para considerar apenas a parte da data
+            java.sql.Date sqlDate = new java.sql.Date(newItem.getDate().getTime());
+            stmt.setDate(3, sqlDate);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    public void updateBorrowedStock(Integer quantity, String equipmentName, Integer supplierId, Date date) throws SQLException {
+        String updateQuery = "UPDATE stockBorrowed SET quantity = quantity + ? WHERE equipmentName = ? AND supplierId = ? AND DATE(date) = ?";
+
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+            updateStatement.setInt(1, quantity);
+            updateStatement.setString(2, equipmentName);
+            updateStatement.setInt(3, supplierId);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            updateStatement.setDate(4, sqlDate);
+            updateStatement.executeUpdate();
         }
     }
 

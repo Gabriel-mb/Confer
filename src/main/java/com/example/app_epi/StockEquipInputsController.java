@@ -77,10 +77,22 @@ public class StockEquipInputsController {
             for (Borrowed item : borrowingsList) {
                 if (!stockDAO.searchBorrowed(item)) {
                     Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
-                    int quantityToBorrow = item.getQuantity();
                     int updatedStock = stock.getQuantity() - item.getQuantity();
                     stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
-                    stockDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getEquipmentName(), item.getDate(), item.getSupplierName(), quantityToBorrow));
+                    stockDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getEquipmentName(), item.getDate(), item.getSupplierName(), item.getQuantity()));
+                } else {
+                    if (!stockDAO.checkDate(item)) {
+                        Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
+                        int updatedStock = stock.getQuantity() - item.getQuantity();
+                        stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
+                        stockDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getEquipmentName(), item.getDate(), item.getSupplierName(), item.getQuantity()));
+                    }
+                    else {
+                        Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
+                        int updatedStock = stock.getQuantity() - item.getQuantity();
+                        stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
+                        stockDAO.updateBorrowedStock(item.getQuantity(),item.getEquipmentName(), stockDAO.getSupplierId(item.getEquipmentName()), item.getDate());
+                    }
                 }
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -129,7 +141,7 @@ public class StockEquipInputsController {
                 int quantityToBorrow = parseInt(epiQuantity.getText());
                 int currentStock = stock.getQuantity();
 
-                if (currentStock <= quantityToBorrow) {
+                if (currentStock < quantityToBorrow) {
                     showErrorAlert("Erro", "Estoque insuficiente", "Não há estoque suficiente para emprestar a quantidade desejada do equipamento.");
                     return;
                 }
@@ -160,7 +172,7 @@ public class StockEquipInputsController {
 
         if (selectedBorrowed != null) {
             // Check if the selected tool is already allocated in stockBorrowed
-            if (stockDAO.searchBorrowed(selectedBorrowed)) {
+            if (stockDAO.checkDate(selectedBorrowed)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Confirmação");
                 alert.setHeaderText("Tem certeza que deseja continuar?");
@@ -171,7 +183,7 @@ public class StockEquipInputsController {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == yesButton) {
-                    stockDAO.remove(selectedBorrowed.getEquipmentName(), stockDAO.getSupplierId(selectedBorrowed.getSupplierName()));
+                    stockDAO.remove(selectedBorrowed.getEquipmentName(), stockDAO.getSupplierId(selectedBorrowed.getSupplierName()),selectedBorrowed.getDate());
                     borrowingsList.remove(selectedBorrowed);
                     table.getItems().remove(selectedBorrowed);
                     showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta retornada ao estoque.");
@@ -179,7 +191,7 @@ public class StockEquipInputsController {
             } else {
                 borrowingsList.remove(selectedBorrowed);
                 table.getItems().remove(selectedBorrowed);
-                showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta removida com scuesso.");
+                showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta removida com sucesso.");
             }
         }
     }
@@ -270,7 +282,8 @@ public class StockEquipInputsController {
         alert.setContentText(contentText);
         alert.showAndWait();
     }
-    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
+
+    public void onBackButtonClick(MouseEvent event) throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
         Parent root = loader.load();
 
@@ -283,10 +296,11 @@ public class StockEquipInputsController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
+
     @FXML
     public void minimizeClick() {
         minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+                ((Stage) ((Button) e.getSource()).getScene().getWindow()).setIconified(true)
         );
     }
 }

@@ -29,7 +29,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="tableDate_Style" hTextAlign="Left" vTextAlign="Middle" pattern="MM/dd/yyyy" fontName="Arial">
+	<style name="tableDate_Style" hTextAlign="Left" vTextAlign="Middle" pattern="dd/MM/yyyy" fontName="Arial">
 		<paragraph leftIndent="5"/>
 	</style>
 	<style name="TextStyle" hTextAlign="Left" vTextAlign="Middle" pattern="" fontName="Arial">
@@ -95,35 +95,24 @@
 			</image>
 		</band>
 	</title>
-	<pageHeader>
-		<band height="49" splitType="Stretch">
-			<staticText>
-				<reportElement x="7" y="6" width="550" height="36" uuid="014e1796-a9af-4295-938c-9e338d7517ef"/>
-				<textElement textAlignment="Justified">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Eu, mediante o presente termo, responsabilizo-me pelo uso e conservação das ferramentas entregues sob minha guarda e tutela, sendo:]]></text>
-			</staticText>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="67">
+	<detail>
+		<band height="120" splitType="Stretch">
 			<componentElement>
-				<reportElement isPrintRepeatedValues="false" x="2" y="4" width="550" height="60" uuid="3305fc3c-dddd-4a21-ae02-8d1c8399d0d0">
+				<reportElement isPrintRepeatedValues="false" x="12" y="54" width="550" height="60" uuid="8722d32c-02a4-4b40-95a9-578a81766520">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Dataset1" uuid="0105896a-f9b9-463b-99a7-efe0e02d5b59">
+					<datasetRun subDataset="Dataset1" uuid="884ca9b6-bb37-4d29-b509-92a2eb97025a">
 						<dataSourceExpression><![CDATA[$P{CollectionBeanParam}]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="60" uuid="4ed5b753-0666-4bc8-8ae6-6659b7881f6a">
+					<jr:column width="60" uuid="5b9bc67a-7986-41e7-8c93-fb5aa51d8e21">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" uuid="dd4f5fa8-9dae-4438-852d-570c75beb0ac"/>
+								<reportElement x="0" y="0" width="60" height="30" uuid="08c59363-4faa-4610-80bc-4b9712458a24"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -132,7 +121,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="60" height="30" uuid="56f46d1a-8f37-4add-abff-63982ce4d0ba"/>
+								<reportElement style="TextStyle" x="0" y="0" width="60" height="30" uuid="19775514-567e-42da-948c-1b7c2ccbd1fb"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -140,11 +129,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="80" uuid="e9c95888-ebe4-455d-8877-d3a58316c911">
+					<jr:column width="80" uuid="f10b2edb-ebcd-4cf8-9991-e8b33bfacc0e">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="80" height="30" uuid="e2eb9d74-50a9-4a3b-98ef-8e507a05db9f"/>
+								<reportElement x="0" y="0" width="80" height="30" uuid="f79b13ce-058e-4d20-9518-ef6b946db81b"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -153,7 +142,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="80" height="30" uuid="c5b02421-c1d3-4078-be78-b2d9dc84c731"/>
+								<reportElement style="TextStyle" x="0" y="0" width="80" height="30" uuid="4cfa8bc2-e8ac-4628-be04-2735672e24c3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -161,11 +150,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="310" uuid="edcc3b3f-a9c5-4002-9ba7-ae2560ec7746">
+					<jr:column width="310" uuid="072491e5-5b09-4639-ae3d-ed14d25c5ad9">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="310" height="30" uuid="3213588d-648b-4161-9b4a-3f75e8c61d52"/>
+								<reportElement x="0" y="0" width="310" height="30" uuid="2e156952-1af8-4b51-94f3-966c8ed29df6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -174,7 +163,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="TextStyle" x="0" y="0" width="310" height="30" uuid="c803504a-ba61-4339-bd6a-51b6c8595c21"/>
+								<reportElement style="TextStyle" x="0" y="0" width="310" height="30" uuid="bf39cc5e-ef56-431f-8780-ee8fdbbdf3a5"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -182,11 +171,11 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="100" uuid="0558594f-9133-4248-a1be-05a56c9e90fc">
+					<jr:column width="100" uuid="926d1767-e20e-40b4-a7c4-ad9edb097336">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="100" height="30" uuid="0e1796c1-eb4b-41ce-93e6-9bac030d9861"/>
+								<reportElement x="0" y="0" width="100" height="30" uuid="645ef0a8-7d11-4378-bd53-537eb696a9f1"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Arial" isBold="true"/>
 								</textElement>
@@ -195,7 +184,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement style="tableDate_Style" x="0" y="0" width="100" height="30" uuid="5ff420bb-c13e-4ec6-93f2-7e025ef4d72f"/>
+								<reportElement style="tableDate_Style" x="0" y="0" width="100" height="30" uuid="75e6d33a-a3b8-4cdd-90c6-1a4d8e1d3da9"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Arial" size="10"/>
 								</textElement>
@@ -205,12 +194,17 @@
 					</jr:column>
 				</jr:table>
 			</componentElement>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="193" splitType="Stretch">
 			<staticText>
-				<reportElement x="3" y="11" width="548" height="176" uuid="b88e24d1-8629-4d69-84e8-be2c81817913"/>
+				<reportElement x="12" y="11" width="550" height="36" uuid="e299373e-0c85-4173-931c-3738d5fab618"/>
+				<textElement textAlignment="Justified">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Eu, mediante o presente termo, responsabilizo-me pelo uso e conservação das ferramentas entregues sob minha guarda e tutela, sendo:]]></text>
+			</staticText>
+		</band>
+		<band height="192">
+			<staticText>
+				<reportElement x="8" y="16" width="548" height="176" uuid="2fed73df-867b-4d45-90ae-1136cb9cee54"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>

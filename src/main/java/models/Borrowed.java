@@ -125,4 +125,7 @@ public class Borrowed {
                 ", employeeName='" + employeeName + '\'' +
                 '}';
     }
+    public String stringStockBorrowed() {
+        return equipmentName + "/" + supplierName + "/" + date + "/" + quantity;
+    }
 }

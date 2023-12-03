@@ -83,6 +83,39 @@ public class CardController {
                 node.setFocusTraversable(false);
             }
         }
+        newEmployeeId.setOnAction(event -> {
+            Connection connection = null;
+            try {
+                connection = new ConnectionDAO().connect();
+                EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+                Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
+
+                if (employee == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText("Ocorreu um erro");
+                    alert.setContentText("Nenhum funcionário encontrado!");
+                    alert.showAndWait();
+                    return;
+                }
+
+                //Envia o id para o cardController
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+                Parent root = loader.load();
+                CardController cardController = loader.getController();
+                cardController.setTableEmployee(employeeId.getText());
+
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                scene.setFill(Color.TRANSPARENT);
+                stage.show();
+
+                connection.close();
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void onSearchButtonClick(MouseEvent event) throws SQLException, IOException {

@@ -11,18 +11,17 @@ public class LoginDAO {
         this.connection = connection;
     }
 
-    public boolean verification (String username, String password) throws SQLException {
-        String sql = "SELECT * FROM user WHERE username='" + username + "' && password='" + password+ "'";
-        PreparedStatement pstm = connection.prepareStatement(sql);
-
-        try (ResultSet rs = pstm.executeQuery()) {
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                return true; // Retorna verdadeiro se encontrou alguma correspondência
+    public boolean verification(String username, String password) throws SQLException {
+        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, username);
+            pstm.setString(2, password);
+            try (ResultSet rs = pstm.executeQuery()) {
+                return rs.next(); // Retorna verdadeiro se encontrou alguma correspondência
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 }
