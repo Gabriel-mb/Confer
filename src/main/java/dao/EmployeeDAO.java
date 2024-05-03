@@ -4,17 +4,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import models.Employee;
 public class EmployeeDAO {
     private final Connection connection;
     public EmployeeDAO(Connection connection) { this.connection = connection; }
 
-    public void create(Employee employee) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
+    public void create(Integer id, String name) throws SQLException { // Implementar um verificador para confirmar que a operação foi realizada
         String sql = "INSERT INTO employee (IDEMPLOYEE, NAME) VALUES (?, ?)";
 
         PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setInt(1, employee.getId());
-        pstm.setString(2, employee.getName());
+        pstm.setInt(1, id);
+        pstm.setString(2, name);
 
         pstm.execute();
 
@@ -98,11 +100,11 @@ public class EmployeeDAO {
         pstm.close();
     }
 
-    public List<Employee> listEmployees() throws SQLException{
+    public ObservableList<Employee> listEmployees() throws SQLException{
         String sql = "SELECT * FROM employee";
         Statement stmt = connection.createStatement();
         ResultSet rst = stmt.executeQuery(sql);
-        List<Employee> employees = new ArrayList<>();
+        ObservableList<Employee> employees = FXCollections.observableArrayList();
 
         while  (rst.next()) {
             Integer id = rst.getInt(1);

@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Borrowed {
 
@@ -55,6 +55,14 @@ public class Borrowed {
         this.equipmentName = equipmentName;
         this.date = date;
         this.quantity = quantity;
+    }
+
+    public Borrowed(String equipmentName, Integer idEquipment, Date date, String supplierName, Integer supplierId) {
+        this.idEquipment = idEquipment;
+        this.supplierName = supplierName;
+        this.equipmentName = equipmentName;
+        this.date = date;
+        this.supplierId = supplierId;
     }
 
     public Integer getQuantity() {

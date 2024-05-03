@@ -66,7 +66,7 @@ public class SearchController {
         }
 
         //Envia o id para o cardController
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
         Parent root = loader.load();
         CardController cardController = loader.getController();
         cardController.setTableEmployee(employeeId.getText());
@@ -97,6 +97,9 @@ public class SearchController {
                 node.setFocusTraversable(false);
             }
         }
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
         employeeId.setOnAction(event -> {
             Connection connection = null;
             try {
@@ -114,7 +117,7 @@ public class SearchController {
                 }
 
                 //Envia o id para o cardController
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
                 Parent root = loader.load();
                 CardController cardController = loader.getController();
                 cardController.setTableEmployee(employeeId.getText());
@@ -149,7 +152,7 @@ public class SearchController {
     }
 
     public void onInventoryButtonClick(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("inventoryController-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patrimony-view.fxml"));
         Parent root = loader.load();
         InventoryController inventoryController = loader.getController();
         inventoryController.setTableEquipments();
@@ -163,7 +166,7 @@ public class SearchController {
         stage.show();
     }
     public void onStockButtonClick(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Stock-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipments-view.fxml"));
         Parent root = loader.load();
         StockController StockController = loader.getController();
         StockController.setTableEquipments();
@@ -190,10 +193,16 @@ public class SearchController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
+    public void onEmployeeButtonClick(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("employee-view.fxml"));
+        Parent root = loader.load();
+        EmployeeController employeeController = loader.getController();
+        employeeController.setTableEmployees();
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
     }
 }

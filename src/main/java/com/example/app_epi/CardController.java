@@ -4,6 +4,12 @@ import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableView;
+import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.IntegerFilter;
+import io.github.palexdev.materialfx.filter.StringFilter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +19,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -24,6 +29,8 @@ import models.Employee;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -57,19 +64,16 @@ public class CardController {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private TableView<Borrowed> table;
-    @FXML
-    private TableColumn<Borrowed, String> nameColumn;
-    @FXML
-    private TableColumn<Borrowed, Integer> idColumn;
-    @FXML
-    private TableColumn<Borrowed, Date> dateColumn;
-    @FXML
-    private TableColumn<Borrowed, String> supplierColumn;
+    private MFXTableView<Borrowed> table;
     @FXML
     private MFXButton minimizeButton;
+    @FXML
+    private MFXDatePicker datePicker;
+    @FXML
+    private MFXButton resetButton;
 
     private ObservableList<Borrowed> borrowingsList;
+    private ObservableList<Borrowed> filteredItems;
 
     private Double x;
     private Double y;
@@ -100,7 +104,7 @@ public class CardController {
                 }
 
                 //Envia o id para o cardController
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
                 Parent root = loader.load();
                 CardController cardController = loader.getController();
                 cardController.setTableEmployee(employeeId.getText());
@@ -116,6 +120,12 @@ public class CardController {
                 throw new RuntimeException(e);
             }
         });
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
+        datePicker.setOnAction(event -> onDatePickerSelect());
+        resetButton.setOnAction(event -> resetDatePicker());
+        filteredItems = FXCollections.observableArrayList();
     }
 
     public void onSearchButtonClick(MouseEvent event) throws SQLException, IOException {
@@ -141,7 +151,7 @@ public class CardController {
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml")); //Diferente dos outros loads
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml")); //Diferente dos outros loads
         Parent root = loader.load();
 
         CardController cardController = loader.getController();
@@ -200,10 +210,23 @@ public class CardController {
         BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
         borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
 
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+        MFXTableColumn<Borrowed> idEquipment = new MFXTableColumn<>("Patrimônio", Comparator.comparing(Borrowed::getIdEquipment));
+        MFXTableColumn<Borrowed> supplierName = new MFXTableColumn<>("Fornecedor", Comparator.comparing(Borrowed::getSupplierName));
+        MFXTableColumn<Borrowed> equipmentName = new MFXTableColumn<>("Ferramenta", Comparator.comparing(Borrowed::getEquipmentName));
+        MFXTableColumn<Borrowed> date = new MFXTableColumn<>("Data", Comparator.comparing(Borrowed::getDate));
+
+        idEquipment.setRowCellFactory(Stock -> new MFXTableRowCell<>(models.Borrowed::getIdEquipment));
+        supplierName.setRowCellFactory(Stock -> new MFXTableRowCell<>(models.Borrowed::getSupplierName));
+        equipmentName.setRowCellFactory(Stock -> new MFXTableRowCell<>(models.Borrowed::getEquipmentName));
+        date.setRowCellFactory(Stock -> new MFXTableRowCell<>(models.Borrowed::getDate));
+
+        table.getTableColumns().addAll(idEquipment, supplierName, equipmentName, date);
+        table.getFilters().addAll(
+                new StringFilter<>("Ferramenta", Borrowed::getEquipmentName),
+                new IntegerFilter<>("Patrimônio", Borrowed::getIdEquipment),
+                new StringFilter<>("Fornecedor", Borrowed::getSupplierName)
+        );
+        equipmentName.setPrefWidth(350);
         table.setItems(borrowingsList);
 
         EmployeeDAO employeeDAO = new EmployeeDAO(connection);
@@ -240,10 +263,10 @@ public class CardController {
     }
 
     public void onPrintButtonClick () throws JRException, SQLException, IOException {
-        Connection connection = new ConnectionDAO().connect();
-        BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
 
-        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(borrowedDAO.listBorrowed(Integer.valueOf(employeeId.getText())));
+        ObservableList<Borrowed> filteredItems = table.getTransformableList();
+
+        JRBeanCollectionDataSource itemsJRBean = new JRBeanCollectionDataSource(filteredItems);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("CollectionBeanParam", itemsJRBean);
         parameters.put("employeeName", nameLabel.getText());
@@ -258,7 +281,7 @@ public class CardController {
         JasperViewer.viewReport(jasperPrint, false);
     }
     public void onEquipButtonClick(ActionEvent event) throws SQLException, IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipCard-view.fxml"));
         Parent root = loader.load();
 
         StockEquipCardController stockEquipCardController = loader.getController();
@@ -270,10 +293,21 @@ public class CardController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
+
+    public void onDatePickerSelect() {
+        LocalDate selectedDate = datePicker.getValue();
+        filteredItems.clear(); // Limpa a lista de itens filtrados
+
+        for (Borrowed item : borrowingsList) {
+            LocalDate itemDate = item.getDate().toLocalDate();
+            if (itemDate.equals(selectedDate)) {
+                filteredItems.add(item);
+            }
+        }
+
+        table.setItems(filteredItems);
+    }
+    public void resetDatePicker() {
+        table.setItems(borrowingsList);
     }
 }

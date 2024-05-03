@@ -50,6 +50,9 @@ public class LoginController {
                 node.setFocusTraversable(false);
             }
         }
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
     public void anchorPane_dragged(MouseEvent event) {
         Stage stage = (Stage) anchorPane.getScene().getWindow();
@@ -105,12 +108,6 @@ public class LoginController {
             }
             event.consume();
         }
-    }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
     }
 }
 

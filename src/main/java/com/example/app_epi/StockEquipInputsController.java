@@ -3,9 +3,9 @@ package com.example.app_epi;
 import dao.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
@@ -50,7 +51,7 @@ public class StockEquipInputsController {
     @FXML
     private TextField epiQuantity;
     @FXML
-    private ComboBox<Stock> equipmentName;
+    private MFXFilterComboBox equipmentName;
     @FXML
     private TableView<Borrowed> table;
     @FXML
@@ -70,60 +71,14 @@ public class StockEquipInputsController {
     private ComboBox<models.Supplier> supplierComboBox;
 
 
-    public void onSaveButtonClick(ActionEvent event) throws IOException {
-        try {
-            Connection connection = new ConnectionDAO().connect();
-            StockDAO stockDAO = new StockDAO(connection);
-            for (Borrowed item : borrowingsList) {
-                if (!stockDAO.searchBorrowed(item)) {
-                    Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
-                    int updatedStock = stock.getQuantity() - item.getQuantity();
-                    stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
-                    stockDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getEquipmentName(), item.getDate(), item.getSupplierName(), item.getQuantity()));
-                } else {
-                    if (!stockDAO.checkDate(item)) {
-                        Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
-                        int updatedStock = stock.getQuantity() - item.getQuantity();
-                        stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
-                        stockDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getEquipmentName(), item.getDate(), item.getSupplierName(), item.getQuantity()));
-                    }
-                    else {
-                        Stock stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
-                        int updatedStock = stock.getQuantity() - item.getQuantity();
-                        stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
-                        stockDAO.updateBorrowedStock(item.getQuantity(),item.getEquipmentName(), stockDAO.getSupplierId(item.getEquipmentName()), item.getDate());
-                    }
-                }
-            }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText(null);
-            alert.setContentText("Equipamentos inseridos com sucesso!");
-            alert.showAndWait();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
-            Parent root = loader.load();
-            StockEquipCardController stockEquipCardController = loader.getController();
-            stockEquipCardController.setTableEmployee(idLabel.getText());
-
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            scene.setFill(Color.TRANSPARENT);
-            stage.show();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void onIncludeButtonClick() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         StockDAO stockDAO = new StockDAO(connection);
         String selectedEquipment = String.valueOf(equipmentName.getValue());
         String selectedSupplier = String.valueOf(supplierComboBox.getValue());
+        Date selectedDate = Date.valueOf(date.getValue());
 
-        boolean equipmentExists = false;
+        Boolean terminate = false;
         if (equipmentName.getValue() == null) {
             showErrorAlert("Erro", "Ocorreu um erro", "Selecione um equipamento!");
         } else if (date.getValue() == null) {
@@ -131,8 +86,6 @@ public class StockEquipInputsController {
         } else if (selectedSupplier == null) {
             showErrorAlert("Erro", "Ocorreu um erro", "Selecione um fornecedor!");
         } else {
-            equipmentExists = false;
-
             Stock stock = stockDAO.readByNameAndSupplier(String.valueOf(equipmentName.getValue()), String.valueOf(supplierComboBox.getValue()));
             if (stock == null) {
                 showErrorAlert("Erro", "Estoque vazio!", "Não há estoque deste equipamento.");
@@ -147,22 +100,30 @@ public class StockEquipInputsController {
                 }
             }
             for (Borrowed item : borrowingsList) {
-                if (item.getEquipmentName().equals(selectedEquipment) && item.getSupplierName().equals(selectedSupplier)) {
-                    item.setQuantity(parseInt(epiQuantity.getText()));
-                    break;
+                if (item.getEquipmentName().equals(selectedEquipment) && item.getSupplierName().equals(selectedSupplier) && item.getDate().equals(selectedDate)) {
+                    stock = stockDAO.readByNameAndSupplier(item.getEquipmentName(), item.getSupplierName());
+                    int updatedStock = stock.getQuantity() - parseInt(epiQuantity.getText());
+                    stockDAO.updateStock(item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), updatedStock);
+                    int updatedQuantity = parseInt(epiQuantity.getText()) + item.getQuantity();
+                    stockDAO.updateBorrowedStock(updatedQuantity, item.getEquipmentName(), stockDAO.getSupplierId(item.getSupplierName()), Date.valueOf(date.getValue()), Integer.valueOf(idLabel.getText()));
+                    terminate = true;
                 }
             }
-        }
-        if (!equipmentExists) {
-            Borrowed newItem = new Borrowed(selectedSupplier, selectedEquipment, Date.valueOf(date.getValue()), parseInt(epiQuantity.getText()));
-            borrowingsList.add(newItem);
+            if (!terminate) {
+                Borrowed newItem = new Borrowed(selectedSupplier, selectedEquipment, Date.valueOf(date.getValue()), parseInt(epiQuantity.getText()));
+                borrowingsList.add(newItem);
+                stock = stockDAO.readByNameAndSupplier(newItem.getEquipmentName(), newItem.getSupplierName());
+                int updatedStock = stock.getQuantity() - parseInt(epiQuantity.getText());
+                stockDAO.updateStock(newItem.getEquipmentName(), stockDAO.getSupplierId(newItem.getSupplierName()), updatedStock);
+                stockDAO.create(new Borrowed(parseInt(idLabel.getText()), newItem.getEquipmentName(), newItem.getDate(), newItem.getSupplierName(), newItem.getQuantity()));
+            }
         }
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
-        table.setItems(borrowingsList);
+        table.setItems(stockDAO.employeeListBorrowed(Integer.valueOf(idLabel.getText())));
     }
 
     public void onRemoveButtonClick() throws SQLException, IOException {
@@ -183,7 +144,7 @@ public class StockEquipInputsController {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.get() == yesButton) {
-                    stockDAO.remove(selectedBorrowed.getEquipmentName(), stockDAO.getSupplierId(selectedBorrowed.getSupplierName()),selectedBorrowed.getDate());
+                    stockDAO.remove(selectedBorrowed.getEquipmentName(), stockDAO.getSupplierId(selectedBorrowed.getSupplierName()), selectedBorrowed.getDate());
                     borrowingsList.remove(selectedBorrowed);
                     table.getItems().remove(selectedBorrowed);
                     showSucessAlert("Sucesso", "Ferramenta Removida", "Ferramenta retornada ao estoque.");
@@ -226,6 +187,9 @@ public class StockEquipInputsController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Supplier<StringConverter<LocalDate>> converterSupplier = () -> new LocalDateStringConverter(dateFormatter, null);
         date.setConverterSupplier(converterSupplier);
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 
     public void anchorPane_dragged(MouseEvent event) {
@@ -256,8 +220,10 @@ public class StockEquipInputsController {
     public void setStockItemsDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         StockDAO stockDAO = new StockDAO(connection);
-        ObservableList<Stock> equipmentNames = FXCollections.observableList(stockDAO.selectStock());
-        equipmentName.setItems(equipmentNames);
+        ObservableList<String> equipmentNames = FXCollections.observableList(stockDAO.selectStock());
+        ObservableList<String> uniqueEquipmentNames = FXCollections.observableList(equipmentNames.stream().distinct().collect(Collectors.toList()));
+        FXCollections.sort(uniqueEquipmentNames);
+        equipmentName.setItems(uniqueEquipmentNames);
     }
 
     public void setSupplierDropDown() throws SQLException, IOException {
@@ -284,7 +250,7 @@ public class StockEquipInputsController {
     }
 
     public void onBackButtonClick(MouseEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipCard-view.fxml"));
         Parent root = loader.load();
 
         StockEquipCardController stockEquipCardController = loader.getController();
@@ -295,12 +261,5 @@ public class StockEquipInputsController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
-    }
-
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ((Stage) ((Button) e.getSource()).getScene().getWindow()).setIconified(true)
-        );
     }
 }

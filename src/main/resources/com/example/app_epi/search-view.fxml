@@ -44,7 +44,7 @@
             </ImageView>
          </graphic>
       </MFXButton>
-      <Rectangle arcHeight="32.0" arcWidth="27.0" height="86.0" layoutX="68.0" layoutY="-12.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="309.0">
+      <Rectangle arcHeight="32.0" arcWidth="27.0" height="85.0" layoutX="50.0" layoutY="-11.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="405.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -69,11 +69,11 @@
             </DropShadow>
          </effect>
       </Rectangle>
-      <MFXButton alignment="CENTER" contentDisplay="TOP" layoutX="72.0" layoutY="10.0" onAction="#onCreateButtonClick" prefHeight="33.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Criar" textFill="WHITE">
+      <MFXButton fx:id="employeeList" alignment="CENTER" contentDisplay="TOP" layoutX="52.0" layoutY="3.0" onAction="#onEmployeeButtonClick" prefHeight="66.0" prefWidth="90.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Funcionários" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="30.0">
                <image>
-                  <Image url="@../assets/person-266.png" />
+                  <Image url="@../assets/group-profile-users.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -87,9 +87,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <MFXButton contentDisplay="TOP" layoutX="140.0" layoutY="10.0" onAction="#onInventoryButtonClick" prefHeight="58.0" prefWidth="76.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Patrimônios" textAlignment="CENTER" textFill="WHITE">
+      <MFXButton contentDisplay="TOP" layoutX="137.0" layoutY="5.0" onAction="#onInventoryButtonClick" prefHeight="61.0" prefWidth="90.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Patrimônios" textAlignment="CENTER" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="10.0" />
+            <Font name="System Bold" size="12.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -97,7 +97,7 @@
          <graphic>
             <ImageView fitHeight="32.0" fitWidth="32.0">
                <image>
-                  <Image url="@../assets/wrench-tool-10222%20-%20Copia.png" />
+                  <Image url="@../assets/wrench.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -105,9 +105,8 @@
             </ImageView>
          </graphic>
       </MFXButton>
-      <Line endX="-100.0" endY="-48.0" layoutX="242.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
-      <Line endX="-100.0" endY="-48.0" layoutX="315.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
-      <MFXButton contentDisplay="TOP" layoutX="218.0" layoutY="5.0" onAction="#onHistoryButtonClick" prefHeight="66.0" prefWidth="76.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Historico" textAlignment="CENTER" textFill="WHITE">
+      <Line endX="-100.0" endY="-48.0" layoutX="241.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
+      <MFXButton contentDisplay="TOP" layoutX="226.0" layoutY="2.0" onAction="#onHistoryButtonClick" prefHeight="66.0" prefWidth="76.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Historico" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -117,7 +116,7 @@
          <graphic>
             <ImageView fitHeight="32.0" fitWidth="32.0" preserveRatio="true">
                <image>
-                  <Image url="@../assets/content-9816.png" />
+                  <Image url="@../assets/file.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -130,8 +129,8 @@
             <Font name="System Bold" size="23.0" />
          </font>
       </Label>
-      <Line endX="-100.0" endY="-48.0" layoutX="394.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
-      <MFXButton contentDisplay="TOP" layoutX="297.0" layoutY="8.0" onAction="#onStockButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Estoque" textAlignment="CENTER" textFill="WHITE">
+      <Line endX="-100.0" endY="-48.0" layoutX="400.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
+      <MFXButton contentDisplay="TOP" layoutX="302.0" layoutY="5.0" onAction="#onStockButtonClick" prefHeight="43.0" prefWidth="67.0" rippleAnimateBackground="false" rippleColor="#bdbdbd00" style="-fx-background-color: TRANSPARENT;" text="Estoque" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -141,7 +140,7 @@
          <graphic>
             <ImageView fitHeight="32.0" fitWidth="35.0">
                <image>
-                  <Image url="@../assets/opened_box.png" />
+                  <Image url="@../assets/carton-box.png" />
                </image>
                <cursor>
                   <Cursor fx:constant="HAND" />
@@ -149,7 +148,10 @@
             </ImageView>
          </graphic>
       </MFXButton>
-      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="980.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">
+      <MFXButton layoutX="382.0" layoutY="26.0" />
+      <Line endX="-100.0" endY="-48.0" layoutX="327.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
+      <Line endX="-100.0" endY="-48.0" layoutX="468.0" layoutY="53.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
+      <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="990.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="10.0" />
          </font>
@@ -157,7 +159,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <MFXButton fx:id="minimizeButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="953.0" layoutY="10.0" onMouseClicked="#minimizeClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #ADADAD;" text="-" textFill="WHITE">
+      <MFXButton fx:id="minimizeButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="963.0" layoutY="10.0" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #ADADAD;" text="-" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="10.0" />
          </font>

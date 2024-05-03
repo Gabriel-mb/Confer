@@ -138,6 +138,9 @@ public class DevolutionController {
                 node.setFocusTraversable(false);
             }
         }
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
         //formata a data do datepicker
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Supplier<StringConverter<LocalDate>> converterSupplier = () -> new LocalDateStringConverter(dateFormatter, null);
@@ -206,11 +209,5 @@ public class DevolutionController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
-    }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
     }
 }

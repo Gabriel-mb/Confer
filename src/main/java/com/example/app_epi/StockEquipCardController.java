@@ -75,6 +75,9 @@ public class StockEquipCardController {
                 node.setFocusTraversable(false);
             }
         }
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 
     public void onSearchButtonClick(MouseEvent event) throws SQLException, IOException {
@@ -100,7 +103,7 @@ public class StockEquipCardController {
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipCard-view.fxml"));
         Parent root = loader.load();
 
         StockEquipCardController stockEquipCardController = loader.getController();
@@ -184,7 +187,7 @@ public class StockEquipCardController {
         y = event.getSceneY();
     }
     public void onModifyButtonClick (ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiInputsModify-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
         Parent root = loader.load();
         StockEquipInputsController stockEquipInputsController = loader.getController();
         stockEquipInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
@@ -216,7 +219,7 @@ public class StockEquipCardController {
         JasperViewer.viewReport(jasperPrint, false);
     }
     public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
         Parent root = loader.load();
 
         CardController cardController = loader.getController();
@@ -227,11 +230,5 @@ public class StockEquipCardController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
-    }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
     }
 }

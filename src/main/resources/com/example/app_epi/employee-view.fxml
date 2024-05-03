@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 15;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.HistoryController">
+<AnchorPane fx:id="anchorPane" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#anchorPane_dragged" onMousePressed="#anchorPane_pressed" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-radius: 15;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app_epi.EmployeeController">
    <children>
       <Rectangle arcHeight="32.0" arcWidth="27.0" height="80.0" layoutX="68.0" layoutY="-12.0" stroke="#ffffff00" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0" width="139.0">
          <fill>
@@ -59,19 +60,41 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <TableView fx:id="table" layoutX="30.0" layoutY="92.0" prefHeight="638.0" prefWidth="968.0" style="-fx-border-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-border-radius: 5; -fx-background-radius: 4; -fx-background-color: transparent; -fx-border-width: 2;">
-         <columns>
-            <TableColumn fx:id="idColumn" editable="false" prefWidth="71.0" text="Patrimônio" />
-            <TableColumn fx:id="supplierNameColumn" prefWidth="91.0" text="Fornecedor" />
-            <TableColumn fx:id="nameEquipColumn" editable="false" prefWidth="156.0" text="Ferramenta" />
-            <TableColumn fx:id="idEmployeeColumn" prefWidth="116.0" text="Matrícula" />
-            <TableColumn fx:id="nameEmployeeColumn" prefWidth="108.0" text="Funcionário" />
-            <TableColumn fx:id="dateBorrowedColumn" editable="false" prefWidth="100.0" text="Data Alocado" />
-            <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
-            <TableColumn fx:id="dateDevolutionColumn" prefWidth="120.0" text="Data Devolucão" />
-            <TableColumn fx:id="fineColumn" prefWidth="93.0" text="Multa" />
-         </columns>
-      </TableView>
+      <MFXTextField fx:id="idEmployee" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="47.0" layoutY="84.0" prefHeight="28.0" prefWidth="158.0" promptText="Matrícula" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;" textLimit="8">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </MFXTextField>
+      <MFXTextField fx:id="employeeName" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="216.0" layoutY="84.0" prefHeight="36.0" prefWidth="340.0" promptText="Nome do Funcionário" style="-fx-border-color: #0e1c6b; -fx-border-radius: 5; -fx-background-radius: 5; -fx-border-width: 1;">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </MFXTextField>
+      <Button layoutX="566.0" layoutY="84.0" mnemonicParsing="false" onAction="#onIncludeButtonClick" prefHeight="36.0" prefWidth="79.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Cadastrar" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="removeButton" layoutX="47.0" layoutY="723.0" mnemonicParsing="false" onAction="#onRemoveButtonClick" prefHeight="30.0" prefWidth="67.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Remover" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <MFXTableView fx:id="table" layoutX="47.0" layoutY="128.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="940.0" />
+      <Button fx:id="printButton" layoutX="920.0" layoutY="723.0" mnemonicParsing="false" onAction="#onPrintButtonClick" prefHeight="30.0" prefWidth="67.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda); -fx-background-radius: 5;" text="Imprimir" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="990.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="10.0" />

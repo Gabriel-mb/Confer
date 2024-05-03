@@ -137,14 +137,14 @@ public class StockDAO {
         return false;
     }
 
-    public List<Stock> selectStock() throws SQLException {
+    public List<String> selectStock() throws SQLException {
         String sql = "SELECT equipmentName FROM stock;";
         PreparedStatement pstm = connection.prepareStatement(sql);
         ResultSet rst = pstm.executeQuery(sql);
-        List<Stock> stockItems = new ArrayList<>();
+        List<String> stockItems = new ArrayList<>();
 
         while (rst.next()) {
-            Stock stockItem = new Stock(rst.getString(1));
+            String stockItem = rst.getString(1);
             stockItems.add(stockItem);
         }
         pstm.close();
@@ -324,18 +324,42 @@ public class StockDAO {
         }
     }
 
-    public void updateBorrowedStock(Integer quantity, String equipmentName, Integer supplierId, Date date) throws SQLException {
-        String updateQuery = "UPDATE stockBorrowed SET quantity = quantity + ? WHERE equipmentName = ? AND supplierId = ? AND DATE(date) = ?";
+    public void updateBorrowedStock(Integer quantity, String equipmentName, Integer supplierId, Date date, Integer employeeId) throws SQLException {
+        String updateQuery = "UPDATE stockBorrowed SET quantity = ? WHERE equipmentName = ? AND supplierId = ? AND date = ? AND employeeId = ?";
 
         try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
             updateStatement.setInt(1, quantity);
             updateStatement.setString(2, equipmentName);
             updateStatement.setInt(3, supplierId);
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            updateStatement.setDate(4, sqlDate);
+            updateStatement.setDate(4, date);
+            updateStatement.setInt(5, employeeId);
             updateStatement.executeUpdate();
         }
     }
+    public ObservableList<Borrowed> employeeListBorrowed(Integer id) throws SQLException {
+        String sql = "SELECT stockBorrowed.equipmentName, stockBorrowed.quantity, stockBorrowed.date, sup.name " +
+                "FROM stockBorrowed " +
+                "INNER JOIN supplier sup ON stockBorrowed.supplierId = sup.supplierId " +
+                "WHERE stockBorrowed.employeeId = ?";
 
 
+        PreparedStatement pstm = connection.prepareStatement(sql);
+        pstm.setInt(1, id);
+        pstm.execute();
+        ResultSet rst = pstm.getResultSet();
+        ObservableList<Borrowed> borrowings = FXCollections.observableArrayList();
+
+        while (rst.next()) {
+            String name = rst.getString(1);
+            Integer quantity = rst.getInt(2);
+            Date date = rst.getDate(3);
+            String supplierName = rst.getString(4);
+
+            borrowings.add(new Borrowed(id, name, date, supplierName, quantity));
+        }
+        pstm.close();
+        rst.close();
+
+        return borrowings;
+    }
 }

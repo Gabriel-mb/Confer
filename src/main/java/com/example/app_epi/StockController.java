@@ -3,14 +3,12 @@ package com.example.app_epi;
 import dao.ConnectionDAO;
 import dao.EquipmentsDAO;
 import dao.StockDAO;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
 import io.github.palexdev.materialfx.selection.MultipleSelectionModel;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -37,6 +37,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Integer.parseInt;
 
@@ -56,12 +57,9 @@ public class StockController {
     @FXML
     private MFXTextField quantity;
     @FXML
-    private ComboBox<Stock> equipmentDropDown;
+    private MFXFilterComboBox<Stock> equipmentDropDown;
     @FXML
     private MFXButton minimizeButton;
-    @FXML
-    private TextField filterTextField;
-
 
 
     public void onMenuButtonClick(ActionEvent event) throws IOException {
@@ -77,6 +75,12 @@ public class StockController {
         Connection connection = new ConnectionDAO().connect();
         StockDAO stockDAO = new StockDAO(connection);
 
+        // Obtém a lista de estoque
+        ObservableList<Stock> stockList = FXCollections.observableArrayList(stockDAO.listStock());
+
+        // Ordena a lista de estoque pelo nome do equipamento em ordem alfabética
+        Collections.sort(stockList, Comparator.comparing(Stock::getEquipmentName));
+
         MFXTableColumn<Stock> equipmentName = new MFXTableColumn<>("Ferramenta", Comparator.comparing(Stock::getEquipmentName));
         MFXTableColumn<Stock> quantity = new MFXTableColumn<>("Quantidade", Comparator.comparing(Stock::getQuantity));
         MFXTableColumn<Stock> supplierName = new MFXTableColumn<>("Fornecedor", Comparator.comparing(Stock::getSupplierName));
@@ -89,15 +93,15 @@ public class StockController {
         quantity.setPrefWidth(150);
         supplierName.setPrefWidth(300);
 
-
         table.getTableColumns().addAll(equipmentName, quantity, supplierName);
         table.getFilters().addAll(
                 new StringFilter<>("Ferramenta", Stock::getEquipmentName),
                 new IntegerFilter<>("Quantidade", Stock::getQuantity),
                 new StringFilter<>("Fornecedor", Stock::getSupplierName)
         );
-        table.setItems(stockDAO.listStock());
+        table.setItems(stockList);
     }
+
 
     public void setSupplierDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
@@ -105,23 +109,27 @@ public class StockController {
         suppliersNames = FXCollections.observableList(stockDAO.selectSupplier());
         supplierDropDown.setItems(suppliersNames);
     }
+
     public void setEquipmentDropDown() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
         StockDAO stockDAO = new StockDAO(connection);
         ObservableList<Stock> stockNames = FXCollections.observableList(stockDAO.selectNames());
-        equipmentDropDown.setItems(stockNames);
-        equipmentDropDown.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
-            if (stockNames != null) {
-                ObservableList<Stock> filteredList = FXCollections.observableArrayList();
-                for (Stock stock : stockNames) {
-                    if (stock.getEquipmentName().toLowerCase().contains(newValue.toLowerCase())) {
-                        filteredList.add(stock);
-                    }
-                }
-                equipmentDropDown.setItems(filteredList);
-                equipmentDropDown.show();
+        // Usamos um HashSet temporário para armazenar os objetos Stock únicos com base no nome do equipamento
+        HashSet<String> uniqueEquipmentNames = new HashSet<>();
+        ObservableList<Stock> uniqueStockNames = FXCollections.observableArrayList();
+
+        for (Stock stock : stockNames) {
+            String equipmentName = stock.getEquipmentName();
+            if (!uniqueEquipmentNames.contains(equipmentName)) {
+                uniqueEquipmentNames.add(equipmentName);
+                uniqueStockNames.add(stock);
             }
-        });
+        }
+
+        // Ordena a lista de objetos Stock em ordem alfabética
+        uniqueStockNames.sort((s1, s2) -> s1.getEquipmentName().compareToIgnoreCase(s2.getEquipmentName()));
+
+        equipmentDropDown.setItems(uniqueStockNames);
     }
 
     public void onIncludeButtonClick() {
@@ -144,8 +152,10 @@ public class StockController {
         try {
             Connection connection = new ConnectionDAO().connect();
             StockDAO stockDAO = new StockDAO(connection);
-            stockDAO.createOrUpdateStock(parseInt(quantity.getText()), String.valueOf(equipmentDropDown.getValue()), String.valueOf(supplierDropDown.getValue()));
-            table.setItems(stockDAO.listStock());
+            stockDAO.createOrUpdateStock(parseInt(quantity.getText()), equipmentDropDown.getText(), String.valueOf(supplierDropDown.getValue()));
+            ObservableList<Stock> stockList = FXCollections.observableArrayList(stockDAO.listStock());
+            Collections.sort(stockList, Comparator.comparing(Stock::getEquipmentName));
+            table.setItems(stockList);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");
             alert.setHeaderText(null);
@@ -157,13 +167,16 @@ public class StockController {
     }
 
     @FXML
-    private void initialize(URL location, ResourceBundle resources) {
+    private void initialize() {
         // percorre todos os nós da cena e define o foco como não transversável para os TextFields
         for (Node node : anchorPane.getChildrenUnmodifiable()) {
             if (node instanceof TextField) {
                 node.setFocusTraversable(false);
             }
         }
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 
     public void anchorPane_dragged(MouseEvent event) {
@@ -216,7 +229,9 @@ public class StockController {
                     alert.setHeaderText(null);
                     alert.setContentText("Estoque alterado com sucesso!");
                     alert.showAndWait();
-                    table.setItems(stockDAO.listStock());
+                    ObservableList<Stock> stockList = FXCollections.observableArrayList(stockDAO.listStock());
+                    Collections.sort(stockList, Comparator.comparing(Stock::getEquipmentName));
+                    table.setItems(stockList);
                 } catch (NumberFormatException e) {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Erro");
@@ -226,11 +241,5 @@ public class StockController {
                 }
             }
         }
-    }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
     }
 }

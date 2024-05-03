@@ -81,52 +81,6 @@ public class EquipmentInputsController {
     private String supplierName;
 
 
-    public void onSaveButtonClick(ActionEvent event) throws IOException {
-        int id = 0;
-        int index = 0;
-        try {
-            Connection connection = new ConnectionDAO().connect();
-            BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
-            borrowingsList.sort(Comparator.comparingInt(Borrowed::getIdEquipment));
-            for (Borrowed item : borrowingsList) {
-                id = item.getIdEquipment();
-                // Get the supplierId for the current supplierName
-                int supplierId = borrowedDAO.getSupplierId(item.getSupplierName());
-
-                if (!confirmation || borrowedDAO.readId(item.getIdEquipment()) == null) {
-                    // Either confirmation is false, or the item doesn't exist in the database.
-                    borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), item.getIdEquipment(), item.getDate(), supplierId));
-                }
-                index++;
-            }
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Sucesso");
-            alert.setHeaderText(null);
-            alert.setContentText("Ferramentas inseridas com sucesso!");
-            alert.showAndWait();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
-            Parent root = loader.load();
-            CardController cardController = loader.getController();
-            cardController.setTableEmployee(idLabel.getText());
-
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            scene.setFill(Color.TRANSPARENT);
-            stage.show();
-
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Ferramenta com matrícula: " + id + " já alocada!");
-            alert.showAndWait();
-            borrowingsList.remove(index);
-        }
-    }
-
     public void onSearchButtonClick() throws SQLException, IOException {
         if (Objects.equals(equipmentIdInput.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -188,18 +142,16 @@ public class EquipmentInputsController {
             alert.setHeaderText("Ocorreu um erro");
             alert.setContentText("Por favor insira uma data válida");
             alert.showAndWait();
-        } else if (borrowedDAO.searchBorrowed(parseInt(equipmentIdInput.getText()),borrowedDAO.getSupplierId(supplierName))) {
+        } else if (borrowedDAO.searchBorrowed(parseInt(equipmentIdInput.getText()), borrowedDAO.getSupplierId(supplierName))) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ferramenta já Alocada");
             alert.setContentText("Por favor selecione outra ferramenta!");
             alert.showAndWait();
         } else {
-            borrowingsList.add(new Borrowed(equipName, parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), supplierName));
-            nameColumn.setCellValueFactory(new PropertyValueFactory<>("equipmentName"));
-            idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipment"));
-            dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-            supplierColumn.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
+            borrowingsList.add(new Borrowed(equipName, parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), supplierName, borrowedDAO.getSupplierId(supplierName)));
+            borrowedDAO.create(new Borrowed(parseInt(idLabel.getText()), parseInt(equipmentIdInput.getText()), Date.valueOf(date.getValue()), borrowedDAO.getSupplierId(supplierName)));
+
             table.setItems(borrowingsList);
 
             equipmentName.getItems().clear();
@@ -214,17 +166,6 @@ public class EquipmentInputsController {
 
         supplierName = sections[0];
         equipName = sections[1];
-    }
-
-    public void onRemoveButtonClick() throws SQLException, IOException {
-        SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
-        int selectedIndex = selectionModel.getSelectedIndex();
-        Borrowed item = borrowingsList.get(selectedIndex);
-
-        removeData(item.getIdEquipment(), item.getSupplierName());
-
-        borrowingsList.remove(selectedIndex);
-        table.setItems(borrowingsList);
     }
 
     public void removeData(Integer idEquip, String supplierName) throws SQLException, IOException {
@@ -263,6 +204,9 @@ public class EquipmentInputsController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Supplier<StringConverter<LocalDate>> converterSupplier = () -> new LocalDateStringConverter(dateFormatter, null);
         date.setConverterSupplier(converterSupplier);
+        minimizeButton.setOnAction(e ->
+                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
+        );
     }
 
     public void anchorPane_dragged(MouseEvent event) {
@@ -317,8 +261,9 @@ public class EquipmentInputsController {
         scene.setFill(Color.TRANSPARENT);
         stage.show();
     }
-    public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("card-view.fxml"));
+
+    public void onBackButtonClick(MouseEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
         Parent root = loader.load();
 
         CardController cardController = loader.getController();
@@ -329,11 +274,5 @@ public class EquipmentInputsController {
         stage.setScene(scene);
         scene.setFill(Color.TRANSPARENT);
         stage.show();
-    }
-    @FXML
-    public void minimizeClick() {
-        minimizeButton.setOnAction(e ->
-                ( (Stage) ( (Button) e.getSource() ).getScene().getWindow() ).setIconified(true)
-        );
     }
 }

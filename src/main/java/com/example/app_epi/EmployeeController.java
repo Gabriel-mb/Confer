@@ -1,6 +1,5 @@
 package com.example.app_epi;
 
-import dao.BorrowedDAO;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import dao.EquipmentsDAO;
@@ -25,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import models.Employee;
 import models.Equipment;
 import models.Supplier;
 import net.sf.jasperreports.engine.*;
@@ -43,22 +43,19 @@ import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
-public class InventoryController {
+public class EmployeeController {
     @FXML
     private AnchorPane anchorPane;
     private Double x;
     private Double y;
-    private ObservableList<Supplier> suppliersNames;
 
     @FXML
-    MFXTableView<Equipment> table;
+    MFXTableView<Employee> table;
 
     @FXML
-    private ComboBox<Supplier> supplierDropDown;
+    private MFXTextField idEmployee;
     @FXML
-    private MFXTextField idEquipment;
-    @FXML
-    private MFXTextField name;
+    private MFXTextField employeeName;
     @FXML
     private MFXButton minimizeButton;
 
@@ -72,70 +69,50 @@ public class InventoryController {
         stage.show();
     }
 
-    public void setTableEquipments() throws SQLException, IOException {
+    public void setTableEmployees() throws SQLException, IOException {
         Connection connection = new ConnectionDAO().connect();
-        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
+        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
 
-        MFXTableColumn<Equipment> idColumn = new MFXTableColumn<>("Patrimônio", Comparator.comparing(Equipment::getIdEquipment));
-        MFXTableColumn<Equipment> nameEquipColumn = new MFXTableColumn<>("Ferramenta");
-        MFXTableColumn<Equipment> nameSupplier = new MFXTableColumn<>("Fornecedor", Comparator.comparing(Equipment::getSupplierName));
-        MFXTableColumn<Equipment> statusColumn = new MFXTableColumn<>("Status", Comparator.comparing(Equipment::getStatus));
-        MFXTableColumn<Equipment> nameEmployeeColumn = new MFXTableColumn<>("Funcionário");
-        MFXTableColumn<Equipment> dateColumn = new MFXTableColumn<>("Data");
+        MFXTableColumn<Employee> idColumn = new MFXTableColumn<>("Matrícula", Comparator.comparing(Employee::getId));
+        MFXTableColumn<Employee> nameEmployeeColumn = new MFXTableColumn<>("Funcionário", Comparator.comparing(Employee::getName));
 
-        idColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getIdEquipment));
-        nameEquipColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getNameEquip));
-        nameSupplier.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getSupplierName));
-        statusColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(models.Equipment::getStatus));
-        nameEmployeeColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> Optional.ofNullable(item.getNameEmployee()).orElse(" ")));
-        dateColumn.setRowCellFactory(Equipment -> new MFXTableRowCell<>(item -> {
-            Date dateValue = item.getDate();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            return dateValue != null ? dateFormat.format(dateValue) : " ";
-        }));
-        nameEquipColumn.setPrefWidth(300);
+        idColumn.setRowCellFactory(Employee -> new MFXTableRowCell<>(models.Employee::getId));
+        nameEmployeeColumn.setRowCellFactory(Employee -> new MFXTableRowCell<>(models.Employee::getName));
 
-        table.getTableColumns().addAll(idColumn, nameEquipColumn, nameSupplier, statusColumn, nameEmployeeColumn, dateColumn);
+        nameEmployeeColumn.setPrefWidth(600);
+
+        table.getTableColumns().addAll(idColumn, nameEmployeeColumn);
         table.getFilters().addAll(
-                new IntegerFilter<>("Patrimônio", Equipment::getIdEquipment),
-                new StringFilter<>("Ferramenta", Equipment::getNameEquip),
-                new StringFilter<>("Fornecedor", Equipment::getSupplierName),
-                new StringFilter<>("Status", Equipment::getStatus),
-                new StringFilter<>("Funcionário", Equipment::getNameEmployee)
+                new StringFilter<>("Funcionário", Employee::getName),
+                new IntegerFilter<>("Matrícula", Employee::getId)
         );
-        table.setItems(equipmentsDAO.listEquipmentsStatus());
-    }
-    public void setSupplierDropDown() throws SQLException, IOException {
-        Connection connection = new ConnectionDAO().connect();
-        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-        suppliersNames = FXCollections.observableList(equipmentsDAO.selectSupplier());
-        supplierDropDown.setItems(suppliersNames);
+        table.setItems(employeeDAO.listEmployees());
     }
 
     public void onIncludeButtonClick() {
-        if (Objects.equals(name.getText(), "")) {
+        if (Objects.equals(employeeName.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Insira um nome para a ferramenta!");
+            alert.setContentText("Insira um nome para o funcionário!");
             alert.showAndWait();
             return;
         }
         try {
             Connection connection = new ConnectionDAO().connect();
-            EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-            equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText(), String.valueOf(supplierDropDown.getValue()));
-            table.setItems(equipmentsDAO.listEquipmentsStatus());
+            EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+            employeeDAO.create(parseInt(idEmployee.getText()), employeeName.getText());
+            table.setItems(employeeDAO.listEmployees());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sucesso");
             alert.setHeaderText(null);
-            alert.setContentText("Ferramenta inserida com sucesso!");
+            alert.setContentText("Funcionário cadastrado com sucesso!");
             alert.showAndWait();
         } catch (SQLException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Patrimônio já cadastrado!");
+            alert.setContentText("Funcionário já cadastrado!");
             alert.showAndWait();
         }
     }
@@ -179,26 +156,21 @@ public class InventoryController {
 
         if (result.get() == yesButton) {
             Connection connection = new ConnectionDAO().connect();
-            EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-            ObservableList<Equipment> equipmentsStatus = FXCollections.observableArrayList();
-            MultipleSelectionModel<Equipment> selectionModel = (MultipleSelectionModel<Equipment>) table.getSelectionModel();
-            List<Equipment> selectedItems = selectionModel.getSelectedValues();
+            EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+            ObservableList<Employee> employees = FXCollections.observableArrayList();
+            MultipleSelectionModel<Employee> selectionModel = (MultipleSelectionModel<Employee>) table.getSelectionModel();
+            List<Employee> selectedItems = selectionModel.getSelectedValues();
 
-            for (Equipment item : selectedItems) {
-                removeData(item.getIdEquipment(), item.getSupplierName());
-                equipmentsStatus.remove(item);
+            for (Employee item : selectedItems) {
+                employeeDAO.delete(item.getId());
+                employees.remove(item);
             }
-            table.setItems(equipmentsDAO.listEquipmentsStatus());
+            table.setItems(employeeDAO.listEmployees());
         }
     }
-    public void removeData(Integer idEquip, String supplierName) throws SQLException, IOException {
-        Connection connection = new ConnectionDAO().connect();
-        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
-        equipmentsDAO.delete(idEquip,equipmentsDAO.readId(supplierName));
-    }
-    public void onPrintButtonClick() throws JRException, SQLException, IOException {
+    public void onPrintButtonClick() throws JRException {
 
-        ObservableList<Equipment> filteredItems = table.getTransformableList();
+        ObservableList<Employee> filteredItems = table.getTransformableList();
 
         // Converta os itens filtrados em uma fonte de dados do JasperReports
         JRBeanCollectionDataSource filteredItemsJRBean = new JRBeanCollectionDataSource(filteredItems);
@@ -208,7 +180,7 @@ public class InventoryController {
         parameters.put("CollectionBeanParam", filteredItemsJRBean);
 
         // Carregue o arquivo do relatório
-        InputStream inputStream = getClass().getResourceAsStream("/InventoryPrint.jrxml");
+        InputStream inputStream = getClass().getResourceAsStream("/employeePrint.jrxml");
         JasperDesign jasperDesign = JRXmlLoader.load(inputStream);
 
         // Compile o relatório
