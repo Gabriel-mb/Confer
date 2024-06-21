@@ -241,9 +241,9 @@ public class EquipmentInputsController {
         DevolutionController devolutionController = loader.getController();
 
         SelectionModel<Borrowed> selectionModel = table.getSelectionModel();
-        int selectedIndex = selectionModel.getSelectedIndex();
+        Borrowed itemSelected = selectionModel.getSelectedItem();
 
-        if (selectedIndex == -1) {
+        if (itemSelected == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
             alert.setHeaderText("Ocorreu um erro");
@@ -251,8 +251,6 @@ public class EquipmentInputsController {
             alert.showAndWait();
             return;
         }
-
-        Borrowed itemSelected = borrowingsList.get(selectedIndex);
         devolutionController.setData(nameLabel.getText(), idLabel.getText(), String.valueOf(itemSelected.getIdEquipment()), itemSelected.getEquipmentName(), String.valueOf(itemSelected.getDate()), itemSelected.getSupplierName());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

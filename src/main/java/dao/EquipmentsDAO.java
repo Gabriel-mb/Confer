@@ -182,4 +182,17 @@ public class EquipmentsDAO {
         pstm.close();
         return supplierId;
     }
+
+    public Boolean searchEquipment(Integer id, Integer supplierId) throws SQLException {
+        String sql = "SELECT idEquipment, supplierId FROM equipments WHERE idEquipment = ? AND supplierId = ?;";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, id);
+            pstm.setInt(2, supplierId);
+            try (ResultSet rst = pstm.executeQuery()) {
+                return rst.next();
+            }
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.app_epi;
 import dao.ConnectionDAO;
 import dao.EmployeeDAO;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,10 +40,7 @@ public class SearchController {
     private Double y = 0.0;
 
 
-    public void onSearchButtonClick(ActionEvent event) throws SQLException, IOException {
-
-        //como fazer uma condition que exiba mensagem de erro caso id seja menor do que 8 caracteres ou que nenhum funcionario foi encontrado
-        //Criar connection no search e fechar apenas quando voltar ao menu/deletar?
+    public void onSearchButtonClick(ActionEvent event) throws IOException {
         if (employeeId.getText().length() != 8) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -52,41 +50,52 @@ public class SearchController {
             return;
         }
 
-        Connection connection = new ConnectionDAO().connect();
-        EmployeeDAO employeeDAO = new EmployeeDAO(connection);
-        Employee employee = employeeDAO.readId(parseInt(employeeId.getText()));
+        LoadingManager.getInstance().runTaskWithLoading(() -> {
+            try {
+                Connection connection = new ConnectionDAO().connect();
+                EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+                Employee employee = employeeDAO.readId(Integer.parseInt(employeeId.getText()));
 
-        if (employee == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Nenhum funcionário encontrado!");
-            alert.showAndWait();
-            return;
-        }
+                if (employee == null) {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erro");
+                        alert.setHeaderText("Ocorreu um erro");
+                        alert.setContentText("Nenhum funcionário encontrado!");
+                        alert.showAndWait();
+                    });
+                    return;
+                }
 
-        //Envia o id para o cardController
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
-        Parent root = loader.load();
-        CardController cardController = loader.getController();
-        cardController.setTableEmployee(employeeId.getText());
+                Platform.runLater(() -> {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("patCard-view.fxml"));
+                        Parent root = loader.load();
+                        CardController cardController = loader.getController();
+                        cardController.setTableEmployee(employeeId.getText());
 
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        scene.setFill(Color.TRANSPARENT);
-        stage.show();
+                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        scene = new Scene(root);
+                        stage.setScene(scene);
+                        scene.setFill(Color.TRANSPARENT);
+                        stage.show();
+                    } catch (IOException | SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-        connection.close();
-    }
-
-    public void onCreateButtonClick(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("create-view.fxml")));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        scene.setFill(Color.TRANSPARENT);
-        stage.show();
+                connection.close();
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText("Ocorreu um erro");
+                    alert.setContentText("Erro ao buscar funcionário ou carregar a tela!");
+                    alert.showAndWait();
+                });
+            }
+        });
     }
 
     @FXML
@@ -173,6 +182,21 @@ public class SearchController {
         StockController.setSupplierDropDown();
         StockController.setEquipmentDropDown();
         StockController.table.autosizeColumnsOnInitialization();
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+
+    public void onEpiButtonClick(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("epis-view.fxml"));
+        Parent root = loader.load();
+        EpiStockController epiStockController = loader.getController();
+        epiStockController.setTableEquipments();
+        epiStockController.setEpiDropDown();
+        epiStockController.table.autosizeColumnsOnInitialization();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

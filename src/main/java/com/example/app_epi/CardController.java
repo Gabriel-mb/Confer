@@ -248,7 +248,7 @@ public class CardController {
         y = event.getSceneY();
     }
     public void onModifyButtonClick (ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
         Parent root = loader.load();
         EquipmentInputsController equipmentInputsController = loader.getController();
         equipmentInputsController.setEmployee(employeeId.getText(), nameLabel.getText());
@@ -286,6 +286,20 @@ public class CardController {
 
         StockEquipCardController stockEquipCardController = loader.getController();
         stockEquipCardController.setTableEmployee(employeeId.getText());
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        scene.setFill(Color.TRANSPARENT);
+        stage.show();
+    }
+
+    public void onEpiButtonClick(ActionEvent event) throws SQLException, IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("epiCard-view.fxml"));
+        Parent root = loader.load();
+
+        EpiCardController epiCardController = loader.getController();
+        epiCardController.setTableEmployee(employeeId.getText());
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);

@@ -11,8 +11,6 @@ public class Employee {
         if (id.toString().length() != 8){
             throw new SQLException("O número ID do funcionário deve ter exatamente 8 caracteres!"); // Usar catch para exibir o erro para o usuário
         }
-        // Pode ser feito outro if para name caso length ultrapase 45 carateres!
-
         this.id = id;
         this.name = name;
     }

@@ -187,7 +187,7 @@ public class StockEquipCardController {
         y = event.getSceneY();
     }
     public void onModifyButtonClick (ActionEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipInputsModify-view.fxml"));
         Parent root = loader.load();
         StockEquipInputsController stockEquipInputsController = loader.getController();
         stockEquipInputsController.setEmployee(employeeId.getText(), nameLabel.getText());

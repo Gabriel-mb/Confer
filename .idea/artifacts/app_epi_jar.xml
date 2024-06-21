@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact name="app_epi:jar">
+  <artifact build-on-make="true" name="app_epi:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/app_epi_jar</output-path>
     <root id="root">
       <element id="archive" name="app_epi.jar">

@@ -89,7 +89,7 @@ public class DevolutionController {
                 BorrowedDAO borrowedDAO = new BorrowedDAO(connection);
                 borrowedDAO.delete(parseInt(idEquipmentLabel.getText()), supId);
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
                 Parent root = loader.load();
 
                 borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(idLabel.getText())));
@@ -112,7 +112,7 @@ public class DevolutionController {
                 EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
                 equipmentsDAO.delete(parseInt(idEquipmentLabel.getText()), supId);
 
-                loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+                loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
                 root = loader.load();
 
                 borrowingsList = FXCollections.observableList(borrowedDAO.listBorrowed(Integer.valueOf(idLabel.getText())));
@@ -194,7 +194,7 @@ public class DevolutionController {
         statusId = selectedValue;
     }
     public void onBackButtonClick (MouseEvent event) throws IOException, SQLException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("equipmentInputsModify-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("patInputsModify-view.fxml"));
         Parent root = loader.load();
         EquipmentInputsController equipmentInputsController = loader.getController();
         equipmentInputsController.setEmployee(idLabel.getText(), nameLabel.getText());

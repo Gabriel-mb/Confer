@@ -112,7 +112,9 @@ public class InventoryController {
         supplierDropDown.setItems(suppliersNames);
     }
 
-    public void onIncludeButtonClick() {
+    public void onIncludeButtonClick() throws SQLException, IOException {
+        Connection connection = new ConnectionDAO().connect();
+        EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
         if (Objects.equals(name.getText(), "")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -121,9 +123,15 @@ public class InventoryController {
             alert.showAndWait();
             return;
         }
+        if (equipmentsDAO.searchEquipment(parseInt(idEquipment.getText()), equipmentsDAO.readId(String.valueOf(supplierDropDown.getValue())))) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Ocorreu um erro");
+            alert.setContentText("Patrimônio ja cadastrado!");
+            alert.showAndWait();
+            return;
+        }
         try {
-            Connection connection = new ConnectionDAO().connect();
-            EquipmentsDAO equipmentsDAO = new EquipmentsDAO(connection);
             equipmentsDAO.create(parseInt(idEquipment.getText()), name.getText(), String.valueOf(supplierDropDown.getValue()));
             table.setItems(equipmentsDAO.listEquipmentsStatus());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -131,12 +139,8 @@ public class InventoryController {
             alert.setHeaderText(null);
             alert.setContentText("Ferramenta inserida com sucesso!");
             alert.showAndWait();
-        } catch (SQLException | IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro");
-            alert.setHeaderText("Ocorreu um erro");
-            alert.setContentText("Patrimônio já cadastrado!");
-            alert.showAndWait();
+        } catch (SQLException | NumberFormatException e) {
+            throw new RuntimeException(e);
         }
     }
 

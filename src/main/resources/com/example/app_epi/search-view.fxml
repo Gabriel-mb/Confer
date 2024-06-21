@@ -148,7 +148,7 @@
             </ImageView>
          </graphic>
       </MFXButton>
-      <MFXButton layoutX="382.0" layoutY="26.0" />
+      <MFXButton fx:id="epiStockButton" layoutX="382.0" layoutY="26.0" onAction="#onEpiButtonClick" />
       <Line endX="-100.0" endY="-48.0" layoutX="327.0" layoutY="54.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
       <Line endX="-100.0" endY="-48.0" layoutX="468.0" layoutY="53.0" startX="-100.0" startY="10.0" stroke="WHITE" strokeLineCap="ROUND" />
       <MFXButton alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" depthLevel="LEVEL1" ellipsisString="" layoutX="990.0" layoutY="10.0" onAction="#onCloseButtonClick" prefHeight="18.0" prefWidth="23.0" rippleBackgroundOpacity="0.0" rippleColor="WHITE" rippleRadius="15.0" rippleRadiusMultiplier="15.0" style="-fx-background-radius: 15; -fx-background-color: #E43D3E;" text="X" textFill="WHITE">

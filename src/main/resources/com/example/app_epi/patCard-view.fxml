@@ -82,7 +82,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
-      <MFXTextField fx:id="newEmployeeId" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="651.0" layoutY="78.0" prefHeight="43.0" prefWidth="221.0" promptText="Matricula" style="-fx-border-color: #0e1c6b; -fx-border-radius: 11; -fx-background-radius: 11; -fx-border-width: 2;" textLimit="8">
+      <MFXTextField fx:id="newEmployeeId" borderGap="0.0" floatMode="DISABLED" floatingTextGap="0.0" layoutX="651.0" layoutY="78.0" onAction="#onSearchButtonClick" prefHeight="43.0" prefWidth="221.0" promptText="Matricula" style="-fx-border-color: #0e1c6b; -fx-border-radius: 11; -fx-background-radius: 11; -fx-border-width: 2;" textLimit="8">
          <font>
             <Font size="20.0" />
          </font>
@@ -185,5 +185,20 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </MFXButton>
+      <Button fx:id="episButton" layoutX="557.0" layoutY="723.0" mnemonicParsing="false" onAction="#onEpiButtonClick" prefHeight="31.0" prefWidth="154.0" style="-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #0e1c6b, #324eda);" text="Ficha de EPI's" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <effect>
+            <DropShadow height="28.76" offsetX="4.0" offsetY="3.0" radius="13.8875" width="28.79">
+               <color>
+                  <Color red="0.30000001192092896" green="0.2939999997615814" blue="0.2939999997615814" opacity="0.550000011920929" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Button>
    </children>
 </AnchorPane>
